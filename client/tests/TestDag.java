@@ -4,6 +4,7 @@
 package tests;
 
 import nl.paul.sohier.ttv.libary.Dag;
+import nl.paul.sohier.ttv.libary.DagRequest;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
@@ -34,7 +35,7 @@ public class TestDag extends TestCase {
 		int d = 1;
 		int m = 2;
 		int j = 3;
-		Dag d2 = new Dag(d, m, j);
+		Dag d2 = new Dag(new DagRequest(d, m, j));
 		
 		Assert.assertEquals(d2.getDag(), d);
 		Assert.assertEquals(d2.getMaand(), m);
@@ -53,22 +54,6 @@ public class TestDag extends TestCase {
 		Assert.assertEquals(0, d2.getJaar());
 	}
 
-	/**
-	 * Test method for {@link nl.paul.sohier.ttv.libary.Dag#isOpen()}.
-	 */
-	public void testIsOpen() {
-		Dag d2 = new Dag();
-		
-		d2.setOpen(true);
-
-		Assert.assertTrue(d2.isOpen());
-		
-		d2.setOpen(false);
-		Assert.assertFalse(d2.isOpen());
-		
-		
-		
-	}
 
 	/**
 	 * Test method for {@link nl.paul.sohier.ttv.libary.Dag#setOpen(boolean)}.

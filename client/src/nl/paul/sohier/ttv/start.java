@@ -10,6 +10,7 @@ import javax.swing.JTable;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -22,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -30,9 +32,14 @@ import java.util.Stack;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import nl.paul.sohier.ttv.classes.DagenCollectie;
 import nl.paul.sohier.ttv.libary.API;
+import nl.paul.sohier.ttv.libary.Collectie;
 import nl.paul.sohier.ttv.libary.Dag;
+import nl.paul.sohier.ttv.libary.DagRequest;
+import nl.paul.sohier.ttv.libary.Item;
+import nl.paul.sohier.ttv.libary.Request;
+import nl.paul.sohier.ttv.libary.ZaalDienst;
+import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 
 public class start {
 
@@ -44,13 +51,15 @@ public class start {
 
 	private int realYear, realMonth, realDay, currentYear, currentMonth;
 
-	private DagenCollectie dagen;
+	private Collectie items;
 
-	private Stack<Dag> queue;
+	private Stack<Request> queue;
+	private Stack<Request> wait;
 
 	private int size = 0;
 
 	private int[][] data;
+	private Color[][] kleur;
 
 	private Thread t;
 	static start window;
@@ -84,7 +93,14 @@ public class start {
 
 	}
 
-	private void addQueue(Dag d) {
+	private void addQueue(Request d) {
+		if (wait.contains(d) || queue.contains(d)) {
+			return;
+		}
+
+		System.out.println("Adding dag: " + d + "queue size: " + queue.size()
+				+ " wait size: " + wait.size());
+
 		queue.add(d);
 
 		interruptThread();
@@ -93,7 +109,6 @@ public class start {
 
 	private void interruptThread() {
 		synchronized (t) {
-			System.out.print("Interrupt");
 			t.interrupt();
 		}
 	}
@@ -103,19 +118,23 @@ public class start {
 		public void run() {
 
 			while (true) {
-				System.out.println("Running");
-
+				System.out.println("running while...");
 				if (queue.size() != 0) {
 					size += queue.size();
 
 					progressBar.setMaximum(size);
 					progressBar.setStringPainted(true);
 
-					Iterator<Dag> itr = queue.iterator();
+					Iterator<Request> itr = queue.iterator();
 
 					while (itr.hasNext()) {
 
-						Task t = new Task(queue.pop());
+						Request request = queue.pop();
+						wait.push(request);
+
+						System.out.println("Creating task for " + request);
+
+						Task t = new Task(request);
 						t.execute();
 					}
 
@@ -135,10 +154,10 @@ public class start {
 	}
 
 	class Task extends SwingWorker<Void, Void> {
-		private Dag dag;
+		private Request task;
 
-		public Task(Dag d) {
-			dag = d;
+		public Task(Request d) {
+			task = d;
 		}
 
 		/*
@@ -146,14 +165,33 @@ public class start {
 		 */
 		@Override
 		public Void doInBackground() {
-			Dag dagt = null;
 
-			if (dagt == null) {
-				dagt = API.createDag(dag.getDag(), dag.getMaand(),
-						dag.getJaar());
+			System.out.println("Running dag for " + task);
+
+			Item add = null;
+
+			if (task instanceof DagRequest) {
+
+				add = API.getDag((DagRequest) task);
+
+			} else if (task instanceof ZaalDienstRequest) {
+				add = API.getZaalDienst((ZaalDienstRequest) task);
+
 			}
 
-			dagen.addDag(dagt);
+			else // Don't remove this else! (It will cause a infitite loop)
+			{
+				System.out.println("Task not defined.");
+				throw new RuntimeException("Task not defined");
+			}
+			if (add == null) {
+				System.out.println("Error?");
+				return null;
+			}
+
+			items.add(add);
+
+			wait.remove(task);
 
 			return null;
 
@@ -169,9 +207,12 @@ public class start {
 
 			size--;
 
+			if (size < 0) {
+				size = 0;
+			}
+
 			if (size == 0) {
 				refreshCalendar(currentMonth, currentYear);
-
 			}
 
 		}
@@ -181,16 +222,26 @@ public class start {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		dagen = new DagenCollectie();
+		items = new Collectie();
 
-		queue = new Stack<Dag>();
+		queue = new Stack<Request>();
+		wait = new Stack<Request>();
 
 		frame = new JFrame();
 		frame.setTitle("TTV Alexandria zaalbeheer");
 		// frame.setBounds(100, 100, 450, 300);
 		frame.pack();
 		frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		frame.addWindowListener(new java.awt.event.WindowAdapter() {
+			public void windowClosing(WindowEvent winEvt) {
+				// Perhaps ask user if they want to save any unsaved files
+				// first.
+				askSave();
+			}
+		});
 
 		mtblCalendar = new DefaultTableModel() {
 			/**
@@ -216,7 +267,7 @@ public class start {
 		currentYear = realYear;
 
 		// Add headers
-		String[] headers = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+		String[] headers = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
 		for (int i = 0; i < 7; i++) {
 			mtblCalendar.addColumn(headers[i]);
 		}
@@ -233,8 +284,8 @@ public class start {
 				if (data[row][col] != 0) {
 					// Here should we open a new frame.
 
-					EditDay frame = new EditDay(dagen.getDag(new Dag(
-							data[row][col], currentMonth, currentYear)));
+					EditDay frame = new EditDay(new DagRequest(data[row][col],
+							currentMonth, currentYear));
 					frame.setVisible(true);
 
 				} else {
@@ -253,11 +304,12 @@ public class start {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		// Set row/column count
-		table.setRowHeight(57);
+		table.setRowHeight(100);
 		mtblCalendar.setColumnCount(7);
 		mtblCalendar.setRowCount(6);
 
 		data = new int[7][7];
+		kleur = new Color[7][7];
 
 		JButton button_1 = new JButton(">");
 		frame.getContentPane().add(button_1, BorderLayout.EAST);
@@ -283,6 +335,37 @@ public class start {
 
 		JMenuItem mntmVoegPersoonToe = new JMenuItem("Voeg persoon toe");
 		mnBestand.add(mntmVoegPersoonToe);
+		mntmVoegPersoonToe.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				AddZaalWacht w = new AddZaalWacht();
+				w.setVisible(true);
+
+			}
+		});
+
+		JMenuItem mntmSave = new JMenuItem("Opslaan");
+		mnBestand.add(mntmSave);
+		mntmSave.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				save();
+			}
+		});
+
+		JMenuItem mntmRefresh = new JMenuItem("Vernieuwen");
+		mnBestand.add(mntmRefresh);
+		mntmRefresh.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				queue.removeAllElements();
+				wait.removeAllElements();
+				items.removeAll();
+				refreshCalendar(currentMonth, currentYear);
+			}
+		});
 
 		JMenuItem mntmAfsluiten = new JMenuItem("Afsluiten");
 		mntmAfsluiten.addActionListener(new ActionListener() {
@@ -290,7 +373,7 @@ public class start {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
-				System.exit(0);
+				askSave();
 
 			}
 
@@ -314,12 +397,16 @@ public class start {
 		mnUitvoer.add(mntmPdf);
 	}
 
+	int count = 0;
+
 	private void refreshCalendar(int month, int year) {
+		count++;
+		System.out.println("Count for this function: " + count);
 		// Variables
 		String[] months = { "January", "February", "March", "April", "May",
 				"June", "July", "August", "September", "October", "November",
 				"December" };
-		int nod, som; // Number Of Days, Start Of Month
+		int nod, column; // Number Of Days, Start Of Month
 
 		// Allow/disallow buttons
 
@@ -340,26 +427,172 @@ public class start {
 			for (int j = 0; j < 7; j++) {
 				mtblCalendar.setValueAt(null, i, j);
 				data[i][j] = 0;
+				kleur[i][j] = new Color(255, 255, 255);
 			}
 		}
 
 		// Get first day of month and number of days
 		GregorianCalendar cal = new GregorianCalendar(year, month, 1);
 		nod = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-		som = cal.get(GregorianCalendar.DAY_OF_WEEK);
+		column = cal.get(GregorianCalendar.DAY_OF_WEEK);
+
+		if (column == 1) {
+			column = 6;
+		} else {
+			column -= 2;
+		}
+
+		int row = 0;
 
 		// Draw calendar
 		for (int i = 1; i <= nod; i++) {
-			int row = new Integer((i + som - 2) / 7);
-			int column = (i + som - 2) % 7;
-			mtblCalendar.setValueAt(i, row, column);
-			data[row][column] = i;
-		}
+			try {
 
+				mtblCalendar.setValueAt(i, row, column);
+				data[row][column] = i;
+
+				Color kl;
+
+				if (column == 5 || column == 6) { // Week-end
+					kl = new Color(255, 220, 220);
+				} else { // Week
+					kl = new Color(255, 255, 255);
+				}
+
+				if (i != 0) {
+					DagRequest d = new DagRequest(i, currentMonth, currentYear);
+
+					Dag dag = (Dag) items.get(d);
+
+					if (dag == null) {
+						kl = new Color(255, 255, 0);
+						addQueue(d);
+					} else {
+						String vl = "<html>" + Integer.toString(i);
+						vl += "<br />";
+
+						boolean opn[] = dag.getOpen();
+						int diensten[] = dag.getZaaldienst();
+
+						vl += addDeel("Ochtend", opn[0], diensten[0]);
+						vl += addDeel("Middag", opn[1], diensten[1]);
+						vl += addDeel("Avond", opn[2], diensten[2]);
+
+						if (open) {
+							if (!zaaldienst) {
+								kl = new Color(255, 0, 0);
+							} else {
+								kl = new Color(0, 255, 0);
+							}
+						} else {
+							kl = new Color(0xd3, 0xd3, 0xd3);
+						}
+						open = false;
+						zaaldienst = true;
+
+						mtblCalendar.setValueAt(vl, row, column);
+					}
+
+					if (i == realDay && currentMonth == realMonth
+							&& currentYear == realYear) { // Today
+						kl = new Color(220, 220, 255);
+					}
+
+				}
+
+				kleur[row][column] = kl;
+
+				column++;
+
+				if (column == 7) {
+					column = 0;
+					row++;
+				}
+
+			} catch (ArrayIndexOutOfBoundsException e) {
+
+			}
+		}
 		// Apply renderers
 		table.setDefaultRenderer(table.getColumnClass(0),
 				new tblCalendarRenderer());
 
+	}
+
+	private boolean open = false;
+	private boolean zaaldienst = true;
+
+	@SuppressWarnings("unused")
+	private String addDeel(String deel, boolean opn, int dienst) {
+		String vl = deel + ": ";
+
+		vl += (opn) ? "Open" : "Gesloten";
+		vl += "<br />";
+
+		if (opn) {
+			open = true;
+
+			if (dienst == 0) {
+				// Geen zaaldienst toegewezen.
+
+				vl += "Geen zaaldienst toegewezen<br />";
+				zaaldienst = false;
+			} else {
+				String data = "Ophalen...";
+				ZaalDienstRequest r = new ZaalDienstRequest(dienst);
+
+				if (r == null) {
+					System.out.println("Null request created?" + dienst);
+				}
+
+				ZaalDienst dt = (ZaalDienst) items.get(r);
+				if (dt == null) {
+					addQueue(r);
+				} else {
+					data = dt.getNaam();
+				}
+
+				vl += "Zaaldienst: " + data + "<br />";
+			}
+		}
+		return vl;
+	}
+
+	private void askSave() {
+		System.out.println("askSave");
+
+		if (items.changed()) {
+			System.out.println("Non saved days");
+
+			// Custom button text
+			Object[] options = { "Save", "Discard", "Cancel" };
+			int n = JOptionPane
+					.showOptionDialog(
+							frame,
+							"Er zijn nog niet opgeslagen dagen, weet je zeker dat je wilt afsluiten?",
+							"Afsluiten", JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, options,
+							options[2]);
+
+			System.out.println("Waarde: " + n);
+
+			switch (n) {
+			case 0:
+				save();
+			case 1:
+				System.exit(0);
+			case 2:
+			default:
+				System.out.println("Return");
+				return;
+			}
+		}
+
+		System.exit(0);
+	}
+
+	private void save() {
+		System.out.println("Save");
 	}
 
 	class tblCalendarRenderer extends DefaultTableCellRenderer {
@@ -373,55 +606,12 @@ public class start {
 			super.getTableCellRendererComponent(table, v, selected, focused,
 					row, column);
 
-			if (column == 0 || column == 6) { // Week-end
-				setBackground(new Color(255, 220, 220));
-			} else { // Week
-				setBackground(new Color(255, 255, 255));
-			}
-
-			int value = (data[row][column]);
-
-			if (value != 0) {
-				Dag d = new Dag(value, currentMonth, currentYear);
-
-				Dag dag = dagen.getDag(d);
-
-				if (dag == null) {
-					setBackground(new Color(255, 255, 0));
-					addQueue(d);
-				} else {
-					String vl = "<html>" + Integer.toString(value);
-					vl += "<br />";
-					vl += (dag.isOpen()) ? "Open" : "Gesloten";
-
-					if (dag.isOpen()) {
-
-						setBackground(new Color(0, 255, 0));
-
-						if (dag.getZaaldienst() == null) {
-							// Geen zaaldienst toegewezen.
-							setBackground(new Color(255, 0, 0));
-							vl += "<br />Geen zaaldienst toegewezen";
-						} else {
-							vl += "<br />Zaaldienst: "
-									+ dag.getZaaldienst().getNaam();
-						}
-					} else {
-						setBackground(new Color(0xd3, 0xd3, 0xd3));
-					}
-					mtblCalendar.setValueAt(vl, row, column);
-				}
-
-				if (value == realDay && currentMonth == realMonth
-						&& currentYear == realYear) { // Today
-					setBackground(new Color(220, 220, 255));
-				}
-
-			}
+			setBackground(kleur[row][column]);
 			setBorder(null);
 			setForeground(Color.black);
 			return this;
 		}
+
 	}
 
 	class btnPrev_Action implements ActionListener {

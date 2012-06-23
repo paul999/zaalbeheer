@@ -26,21 +26,21 @@ public class TestDagCollectie extends TestCase {
 	}
 
 	/**
-	 * Test method for {@link nl.paul.sohier.ttv.classes.DagenCollectie#DagenCollectie()}.
+	 * Test method for {@link nl.paul.sohier.ttv.libary.Collectie#DagenCollectie()}.
 	 */
 	public void testDagenCollectie() {
 		fail("Not yet implemented");
 	}
 
 	/**
-	 * Test method for {@link nl.paul.sohier.ttv.classes.DagenCollectie#getDag(nl.paul.sohier.ttv.libary.Dag)}.
+	 * Test method for {@link nl.paul.sohier.ttv.libary.Collectie#getDag(nl.paul.sohier.ttv.libary.Dag)}.
 	 */
 	public void testGetDag() {
 		fail("Not yet implemented");
 	}
 
 	/**
-	 * Test method for {@link nl.paul.sohier.ttv.classes.DagenCollectie#addDag(nl.paul.sohier.ttv.libary.Dag)}.
+	 * Test method for {@link nl.paul.sohier.ttv.libary.Collectie#addDag(nl.paul.sohier.ttv.libary.Dag)}.
 	 */
 	public void testAddDag() {
 		fail("Not yet implemented");
