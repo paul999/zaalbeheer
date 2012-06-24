@@ -32,12 +32,6 @@ public class Collectie {
 			try {
 				Object t = itr.next();
 				Item d = (Item) t;
-				
-				if (d == null)
-				{
-					System.out.println("This is not good...");
-					System.out.println(t);
-				}
 
 				if (d != null && d.equals(get)) {
 					removeLock();
@@ -63,11 +57,9 @@ public class Collectie {
 	public void add(Item add) {
 		if (add == null)
 		{
-			System.out.println("Cant add a null item!");
 			throw new RuntimeException("Cant add a null item!");
 		}
 		
-		System.out.println("Adding dag " + add);
 		remove(add);
 		waitForLock();
 		items.add(add);
@@ -135,7 +127,6 @@ public class Collectie {
 			Item d = (Item) itr.next();
 
 			if (d.isChanged()) {
-				System.out.println("Not saved: " + d);
 				
 				removeLock();
 				return true;

@@ -78,8 +78,6 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 		Server srv = API.getServer(this);
 		dag = srv.getSavedDag(request);
 
-		System.out.println("Dag voor editing: " + dag);
-
 		contentPane.setLayout(new FormLayout(
 				new ColumnSpec[] { FormFactory.RELATED_GAP_COLSPEC,
 						FormFactory.DEFAULT_COLSPEC,
@@ -205,8 +203,6 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 					la[a] = i;
 					a++;
 				}
-			} else {
-				System.out.println("null? :(");
 			}
 		}
 		model mo = new model(s);
@@ -234,11 +230,7 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 	}
 
 	protected void askSave() {
-
-		System.out.println("askSave");
-
 		if (dag.isChanged()) {
-			System.out.println("Non saved days");
 
 			// Custom button text
 			Object[] options = { "Save", "Discard", "Cancel" };
@@ -249,9 +241,6 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 							"Afsluiten", JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null, options,
 							options[2]);
-
-			System.out.println("Waarde: " + n);
-
 			switch (n) {
 			case 0:
 				save();
@@ -259,7 +248,6 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 				dispose();
 			case 2:
 			default:
-				System.out.println("Return");
 				return;
 			}
 		}
@@ -272,7 +260,6 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 		public void actionPerformed(ActionEvent e) {
 			// Save it....
 			if (dag.isChanged()) {
-				System.out.println("Need to save...");
 				save();
 			} else {
 				dispose();
@@ -402,16 +389,7 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 			}
 		}
 		
-		for (int i = 0; i < dienst.length; i++)
-		{
-			System.out.println("Dienst[i] = " + i);
-			
-			for (int j = 0; j < dienst[i].length; j++)
-			{
-				System.out.println("Data: " + dienst[i][j]);
-			}
-		}
-		
+				
 		dag.setZaaldienst(dienst); // TODO Fix.
 
 	}
@@ -419,7 +397,6 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 	private int findId(String naam) {
 		for (int i = 0; i < s.length; i++) {
 			if (naam.equals(s[i].getNaam())) {
-				System.out.println("Found you :D" + naam + " id: " + s[i].getId());
 				return s[i].getId();
 			}
 		}

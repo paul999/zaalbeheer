@@ -18,9 +18,6 @@ public class ServerImpl implements Server {
 
 	@Override
 	public Dag getSavedDag(DagRequest request) {
-		System.out.println("Got a request for " + request);
-
-		System.out.println("Got a request for " + request);
 		Dag dt = new Dag(request);
 
 		DataBase db = new DataBase();
@@ -52,24 +49,18 @@ public class ServerImpl implements Server {
 				while (true) {
 					switch (r2.getInt("type")) {
 					case 0:
-						System.out.println("a");
 						o[co] = r2.getInt("user");
 						co++;
 						break;
 					case 1:
-						System.out.println("b");
 						m[cm] = r2.getInt("user");
 						cm++;
 						break;
 					case 2:
-						System.out.println("c");
 						a[ca] = r2.getInt("user");
 						ca++;
 						break;
-						default:
-							System.out.println("Dit hoort niet te gebeuren.........");
 					}
-					System.out.println("llllllllllllllllllllllllllllllllllllllooooooooooooooooooooooooooooooooooooong");
 					if (r2.isLast()) {
 						break;
 					}
@@ -108,11 +99,8 @@ public class ServerImpl implements Server {
 			dt.setId(r.getInt("id"));
 			dt.setChanged(false);
 
-			System.out.println("data found in database for dag " + request);
 
 		} catch (SQLException e) {
-			System.out
-					.println("No data in the database yet for dag " + request);
 
 			return API.createStandardDag(request);
 		} finally {
@@ -125,8 +113,6 @@ public class ServerImpl implements Server {
 
 	@Override
 	public Dag saveDag(Dag dag) {
-		System.out.println("Got a request to save something " + dag);
-
 		DataBase db = new DataBase();
 
 		String sql = "";
@@ -146,7 +132,6 @@ public class ServerImpl implements Server {
 		sql = String.format(sql, dag.getDag(), dag.getMaand(), dag.getJaar(),
 				dag.getDeelOpeni(0), dag.getDeelOpeni(1), dag.getDeelOpeni(2));
 
-		System.out.println("Query to run: " + sql);
 
 		boolean result = false;
 		if (!nw) {
@@ -164,7 +149,6 @@ public class ServerImpl implements Server {
 		}
 
 		if (id != -1) {
-			System.out.println("Going to do some dag kunfu magic");
 			sql = "DELETE FROM dienst WHERE dag = " + id;
 			db.runUpdate(sql);
 			
@@ -215,7 +199,6 @@ public class ServerImpl implements Server {
 
 	@Override
 	public ZaalDienst getZaalDienst(ZaalDienstRequest request) {
-		System.out.println("Got a request for " + request);
 		ZaalDienst dt = new ZaalDienst(request);
 
 		DataBase db = new DataBase();
@@ -263,8 +246,6 @@ public class ServerImpl implements Server {
 				dienst.getDagi(2), dienst.getDagi(3), dienst.getDagi(4),
 				dienst.getDagi(5), dienst.getDagi(6));
 
-		System.out.println("Query to run: " + sql);
-
 		boolean result = false;
 		if (!nw) {
 			sql += " WHERE id = " + dienst.getId();
@@ -289,10 +270,6 @@ public class ServerImpl implements Server {
 
 	@Override
 	public ZaalDienst[] getAlleZaalDiensten() {
-		// TODO Auto-generated method stub
-
-		System.out.println("Got a request for getting all zaaldienstne");
-
 		DataBase db = new DataBase();
 		ZaalDienst[] data;
 
@@ -336,7 +313,6 @@ public class ServerImpl implements Server {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("No data in the database yet.");
 
 			return null;
 		}

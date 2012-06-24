@@ -239,9 +239,7 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 
 	}
 
-	private void upd() {
-		System.out.println("Going to update yuo...");
-		
+	private void upd() {		
 		boolean[] tmp = {false, false, false, false, false, false, false};
 		tmp[0] = chckbxMaandag.isSelected();
 		tmp[1] = chckbxDinsdag.isSelected();

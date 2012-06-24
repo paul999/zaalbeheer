@@ -20,28 +20,22 @@ import nl.paul.sohier.ttv.server.Server;
 
 public class API {
 	public static Dag getDag(DagRequest request, JFrame frame) {
-		System.out.println("Getting dag from server...");
-
 		Server srv = API.getServer(frame);
 
 		try {
 			return srv.getSavedDag(request);
 		} catch (Exception e) {
-			System.out.println(e);
 			return null;
 		}
 	}
 
 	public static ZaalDienst getZaalDienst(ZaalDienstRequest request,
 			JFrame frame) {
-		System.out.println("Getting zaaldienst from server...");
-
 		Server srv = API.getServer(frame);
 
 		try {
 			return srv.getZaalDienst(request);
 		} catch (Exception e) {
-			System.out.println(e);
 			return null;
 		}
 	}
@@ -97,8 +91,6 @@ public class API {
 
 		int lt = cal.get(GregorianCalendar.DAY_OF_WEEK);
 
-		System.out.println("Request:  " + d + " weekdag: " + lt);
-
 		boolean[] open = { false, false, false };
 
 		switch (lt) {
@@ -126,9 +118,6 @@ public class API {
 
 	public static void createIssue(String title, String body, Exception e) {
 		try {
-
-			System.out.println("Hiero!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
 			Writer writer = new StringWriter();
 			PrintWriter printWriter = new PrintWriter(writer);
 			e.printStackTrace(printWriter);

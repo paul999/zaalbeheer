@@ -25,7 +25,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -33,12 +32,6 @@ import java.util.Stack;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-
-import org.eclipse.egit.github.core.Authorization;
-import org.eclipse.egit.github.core.Issue;
-import org.eclipse.egit.github.core.client.GitHubClient;
-import org.eclipse.egit.github.core.service.IssueService;
-import org.eclipse.egit.github.core.service.OAuthService;
 
 import nl.paul.sohier.ttv.libary.API;
 import nl.paul.sohier.ttv.libary.Collectie;
@@ -110,9 +103,6 @@ public class start {
 			return;
 		}
 
-		System.out.println("Adding dag: " + d + "queue size: " + queue.size()
-				+ " wait size: " + wait.size());
-
 		queue.add(d);
 
 		interruptThread();
@@ -130,7 +120,6 @@ public class start {
 		public void run() {
 
 			while (true) {
-				System.out.println("running while...");
 				if (queue.size() != 0) {
 					size += queue.size();
 
@@ -143,8 +132,6 @@ public class start {
 
 						Request request = queue.pop();
 						wait.push(request);
-
-						System.out.println("Creating task for " + request);
 
 						Task t = new Task(request);
 						t.execute();
@@ -177,9 +164,6 @@ public class start {
 		 */
 		@Override
 		public Void doInBackground() {
-
-			System.out.println("Running dag for " + task);
-
 			Item add = null;
 
 			if (task instanceof DagRequest) {
@@ -193,7 +177,6 @@ public class start {
 
 			else // Don't remove this else! (It will cause a infitite loop)
 			{
-				System.out.println("Task not defined.");
 				throw new RuntimeException("Task not defined");
 			}
 			if (add == null) {
@@ -356,6 +339,9 @@ public class start {
 
 			}
 		});
+		
+		JMenuItem mntmWijzig = new JMenuItem("Wijzig persoon");
+		mnBestand.add(mntmWijzig);
 
 		JMenuItem mntmSave = new JMenuItem("Opslaan");
 		mnBestand.add(mntmSave);
@@ -401,6 +387,17 @@ public class start {
 
 		JMenuItem mntmPdf = new JMenuItem("PDF");
 		mnUitvoer.add(mntmPdf);
+		
+		JMenu menuEmail = new JMenu("Email");
+		
+		JMenuItem mntmIedereen = new JMenuItem("Iedereen");
+		menuEmail.add(mntmIedereen);
+		JMenuItem mntmBestuur = new JMenuItem("Bestuur");
+		menuEmail.add(mntmBestuur);
+		JMenuItem mntmEnkel = new JMenuItem("Persoon");
+		menuEmail.add(mntmEnkel);
+		
+		mnUitvoer.add(menuEmail);
 
 		mntmPdf.addActionListener(new ActionListener() {
 
@@ -440,6 +437,8 @@ public class start {
 			}
 
 		});
+		
+		menuBar.add(mntmRefresh);
 
 	}
 
@@ -455,7 +454,7 @@ public class start {
 
 	private void refreshCalendar(int month, int year) {
 		count++;
-		System.out.println("Count for this function: " + count);
+		
 		// Variables
 		String[] months = { "januari", "februari", "maart", "april", "mei",
 				"juni", "juli", "augustus", "september", "oktober", "november",
@@ -575,7 +574,6 @@ public class start {
 	private boolean open = false;
 	private boolean zaaldienst = true;
 
-	@SuppressWarnings("unused")
 	private String addDeel(String deel, boolean opn, int[] dienst) {
 		String vl = deel + ": ";
 
@@ -597,7 +595,7 @@ public class start {
 				{
 					if (dienst[i] == 0)
 					{
-						System.out.println("ID is 0 voor een dienst");
+						
 						// Skip it.
 						continue;
 					}
@@ -627,10 +625,7 @@ public class start {
 	}
 
 	private void askSave() {
-		System.out.println("askSave");
-
 		if (API.items.changed()) {
-			System.out.println("Non saved days");
 
 			// Custom button text
 			Object[] options = { "Save", "Discard", "Cancel" };
@@ -642,8 +637,6 @@ public class start {
 							JOptionPane.QUESTION_MESSAGE, null, options,
 							options[2]);
 
-			System.out.println("Waarde: " + n);
-
 			switch (n) {
 			case 0:
 				save();
@@ -651,7 +644,7 @@ public class start {
 				System.exit(0);
 			case 2:
 			default:
-				System.out.println("Return");
+
 				return;
 			}
 		}
@@ -660,12 +653,9 @@ public class start {
 	}
 
 	private void save() {
-		System.out.println("Save");
-
 		while (API.items.changed()) {
 			Item upd = API.items.getChanged();
 
-			System.out.println("Going to save " + upd);
 			Server srv = API.getServer(frame);
 
 			if (upd instanceof Dag) {
@@ -673,7 +663,6 @@ public class start {
 			} else if (upd instanceof ZaalDienst) {
 				srv.saveZaalDienst((ZaalDienst) upd);
 			} else {
-				System.out.println("Unknown item class");
 				upd.setChanged(false);
 			}
 			API.items.remove(upd);
