@@ -188,7 +188,7 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 	}
 
 	public void save() {
-		Server srv = API.getServer();
+		Server srv = API.getServer(this);
 		
 		btnOpslaan.setEnabled(false);
 		btnOpslaan.setText("Bezig met opslaan...");

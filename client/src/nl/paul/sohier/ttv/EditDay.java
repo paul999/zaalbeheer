@@ -45,6 +45,7 @@ public class EditDay extends JFrame implements ActionListener {
 	private ZaalDienst[] s;
 	private int[] ids;
 	private start parent;
+	private boolean load = false;
 
 	/**
 	 * Create the frame.
@@ -70,8 +71,10 @@ public class EditDay extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		Server srv = API.getServer();
+		Server srv = API.getServer(this);
 		dag = srv.getSavedDag(request);
+		
+		System.out.println("Dag voor editing: " + dag);
 
 		contentPane.setLayout(new FormLayout(
 				new ColumnSpec[] { FormFactory.RELATED_GAP_COLSPEC,
@@ -166,6 +169,10 @@ public class EditDay extends JFrame implements ActionListener {
 		dienstmiddag.addItem("Selecteer");
 		dienstavond.addItem("Selecteer");
 		int[] zt = dag.getZaaldienst();
+		
+		System.out.println(zt.length);
+		System.out.println(zt[0] + " "  + zt[1] + " " + zt[2] + " ");
+		System.out.println(dag);
 
 		for (int i = 0; i < s.length; i++) {
 			if (s[i] != null) {
@@ -176,6 +183,8 @@ public class EditDay extends JFrame implements ActionListener {
 				ids[i + 1] = s[i].getId();
 
 				int id = s[i].getId();
+				
+				System.out.println(id + " " + zt[0]+ " " + zt[1]+ " " + zt[2]);
 
 				if (id == zt[0]) {
 					dienstochtend.setSelectedIndex(i + 1);
@@ -194,6 +203,7 @@ public class EditDay extends JFrame implements ActionListener {
 			}
 		}
 
+		load = true;
 		upd();
 
 	}
@@ -257,7 +267,7 @@ public class EditDay extends JFrame implements ActionListener {
 		button.setVisible(false);
 		btnOpslaan.setText("Bezig met opslaan...");
 
-		Server srv = API.getServer();
+		Server srv = API.getServer(this);
 		Dag dt = srv.saveDag(dag);
 		if (dt == null || !dt.isSaved()) {
 			JOptionPane
@@ -285,6 +295,8 @@ public class EditDay extends JFrame implements ActionListener {
 	}
 
 	private void upd() {
+		if (!load)
+			return;
 		boolean[] open = { false, false, false };
 
 		open[0] = ochtend.isSelected();

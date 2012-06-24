@@ -11,9 +11,9 @@ public class Dag implements DagInterface, Item {
 	private int id = -1;
 	private boolean changed = false;
 	private boolean saved = false;
-	
-	private boolean open[] = {false,false,false};
-	private int zaaldienst[] = {0, 0, 0};
+
+	private boolean open[] = { false, false, false };
+	private int zaaldienst[] = { 0, 0, 0 };
 
 	public Dag(DagRequest d) {
 		dag = d.getDag();
@@ -23,7 +23,7 @@ public class Dag implements DagInterface, Item {
 	}
 
 	public Dag() {
-		
+
 	}
 
 	/**
@@ -32,24 +32,25 @@ public class Dag implements DagInterface, Item {
 	public boolean[] getOpen() {
 		return open;
 	}
-	public boolean getDeelOpen(int i)
-	{
+
+	public boolean getDeelOpen(int i) {
 		return open[i];
 	}
-	public int getDeelOpeni(int i)
-	{
+
+	public int getDeelOpeni(int i) {
 		return open[i] ? 1 : 0;
 	}
 
 	/**
-	 * @param open the open to set
+	 * @param open
+	 *            the open to set
 	 */
 	public void setOpen(boolean[] open) {
 		changed = true;
 		this.open = open;
 	}
-	public void setOpen(int optie, boolean open)
-	{
+
+	public void setOpen(int optie, boolean open) {
 		changed = true;
 		this.open[optie] = open;
 	}
@@ -60,14 +61,14 @@ public class Dag implements DagInterface, Item {
 	public int[] getZaaldienst() {
 		return zaaldienst;
 	}
-	
-	public int getDeelZaalDienst(int i)
-	{
+
+	public int getDeelZaalDienst(int i) {
 		return zaaldienst[i];
 	}
 
 	/**
-	 * @param zaaldienst the zaaldienst to set
+	 * @param zaaldienst
+	 *            the zaaldienst to set
 	 */
 	public void setZaaldienst(int[] zaaldienst) {
 		changed = true;
@@ -75,28 +76,32 @@ public class Dag implements DagInterface, Item {
 	}
 
 	/**
-	 * @param dag the dag to set
+	 * @param dag
+	 *            the dag to set
 	 */
 	public void setDag(int dag) {
 		this.dag = dag;
 	}
 
 	/**
-	 * @param maand the maand to set
+	 * @param maand
+	 *            the maand to set
 	 */
 	public void setMaand(int maand) {
 		this.maand = maand;
 	}
 
 	/**
-	 * @param jaar the jaar to set
+	 * @param jaar
+	 *            the jaar to set
 	 */
 	public void setJaar(int jaar) {
 		this.jaar = jaar;
 	}
 
 	/**
-	 * @param changed the changed to set
+	 * @param changed
+	 *            the changed to set
 	 */
 	public void setChanged(boolean changed) {
 		this.changed = changed;
@@ -108,7 +113,6 @@ public class Dag implements DagInterface, Item {
 	public int getDag() {
 		return dag;
 	}
-
 
 	/**
 	 * @return the maand
@@ -123,7 +127,6 @@ public class Dag implements DagInterface, Item {
 	public int getJaar() {
 		return jaar;
 	}
-
 
 	/*
 	 * (non-Javadoc)
@@ -162,6 +165,10 @@ public class Dag implements DagInterface, Item {
 	 */
 	public String toString() {
 		return getDag() + "/" + (getMaand() + 1) + "/" + getJaar();
+		/*+ " Open: "
+				+ open[0] + " " + open[1] + " " + open[2] + " dienst: "
+				+ zaaldienst[0] + " " + zaaldienst[1] + " " + zaaldienst[2]
+				+ " ";*/
 	}
 
 	/**
@@ -187,7 +194,8 @@ public class Dag implements DagInterface, Item {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(int id) {
 		this.id = id;

@@ -5,8 +5,8 @@ import java.sql.SQLException;
 
 import javax.jws.WebService;
 
-import DataBase.DataBase;
 
+import nl.paul.sohier.ttv.DataBase.DataBase;
 import nl.paul.sohier.ttv.libary.API;
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
@@ -137,7 +137,7 @@ public class ServerImpl implements Server {
 			dt.setNaam(r.getString("naam"));
 			dt.setChanged(false);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			
 			return null;
 		} finally {
 

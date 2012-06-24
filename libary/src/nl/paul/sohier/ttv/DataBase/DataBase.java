@@ -1,4 +1,4 @@
-package DataBase;
+package nl.paul.sohier.ttv.DataBase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -17,6 +17,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -40,6 +41,8 @@ import nl.paul.sohier.ttv.libary.Item;
 import nl.paul.sohier.ttv.libary.Request;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
+import nl.paul.sohier.ttv.output.OutputException;
+import nl.paul.sohier.ttv.output.PDF;
 import nl.paul.sohier.ttv.server.Server;
 
 public class start {
@@ -173,10 +176,10 @@ public class start {
 
 			if (task instanceof DagRequest) {
 
-				add = API.getDag((DagRequest) task);
+				add = API.getDag((DagRequest) task, frame);
 
 			} else if (task instanceof ZaalDienstRequest) {
-				add = API.getZaalDienst((ZaalDienstRequest) task);
+				add = API.getZaalDienst((ZaalDienstRequest) task, frame);
 
 			}
 
@@ -370,11 +373,8 @@ public class start {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
 				askSave();
-
 			}
-
 		});
 
 		mnBestand.add(mntmAfsluiten);
@@ -393,6 +393,46 @@ public class start {
 
 		JMenuItem mntmPdf = new JMenuItem("PDF");
 		mnUitvoer.add(mntmPdf);
+
+		mntmPdf.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ProgressMonitor progressMonitor = null;
+				
+				try {
+					PDF p = new PDF(frame);
+
+					p.askDirectory();
+					
+					progressMonitor = new ProgressMonitor(frame,
+
+							"Bezig met genereren PDF...", "Bezig met genereren PDF...", 0, 31);
+							progressMonitor.setMillisToDecideToPopup(0);
+					p.setBar(progressMonitor);
+
+					p.generate(new DagRequest(-1, currentMonth, currentYear));
+
+					p.save();
+					progressMonitor.close();
+					
+					JOptionPane.showMessageDialog(frame, "PDF is opgeslagen op " + p.getFile(),
+							"PDF Opgeslagen.",
+							JOptionPane.INFORMATION_MESSAGE);					
+				} catch (OutputException e) {
+					String msg = e.getMessage();
+					progressMonitor.close();
+
+					JOptionPane.showMessageDialog(frame, msg,
+							"Fout bij genereren PDF.",
+							JOptionPane.ERROR_MESSAGE);
+
+				}
+
+			}
+
+		});
+
 	}
 
 	protected void refresh() {
@@ -400,7 +440,7 @@ public class start {
 		wait.removeAllElements();
 		items.removeAll();
 		refreshCalendar(currentMonth, currentYear);
-		
+
 	}
 
 	int count = 0;
@@ -409,9 +449,9 @@ public class start {
 		count++;
 		System.out.println("Count for this function: " + count);
 		// Variables
-		String[] months = { "January", "February", "March", "April", "May",
-				"June", "July", "August", "September", "October", "November",
-				"December" };
+		String[] months = { "januari", "februari", "maart", "april", "mei",
+				"juni", "juli", "augustus", "september", "oktober", "november",
+				"december" };
 		int nod, column; // Number Of Days, Start Of Month
 
 		// Allow/disallow buttons
@@ -599,24 +639,18 @@ public class start {
 
 	private void save() {
 		System.out.println("Save");
-		
-		while (items.changed())
-		{
+
+		while (items.changed()) {
 			Item upd = items.getChanged();
-			
+
 			System.out.println("Going to save " + upd);
-			Server srv = API.getServer();
-			
-			if (upd instanceof Dag)
-			{
-				srv.saveDag((Dag)upd);
-			}
-			else if (upd instanceof ZaalDienst)
-			{
-				srv.saveZaalDienst((ZaalDienst)upd);
-			}
-			else
-			{
+			Server srv = API.getServer(frame);
+
+			if (upd instanceof Dag) {
+				srv.saveDag((Dag) upd);
+			} else if (upd instanceof ZaalDienst) {
+				srv.saveZaalDienst((ZaalDienst) upd);
+			} else {
 				System.out.println("Unknown item class");
 				upd.setChanged(false);
 			}
