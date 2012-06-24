@@ -13,7 +13,9 @@ public class Dag implements DagInterface, Item {
 	private boolean saved = false;
 
 	private boolean open[] = { false, false, false };
-	private int zaaldienst[] = { 0, 0, 0 };
+	private int[] ochtend = {};
+	private int[] middag = {};
+	private int[] avond = {};
 
 	public Dag(DagRequest d) {
 		dag = d.getDag();
@@ -55,24 +57,32 @@ public class Dag implements DagInterface, Item {
 		this.open[optie] = open;
 	}
 
-	/**
-	 * @return the zaaldienst
-	 */
-	public int[] getZaaldienst() {
-		return zaaldienst;
-	}
-
-	public int getDeelZaalDienst(int i) {
-		return zaaldienst[i];
+	public int[] getDeelZaalDienst(int i) {
+		switch (i) {
+		case 0:
+			return ochtend;
+		case 1:
+			return middag;
+		case 2:
+			return avond;
+		}
+		return null;
 	}
 
 	/**
 	 * @param zaaldienst
 	 *            the zaaldienst to set
 	 */
-	public void setZaaldienst(int[] zaaldienst) {
+	public void setZaaldienst(int[][] zaaldienst) {
+
+		if (zaaldienst.length != 3) {
+			throw new RuntimeException("zaaldienst moet 3 waarde hebben");
+		}
+
 		changed = true;
-		this.zaaldienst = zaaldienst;
+		ochtend = zaaldienst[0];
+		middag = zaaldienst[1];
+		avond = zaaldienst[2];
 	}
 
 	/**
@@ -165,10 +175,10 @@ public class Dag implements DagInterface, Item {
 	 */
 	public String toString() {
 		return getDag() + "/" + (getMaand() + 1) + "/" + getJaar();
-		/*+ " Open: "
-				+ open[0] + " " + open[1] + " " + open[2] + " dienst: "
-				+ zaaldienst[0] + " " + zaaldienst[1] + " " + zaaldienst[2]
-				+ " ";*/
+		/*
+		 * + " Open: " + open[0] + " " + open[1] + " " + open[2] + " dienst: " +
+		 * zaaldienst[0] + " " + zaaldienst[1] + " " + zaaldienst[2] + " ";
+		 */
 	}
 
 	/**
@@ -207,4 +217,47 @@ public class Dag implements DagInterface, Item {
 	public int getId() {
 		return id;
 	}
+	
+	/**
+	 * @param ochtend the ochtend to set
+	 */
+	public void setOchtend(int[] ochtend) {
+		this.ochtend = ochtend;
+	}
+
+	/**
+	 * @param middag the middag to set
+	 */
+	public void setMiddag(int[] middag) {
+		this.middag = middag;
+	}
+
+	/**
+	 * @param avond the avond to set
+	 */
+	public void setAvond(int[] avond) {
+		this.avond = avond;
+	}
+
+	/**
+	 * @return the ochtend
+	 */
+	public int[] getOchtend() {
+		return ochtend;
+	}
+
+	/**
+	 * @return the middag
+	 */
+	public int[] getMiddag() {
+		return middag;
+	}
+
+	/**
+	 * @return the avond
+	 */
+	public int[] getAvond() {
+		return avond;
+	}
+	
 }

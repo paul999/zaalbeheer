@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -32,6 +33,12 @@ import java.util.Stack;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
+import org.eclipse.egit.github.core.Authorization;
+import org.eclipse.egit.github.core.Issue;
+import org.eclipse.egit.github.core.client.GitHubClient;
+import org.eclipse.egit.github.core.service.IssueService;
+import org.eclipse.egit.github.core.service.OAuthService;
 
 import nl.paul.sohier.ttv.libary.API;
 import nl.paul.sohier.ttv.libary.Collectie;
@@ -55,7 +62,7 @@ public class start {
 
 	private int realYear, realMonth, realDay, currentYear, currentMonth;
 
-	private Collectie items;
+	
 
 	private Stack<Request> queue;
 	private Stack<Request> wait;
@@ -78,7 +85,7 @@ public class start {
 					window = new start();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					API.createIssue("Global Exception", "Global exception in applicatie: ", e);
 				}
 			}
 		});
@@ -88,6 +95,7 @@ public class start {
 	 * Create the application.
 	 */
 	public start() {
+				
 		initialize();
 
 		t = new Thread(new runQueue());
@@ -189,11 +197,11 @@ public class start {
 				throw new RuntimeException("Task not defined");
 			}
 			if (add == null) {
-				System.out.println("Error?");
+				
 				return null;
 			}
 
-			items.add(add);
+			API.items.add(add);
 
 			wait.remove(task);
 
@@ -226,7 +234,7 @@ public class start {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		items = new Collectie();
+		API.items = new Collectie();
 
 		queue = new Stack<Request>();
 		wait = new Stack<Request>();
@@ -438,7 +446,7 @@ public class start {
 	protected void refresh() {
 		queue.removeAllElements();
 		wait.removeAllElements();
-		items.removeAll();
+		API.items.removeAll();
 		refreshCalendar(currentMonth, currentYear);
 
 	}
@@ -508,7 +516,7 @@ public class start {
 				if (i != 0) {
 					DagRequest d = new DagRequest(i, currentMonth, currentYear);
 
-					Dag dag = (Dag) items.get(d);
+					Dag dag = (Dag) API.items.get(d);
 
 					if (dag == null) {
 						kl = new Color(255, 255, 0);
@@ -518,11 +526,10 @@ public class start {
 						vl += "<br />";
 
 						boolean opn[] = dag.getOpen();
-						int diensten[] = dag.getZaaldienst();
 
-						vl += addDeel("Ochtend", opn[0], diensten[0]);
-						vl += addDeel("Middag", opn[1], diensten[1]);
-						vl += addDeel("Avond", opn[2], diensten[2]);
+						vl += addDeel("Ochtend", opn[0], dag.getDeelZaalDienst(0));
+						vl += addDeel("Middag", opn[1], dag.getDeelZaalDienst(1));
+						vl += addDeel("Avond", opn[2], dag.getDeelZaalDienst(2));
 
 						if (open) {
 							if (!zaaldienst) {
@@ -569,7 +576,7 @@ public class start {
 	private boolean zaaldienst = true;
 
 	@SuppressWarnings("unused")
-	private String addDeel(String deel, boolean opn, int dienst) {
+	private String addDeel(String deel, boolean opn, int[] dienst) {
 		String vl = deel + ": ";
 
 		vl += (opn) ? "Open" : "Gesloten";
@@ -578,27 +585,42 @@ public class start {
 		if (opn) {
 			open = true;
 
-			if (dienst == 0) {
+			if (dienst.length == 0) {
 				// Geen zaaldienst toegewezen.
 
 				vl += "Geen zaaldienst toegewezen<br />";
 				zaaldienst = false;
-			} else {
-				String data = "Ophalen...";
-				ZaalDienstRequest r = new ZaalDienstRequest(dienst);
+			} else {			
+				String dt = "";
+				
+				for (int i = 0; i < dienst.length; i++)
+				{
+					if (dienst[i] == 0)
+					{
+						System.out.println("ID is 0 voor een dienst");
+						// Skip it.
+						continue;
+					}
+					ZaalDienstRequest r = new ZaalDienstRequest(dienst[i]);
+					ZaalDienst zt = (ZaalDienst)API.items.get(r);
+						
+					if (i != 0)
+					{
+						dt += ", ";
+					}
+					
+					if (zt == null)
+					{
+						addQueue(r);
+						dt += "Ophalen";
+					}
+					else
+					{
+						dt += zt.getNaam();
+					}
+				}				
 
-				if (r == null) {
-					System.out.println("Null request created?" + dienst);
-				}
-
-				ZaalDienst dt = (ZaalDienst) items.get(r);
-				if (dt == null) {
-					addQueue(r);
-				} else {
-					data = dt.getNaam();
-				}
-
-				vl += "Zaaldienst: " + data + "<br />";
+				vl += "Zaaldienst: " + dt + "<br />";
 			}
 		}
 		return vl;
@@ -607,7 +629,7 @@ public class start {
 	private void askSave() {
 		System.out.println("askSave");
 
-		if (items.changed()) {
+		if (API.items.changed()) {
 			System.out.println("Non saved days");
 
 			// Custom button text
@@ -640,8 +662,8 @@ public class start {
 	private void save() {
 		System.out.println("Save");
 
-		while (items.changed()) {
-			Item upd = items.getChanged();
+		while (API.items.changed()) {
+			Item upd = API.items.getChanged();
 
 			System.out.println("Going to save " + upd);
 			Server srv = API.getServer(frame);
@@ -654,7 +676,7 @@ public class start {
 				System.out.println("Unknown item class");
 				upd.setChanged(false);
 			}
-			items.remove(upd);
+			API.items.remove(upd);
 		}
 	}
 

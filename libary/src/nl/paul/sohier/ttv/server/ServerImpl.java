@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import javax.jws.WebService;
 
-
 import nl.paul.sohier.ttv.DataBase.DataBase;
 import nl.paul.sohier.ttv.libary.API;
 import nl.paul.sohier.ttv.libary.Dag;
@@ -35,10 +34,68 @@ public class ServerImpl implements Server {
 		try {
 			r.next();
 
-			int[] zaaldienst = { 0, 0, 0 };
-			zaaldienst[0] = r.getInt("dienstochtend");
-			zaaldienst[1] = r.getInt("dienstmiddag");
-			zaaldienst[2] = r.getInt("dienstavond");
+			int[][] zaaldienst = new int[3][];
+
+			int[] o = new int[100];
+			int[] m = new int[100];
+			int[] a = new int[100];
+
+			int co = 0, ca = 0, cm = 0;
+
+			String sql = "SELECT * FROM dienst WHERE dag = " + r.getInt("id");
+
+			ResultSet r2 = db.runSelect(sql);
+
+			try {
+				
+				r2.next();
+				while (true) {
+					switch (r2.getInt("type")) {
+					case 0:
+						System.out.println("a");
+						o[co] = r2.getInt("user");
+						co++;
+						break;
+					case 1:
+						System.out.println("b");
+						m[cm] = r2.getInt("user");
+						cm++;
+						break;
+					case 2:
+						System.out.println("c");
+						a[ca] = r2.getInt("user");
+						ca++;
+						break;
+						default:
+							System.out.println("Dit hoort niet te gebeuren.........");
+					}
+					System.out.println("llllllllllllllllllllllllllllllllllllllooooooooooooooooooooooooooooooooooooong");
+					if (r2.isLast()) {
+						break;
+					}
+					r2.next();
+				}
+			} catch (SQLException e) {
+				
+			}
+			
+			zaaldienst[0] = new int[co];
+			zaaldienst[1] = new int[cm];
+			zaaldienst[2] = new int[ca];
+			
+			for (int i = 0; i < co; i++)
+			{
+				zaaldienst[0][i] = o[i];
+			}
+			for (int i = 0; i < cm; i++)
+			{
+				zaaldienst[1][i] = m[i];
+			}
+			for (int i = 0; i < ca; i++)
+			{
+				zaaldienst[2][i] = a[i];
+			}
+			
 			dt.setZaaldienst(zaaldienst);
 
 			boolean[] open = { false, false, false };
@@ -74,8 +131,9 @@ public class ServerImpl implements Server {
 
 		String sql = "";
 		boolean nw = false;
+		int id = dag.getId();
 
-		if (dag.getId() == -1) {
+		if (id == -1) {
 			nw = true;
 			sql += "INSERT INTO dag ";
 		} else {
@@ -83,12 +141,10 @@ public class ServerImpl implements Server {
 		}
 		sql += "SET ";
 
-		sql += "dag = %d, maand = %d, jaar = %d, ochtend = %d, middag = %d, avond = %d, dienstochtend = %d, dienstmiddag = %d, dienstavond = %d";
+		sql += "dag = %d, maand = %d, jaar = %d, ochtend = %d, middag = %d, avond = %d";
 
 		sql = String.format(sql, dag.getDag(), dag.getMaand(), dag.getJaar(),
-				dag.getDeelOpeni(0), dag.getDeelOpeni(1), dag.getDeelOpeni(2),
-				dag.getDeelZaalDienst(0), dag.getDeelZaalDienst(1),
-				dag.getDeelZaalDienst(2));
+				dag.getDeelOpeni(0), dag.getDeelOpeni(1), dag.getDeelOpeni(2));
 
 		System.out.println("Query to run: " + sql);
 
@@ -100,10 +156,46 @@ public class ServerImpl implements Server {
 				result = true;
 			}
 		} else {
-			int id = (int) db.runInsert(sql);
+			id = (int) db.runInsert(sql);
 			if (id != -1) {
 				result = true;
 				dag.setId(id);
+			}
+		}
+
+		if (id != -1) {
+			System.out.println("Going to do some dag kunfu magic");
+			sql = "DELETE FROM dienst WHERE dag = " + id;
+			db.runUpdate(sql);
+			
+			int[] o = dag.getDeelZaalDienst(0);
+			int[] m = dag.getDeelZaalDienst(1);
+			int[] a = dag.getDeelZaalDienst(2);
+			int l = o.length + m.length + a.length;
+
+			String[] s = new String[l];
+
+			sql = "INSERT INTO dienst SET type = %d, user = %d, dag = %d";
+
+			int c = 0;
+
+			for (int i = 0; i < o.length; i++) {
+				s[c] = String.format(sql, 0, o[i], id);
+				c++;
+			}
+
+			for (int i = 0; i < m.length; i++) {
+				s[c] = String.format(sql, 1, m[i], id);
+				c++;
+			}
+
+			for (int i = 0; i < a.length; i++) {
+				s[c] = String.format(sql, 2, a[i], id);
+				c++;
+			}
+
+			for (int i = 0; i < s.length; i++) {
+				db.runInsert(s[i]);
 			}
 		}
 
@@ -137,7 +229,7 @@ public class ServerImpl implements Server {
 			dt.setNaam(r.getString("naam"));
 			dt.setChanged(false);
 		} catch (SQLException e) {
-			
+
 			return null;
 		} finally {
 

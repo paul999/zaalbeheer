@@ -20,8 +20,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import nl.paul.sohier.ttv.libary.API;
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
-import nl.paul.sohier.ttv.libary.ZaalDienst;
-import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 import nl.paul.sohier.ttv.server.Server;
 
 public class PDF extends Save {
@@ -145,12 +143,12 @@ public class PDF extends Save {
 						request.getJaar()));
 				System.out.println(dag);
 
-				int zaaldienst[] = dag.getZaaldienst();
+				
 				boolean open[] = dag.getOpen();
-				ZaalDienst[] zt = {
-						srv.getZaalDienst(new ZaalDienstRequest(zaaldienst[0])),
-						srv.getZaalDienst(new ZaalDienstRequest(zaaldienst[1])),
-						srv.getZaalDienst(new ZaalDienstRequest(zaaldienst[2])) };
+				String[] zt = {
+						API.zaallijst(dag.getDeelZaalDienst(0), frame),
+						API.zaallijst(dag.getDeelZaalDienst(1), frame),
+						API.zaallijst(dag.getDeelZaalDienst(2), frame) };
 
 				if (dat.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY
 						&& !open[0] && !open[1] && !open[2]) {
@@ -159,8 +157,8 @@ public class PDF extends Save {
 
 				t.addCell(txt);
 				if (open[0]) {
-					if (zt[0] != null && zt[0].getId() > 0) {
-						t.addCell(zt[0].getNaam());
+					if (zt[0] != null) {
+						t.addCell(zt[0]);
 					} else {
 						t.addCell("?");
 					}
@@ -169,8 +167,8 @@ public class PDF extends Save {
 				}
 
 				if (open[1]) {
-					if (zt[1] != null && zt[1].getId() > 0) {
-						t.addCell(zt[1].getNaam());
+					if (zt[1] != null) {
+						t.addCell(zt[1]);
 					} else {
 						t.addCell("?");
 					}
@@ -184,8 +182,8 @@ public class PDF extends Save {
 				}
 
 				if (open[2]) {
-					if (zt[2] != null && zt[2].getId() > 0) {
-						t.addCell(zt[2].getNaam());
+					if (zt[2] != null) {
+						t.addCell(zt[2]);
 					} else {
 						t.addCell("?");
 					}

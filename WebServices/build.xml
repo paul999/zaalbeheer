@@ -12,6 +12,8 @@
             <fileset dir="/home/paul/workspace/zaalbeheer/libary/bin"/>
             <zipfileset excludes="META-INF/*.SF" src="/home/paul/workspace/zaalbeheer/libary/lib/mysql-connector-java-5.1.20-bin.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="/home/paul/workspace/zaalbeheer/libary/lib/itextpdf-5.3.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/paul/workspace/zaalbeheer/libary/lib/org.eclipse.egit.github.core-1.2.1-20120113.162445-8.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/paul/workspace/zaalbeheer/libary/lib/gson-2.2.1.jar"/>
         </jar>
     </target>
 </project>
