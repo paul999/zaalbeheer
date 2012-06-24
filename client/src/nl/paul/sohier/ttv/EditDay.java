@@ -44,11 +44,14 @@ public class EditDay extends JFrame implements ActionListener {
 	private JButton button;
 	private ZaalDienst[] s;
 	private int[] ids;
-	
+	private start parent;
+
 	/**
 	 * Create the frame.
 	 */
-	public EditDay(DagRequest request) {
+	public EditDay(DagRequest request, start parent) {
+
+		this.parent = parent;
 
 		setTitle("Aanpassen dag: " + request);
 
@@ -134,7 +137,6 @@ public class EditDay extends JFrame implements ActionListener {
 		contentPane.add(btnOpslaan, "2, 10, left, default");
 
 		btnOpslaan.addActionListener(new btnSave());
-		
 
 		button = new JButton("Annuleren");
 		contentPane.add(button, "4, 10, left, default");
@@ -144,59 +146,53 @@ public class EditDay extends JFrame implements ActionListener {
 		middag.addActionListener(this);
 		avond.addActionListener(this);
 
+		dienstochtend.addActionListener(this);
+		dienstmiddag.addActionListener(this);
+		dienstavond.addActionListener(this);
+
 		// Set initial values.
 		ochtend.setSelected(dag.getDeelOpen(0));
 		middag.setSelected(dag.getDeelOpen(1));
 		avond.setSelected(dag.getDeelOpen(2));
-		
+
 		s = srv.getAlleZaalDiensten();
-		
-		ids = new int[s.length+1];
+
+		ids = new int[s.length + 1];
 		ids[0] = -1;
-		
+
 		System.out.println(s.length);
-		
+
 		dienstochtend.addItem("Selecteer");
 		dienstmiddag.addItem("Selecteer");
 		dienstavond.addItem("Selecteer");
 		int[] zt = dag.getZaaldienst();
-		
-		for (int i = 0; i < s.length; i++)
-		{
-			if (s[i] != null)
-			{
+
+		for (int i = 0; i < s.length; i++) {
+			if (s[i] != null) {
 				dienstochtend.addItem(s[i].getNaam());
 				dienstmiddag.addItem(s[i].getNaam());
 				dienstavond.addItem(s[i].getNaam());
-				
+
 				ids[i + 1] = s[i].getId();
-				
+
 				int id = s[i].getId();
-				
-				
-				
-				if (id == zt[0])
-				{
+
+				if (id == zt[0]) {
 					dienstochtend.setSelectedIndex(i + 1);
 				}
-				
-				if (id == zt[1])
-				{
+
+				if (id == zt[1]) {
 					dienstmiddag.setSelectedIndex(i + 1);
-					
+
 				}
-				
-				if (id == zt[2])
-				{
+
+				if (id == zt[2]) {
 					dienstavond.setSelectedIndex(i + 1);
 				}
-			}
-			else
-			{
+			} else {
 				System.out.println("null? :(");
 			}
 		}
-		
 
 		upd();
 
@@ -240,45 +236,42 @@ public class EditDay extends JFrame implements ActionListener {
 	class btnSave implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// Save it....
-			if (dag.isChanged())
-			{
+			if (dag.isChanged()) {
 				System.out.println("Need to save...");
 				save();
-			}
-			else
-			{
+			} else {
 				dispose();
 			}
 		}
 	}
-	
+
 	class btnCancel implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// Save it....
 			askSave();
 		}
-	}	
+	}
 
 	public void save() {
 		btnOpslaan.setEnabled(false);
 		button.setVisible(false);
 		btnOpslaan.setText("Bezig met opslaan...");
-		
+
 		Server srv = API.getServer();
 		Dag dt = srv.saveDag(dag);
-		if (dt == null || !dt.isSaved())
-		{
-			JOptionPane.showMessageDialog(this,
-				    "Er is iets misgegaan bij het opslaan, probeer het later nogmaals",
-				    "Fout tijdens opslaan...",
-				    JOptionPane.ERROR_MESSAGE);
+		if (dt == null || !dt.isSaved()) {
+			JOptionPane
+					.showMessageDialog(
+							this,
+							"Er is iets misgegaan bij het opslaan, probeer het later nogmaals",
+							"Fout tijdens opslaan...",
+							JOptionPane.ERROR_MESSAGE);
 
 			btnOpslaan.setEnabled(true);
 			btnOpslaan.setText("Opslaan");
-			button.setVisible(true);				
-		}
-		else
-		{
+			button.setVisible(true);
+		} else {
+			parent.refresh();
 			dispose();
 		}
 
@@ -299,7 +292,7 @@ public class EditDay extends JFrame implements ActionListener {
 		open[2] = avond.isSelected();
 
 		dag.setOpen(open);
-		
+
 		boolean hide = true;
 
 		if (open[0]) {
@@ -320,14 +313,33 @@ public class EditDay extends JFrame implements ActionListener {
 		} else {
 			dienstavond.setVisible(false);
 		}
-		
-		if (hide)
-		{
+
+		if (hide) {
 			lblZaaldienst.setVisible(false);
-		}
-		else
-		{
+		} else {
 			lblZaaldienst.setVisible(true);
 		}
+
+		int[] dienst = { 0, 0, 0 };
+
+		if (dienstochtend.getSelectedItem() != null)
+			dienst[0] = findId(dienstochtend.getSelectedItem().toString());
+		if (dienstmiddag.getSelectedItem() != null)
+			dienst[1] = findId(dienstmiddag.getSelectedItem().toString());
+		if (dienstavond.getSelectedItem() != null)
+			dienst[2] = findId(dienstavond.getSelectedItem().toString());
+		
+		dag.setZaaldienst(dienst);
+
+	}
+
+	private int findId(String naam) {
+		for (int i = 0; i < s.length; i++) {
+			if (naam.equals(s[i].getNaam())) {
+				System.out.println("Found you :D");
+				return s[i].getId();
+			}
+		}
+		return 0;
 	}
 }

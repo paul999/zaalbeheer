@@ -143,6 +143,11 @@ public class ZaalDienst implements Item, ZaalDienstInterface {
 		
 		return (dagen[dag]) ? 1 : 0;
 	}
+	
+	public void setChanged(boolean changed)
+	{
+		this.changed = changed;
+	}
 
 	/**
 	 * @param saved the saved to set

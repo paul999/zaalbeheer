@@ -77,7 +77,7 @@ public class Collectie {
 	/**
 	 * @param delete
 	 */
-	private void remove(Item delete) {
+	public void remove(Item delete) {
 		waitForLock();
 		Iterator<Item> itr = items.iterator();
 
@@ -109,6 +109,24 @@ public class Collectie {
 		inUse = false;
 	}
 	
+	public Item getChanged()
+	{
+		waitForLock();
+		Iterator<Item> itr = items.iterator();
+
+		while (itr.hasNext()) {
+			Item d = (Item) itr.next();
+
+			if (d.isChanged()) {
+				removeLock();
+				return d;
+			}
+		}
+		removeLock();		
+		
+		return null;		
+	}
+	
 	public boolean changed(){
 		waitForLock();
 		Iterator<Item> itr = items.iterator();
@@ -117,6 +135,7 @@ public class Collectie {
 			Item d = (Item) itr.next();
 
 			if (d.isChanged()) {
+				System.out.println("Not saved: " + d);
 				
 				removeLock();
 				return true;

@@ -48,13 +48,19 @@ public class ServerImpl implements Server {
 			open[2] = r.getInt("avond") == 1 ? true : false;
 			dt.setOpen(open);
 
+			dt.setId(r.getInt("id"));
+			dt.setChanged(false);
+
+			System.out.println("data found in database for dag " + request);
+
 		} catch (SQLException e) {
-			System.out.println("No data in the database yet.");
+			System.out
+					.println("No data in the database yet for dag " + request);
 
 			return API.createStandardDag(request);
+		} finally {
+			db.closeDatabase();
 		}
-
-		db.closeDatabase();
 
 		return dt;
 
@@ -62,8 +68,51 @@ public class ServerImpl implements Server {
 
 	@Override
 	public Dag saveDag(Dag dag) {
-		System.out.println("Got a request to save something...");
+		System.out.println("Got a request to save something " + dag);
+
+		DataBase db = new DataBase();
+
+		String sql = "";
+		boolean nw = false;
+
+		if (dag.getId() == -1) {
+			nw = true;
+			sql += "INSERT INTO dag ";
+		} else {
+			sql += "UPDATE dag ";
+		}
+		sql += "SET ";
+
+		sql += "dag = %d, maand = %d, jaar = %d, ochtend = %d, middag = %d, avond = %d, dienstochtend = %d, dienstmiddag = %d, dienstavond = %d";
+
+		sql = String.format(sql, dag.getDag(), dag.getMaand(), dag.getJaar(),
+				dag.getDeelOpeni(0), dag.getDeelOpeni(1), dag.getDeelOpeni(2),
+				dag.getDeelZaalDienst(0), dag.getDeelZaalDienst(1),
+				dag.getDeelZaalDienst(2));
+
+		System.out.println("Query to run: " + sql);
+
+		boolean result = false;
+		if (!nw) {
+			sql += " WHERE id = " + dag.getId();
+
+			if (db.runUpdate(sql) != 0) {
+				result = true;
+			}
+		} else {
+			int id = (int) db.runInsert(sql);
+			if (id != -1) {
+				result = true;
+				dag.setId(id);
+			}
+		}
+
+		if (result) {
+			dag.setSaved(true);
+		}
+
 		return dag;
+
 	}
 
 	@Override
@@ -86,20 +135,20 @@ public class ServerImpl implements Server {
 			r.next();
 			dt.setEmail(r.getString("email"));
 			dt.setNaam(r.getString("naam"));
+			dt.setChanged(false);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
-		}
+		} finally {
 
-		db.closeDatabase();
+			db.closeDatabase();
+		}
 
 		return dt;
 	}
 
 	@Override
 	public ZaalDienst saveZaalDienst(ZaalDienst dienst) {
-		// TODO Auto-generated method stub
-
 		DataBase db = new DataBase();
 
 		String sql = "";
@@ -175,7 +224,7 @@ public class ServerImpl implements Server {
 				tmp.setNaam(r.getString("naam"));
 				tmp.setEmail(r.getString("email"));
 				tmp.setAantal(r.getInt("aantal"));
-				
+
 				tmp.setDag(0, r.getBoolean("maandag"));
 				tmp.setDag(1, r.getBoolean("dinsdag"));
 				tmp.setDag(2, r.getBoolean("woensdag"));
@@ -183,7 +232,7 @@ public class ServerImpl implements Server {
 				tmp.setDag(4, r.getBoolean("vrijdag"));
 				tmp.setDag(5, r.getBoolean("zaterdag"));
 				tmp.setDag(6, r.getBoolean("zondag"));
-				
+
 				tmp.setId(r.getInt("id"));
 
 				data[i] = tmp;

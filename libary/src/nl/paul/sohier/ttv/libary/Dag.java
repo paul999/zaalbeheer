@@ -8,6 +8,7 @@ public class Dag implements DagInterface, Item {
 	private int dag = 0;
 	private int maand = 0;
 	private int jaar = 0;
+	private int id = -1;
 	private boolean changed = false;
 	private boolean saved = false;
 	
@@ -58,6 +59,11 @@ public class Dag implements DagInterface, Item {
 	 */
 	public int[] getZaaldienst() {
 		return zaaldienst;
+	}
+	
+	public int getDeelZaalDienst(int i)
+	{
+		return zaaldienst[i];
 	}
 
 	/**
@@ -178,5 +184,19 @@ public class Dag implements DagInterface, Item {
 	 */
 	public boolean isSaved() {
 		return saved;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
 	}
 }

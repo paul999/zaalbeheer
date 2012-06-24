@@ -90,6 +90,8 @@ public class API {
 
 		}
 		dag.setOpen(open);
+		dag.setId(-1);
+		dag.setChanged(false);
 
 		return dag;
 	}

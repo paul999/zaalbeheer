@@ -40,6 +40,7 @@ import nl.paul.sohier.ttv.libary.Item;
 import nl.paul.sohier.ttv.libary.Request;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
+import nl.paul.sohier.ttv.server.Server;
 
 public class start {
 
@@ -285,7 +286,7 @@ public class start {
 					// Here should we open a new frame.
 
 					EditDay frame = new EditDay(new DagRequest(data[row][col],
-							currentMonth, currentYear));
+							currentMonth, currentYear), window);
 					frame.setVisible(true);
 
 				} else {
@@ -360,10 +361,7 @@ public class start {
 		mntmRefresh.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				queue.removeAllElements();
-				wait.removeAllElements();
-				items.removeAll();
-				refreshCalendar(currentMonth, currentYear);
+				refresh();
 			}
 		});
 
@@ -395,6 +393,14 @@ public class start {
 
 		JMenuItem mntmPdf = new JMenuItem("PDF");
 		mnUitvoer.add(mntmPdf);
+	}
+
+	protected void refresh() {
+		queue.removeAllElements();
+		wait.removeAllElements();
+		items.removeAll();
+		refreshCalendar(currentMonth, currentYear);
+		
 	}
 
 	int count = 0;
@@ -593,6 +599,29 @@ public class start {
 
 	private void save() {
 		System.out.println("Save");
+		
+		while (items.changed())
+		{
+			Item upd = items.getChanged();
+			
+			System.out.println("Going to save " + upd);
+			Server srv = API.getServer();
+			
+			if (upd instanceof Dag)
+			{
+				srv.saveDag((Dag)upd);
+			}
+			else if (upd instanceof ZaalDienst)
+			{
+				srv.saveZaalDienst((ZaalDienst)upd);
+			}
+			else
+			{
+				System.out.println("Unknown item class");
+				upd.setChanged(false);
+			}
+			items.remove(upd);
+		}
 	}
 
 	class tblCalendarRenderer extends DefaultTableCellRenderer {
