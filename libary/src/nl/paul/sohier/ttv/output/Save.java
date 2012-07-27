@@ -3,6 +3,7 @@ package nl.paul.sohier.ttv.output;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -13,7 +14,24 @@ abstract public class Save implements Output {
 	private File fl;
 	private boolean dir = false;
 
-	public void askDirectory() {
+	public void askDirectory(boolean temp) {
+		if (temp)
+		{
+			File tmp;
+			try {
+				tmp = File.createTempFile("ttv", ".pdf");
+			} catch (IOException e) {
+
+				e.printStackTrace();
+				return;
+			}
+			
+			setFl(tmp);
+			setFile(tmp.getName());
+			setDir(true);			
+			return;
+		}
+		
 		// Create a file chooser
 		final JFileChooser fc = new JFileChooser();
 

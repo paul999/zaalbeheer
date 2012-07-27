@@ -17,7 +17,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -41,7 +40,7 @@ import nl.paul.sohier.ttv.libary.Item;
 import nl.paul.sohier.ttv.libary.Request;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
-import nl.paul.sohier.ttv.output.OutputException;
+import nl.paul.sohier.ttv.output.Generator;
 import nl.paul.sohier.ttv.output.PDF;
 import nl.paul.sohier.ttv.server.Server;
 
@@ -352,6 +351,17 @@ public class start {
 				save();
 			}
 		});
+		
+		JMenuItem mntmSet = new JMenuItem("Instellingen");
+		mnBestand.add(mntmSet);
+		mntmSet.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Settings st = new Settings();
+				st.setVisible(true);
+			}
+		});		
 
 		JMenuItem mntmRefresh = new JMenuItem("Vernieuwen");
 		mnBestand.add(mntmRefresh);
@@ -398,42 +408,28 @@ public class start {
 		menuEmail.add(mntmEnkel);
 		
 		mnUitvoer.add(menuEmail);
+		
+		mntmIedereen.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new SendAllMail(new DagRequest(0, currentMonth, currentYear), window);
+				
+
+			}
+		});		
 
 		mntmPdf.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ProgressMonitor progressMonitor = null;
+				PDF p = new PDF(frame);
+				Generator g = new Generator(frame, p, new DagRequest(-1, currentMonth, currentYear), null);
 				
-				try {
-					PDF p = new PDF(frame);
-
-					p.askDirectory();
-					
-					progressMonitor = new ProgressMonitor(frame,
-
-							"Bezig met genereren PDF...", "Bezig met genereren PDF...", 0, 31);
-							progressMonitor.setMillisToDecideToPopup(0);
-					p.setBar(progressMonitor);
-
-					p.generate(new DagRequest(-1, currentMonth, currentYear));
-
-					p.save();
-					progressMonitor.close();
-					
-					JOptionPane.showMessageDialog(frame, "PDF is opgeslagen op " + p.getFile(),
-							"PDF Opgeslagen.",
-							JOptionPane.INFORMATION_MESSAGE);					
-				} catch (OutputException e) {
-					String msg = e.getMessage();
-					progressMonitor.close();
-
-					JOptionPane.showMessageDialog(frame, msg,
-							"Fout bij genereren PDF.",
-							JOptionPane.ERROR_MESSAGE);
-
-				}
-
+				g.genereer();
+				JOptionPane.showMessageDialog(frame, "PDF is opgeslagen op " + p.getFile(),
+						"PDF Opgeslagen.",
+						JOptionPane.INFORMATION_MESSAGE);					
 			}
 
 		});

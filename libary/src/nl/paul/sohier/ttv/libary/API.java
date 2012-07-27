@@ -1,11 +1,17 @@
 package nl.paul.sohier.ttv.libary;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.Properties;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -45,7 +51,7 @@ public class API {
 	public static Server getServer(JFrame frame) {
 		URL url;
 		try {
-			url = new URL("http://localhost:9999/ws/hello?wsdl");
+			url = new URL("http://91.196.170.37:9999/ws/hello?wsdl");
 
 			// 1st argument service URI, refer to wsdl document above
 			// 2nd argument is service name, refer to wsdl document above
@@ -147,43 +153,185 @@ public class API {
 			System.exit(1);
 		}
 	}
-	
+
 	public static Collectie items;
+	private static Properties properties;
 	
-	public static String zaallijst(int[] lijst, JFrame frame)
+	public static ArrayList<ZaalDienst> zaallijsten(DagRequest request, JFrame frame)
 	{
-		if (lijst.length == 0)
-		{
+		ArrayList<ZaalDienst> list = new ArrayList<ZaalDienst>();
+		
+		GregorianCalendar dt = new GregorianCalendar(request.getJaar(),
+				request.getMaand(), 1);
+
+		Server srv = API.getServer(frame);
+
+		for (int i = 1; i <= dt
+				.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); i++) {
+
+			DagRequest r = new DagRequest(i, request.getMaand(),
+					request.getJaar());
+			Dag dag = (Dag) API.items.get(r);
+
+			if (dag == null) {
+				dag = srv.getSavedDag(r);
+
+				if (dag == null) {
+					throw new RuntimeException("Kon " + r
+							+ " niet ophalen van de server.");
+				}
+			}
+			
+			for (int j = 0; j < 3; j++)
+			{
+				int t[] = dag.getDeelZaalDienst(j);
+				
+				for (int k = 0; k < t.length; k++)
+				{
+					ZaalDienstRequest zr = new ZaalDienstRequest();
+					
+					ZaalDienst z = (ZaalDienst)API.items.get(zr);
+					
+					if (z == null)
+					{
+						z = srv.getZaalDienst(zr);
+
+						if (z == null) {
+							// Should not happen?
+							throw new RuntimeException(
+									"There is no result found at the server?");
+						}
+						API.items.add(z);
+					}
+					list.add(z);
+					
+				}
+			}
+		}		
+		
+		return list;
+	}
+
+	public static String zaallijst(int[] lijst, JFrame frame) {
+		if (lijst.length == 0) {
 			return null;
 		}
-		
+
 		String dt = "";
 		Server srv = API.getServer(frame);
-		
-		for (int i = 0; i < lijst.length; i++)
-		{
+
+		for (int i = 0; i < lijst.length; i++) {
 			ZaalDienstRequest r = new ZaalDienstRequest(lijst[i]);
-			ZaalDienst zt = (ZaalDienst)API.items.get(r);
-			
-			if (zt == null)
-			{
+			ZaalDienst zt = (ZaalDienst) API.items.get(r);
+
+			if (zt == null) {
 				zt = srv.getZaalDienst(r);
-				
-				if (zt == null)
-				{
+
+				if (zt == null) {
 					// Should not happen?
-					throw new RuntimeException("There is no result found at the server?");
+					throw new RuntimeException(
+							"There is no result found at the server?");
 				}
 				API.items.add(zt);
 			}
-			
-			if (i != 0)
-			{
+
+			if (i != 0) {
 				dt += ", ";
 			}
 			dt += zt.getNaam();
 		}
-		
+
 		return dt;
+	}
+
+	public static Properties getProperties() {
+
+		if (API.properties == null) {
+			// set up real properties
+			properties = new Properties();
+			FileInputStream appStream;
+			try {
+				appStream = new FileInputStream(getSettingsDirectory() + "app.properties");
+				properties.load(appStream);
+				appStream.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+
+				File f = new File(getSettingsDirectory() + "app.properties");
+				if (!f.exists()) {
+					try {
+						f.createNewFile();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+						return null;
+					}
+				}
+				return getProperties();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+
+		}
+		return properties;
+
+	}
+	
+	public static void saveProperties()
+	{
+		saveProperties(properties);
+	}
+
+	@SuppressWarnings("deprecation")
+	public static void saveProperties(Properties p) {
+		FileOutputStream defaultsOut;
+		try {
+			defaultsOut = new FileOutputStream(getSettingsDirectory()
+					+ "app.properties");
+			p.save(defaultsOut, "---No Comment---");
+			defaultsOut.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static String getSettingsDirectory() {
+		String userHome = System.getProperty("user.home");
+		if (userHome == null) {
+			throw new IllegalStateException("user.home==null");
+		}
+		File home = new File(userHome);
+		File settingsDirectory = new File(home, ".ttv");
+		if (!settingsDirectory.exists()) {
+			if (!settingsDirectory.mkdir()) {
+				throw new IllegalStateException(settingsDirectory.toString());
+			}
+		}
+		return settingsDirectory.getAbsolutePath() + "/";
+	}
+	
+	public static String get(String name)
+	{
+		Object tmp = null;
+		
+		tmp = getProperties().get(name);
+		
+		if (tmp == null)
+		{
+			return "";
+		}
+		return tmp.toString();
+		
+		
+	}
+
+	public static void put(String key, String value)
+	{
+		if (value != null)
+		{
+			getProperties().put(key, value);
+		}
 	}
 }

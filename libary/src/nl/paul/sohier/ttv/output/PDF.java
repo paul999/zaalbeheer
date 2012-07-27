@@ -30,9 +30,8 @@ public class PDF extends Save {
 	public PDF(JFrame jf) {
 		frame = jf;
 	}
-	
-	public void setBar(ProgressMonitor pg)
-	{
+
+	public void setBar(ProgressMonitor pg) {
 		progressMonitor = pg;
 	}
 
@@ -43,7 +42,7 @@ public class PDF extends Save {
 		}
 
 		Document document = new Document(PageSize.A4, 50, 50, 50, 50);
-		
+
 		try {
 			File tmp = File.createTempFile("ttv", ".pdf");
 			tempDir = tmp.getAbsolutePath();
@@ -96,10 +95,6 @@ public class PDF extends Save {
 			t.addCell("Avond");
 
 			t.completeRow();
-
-			System.out.println("End: "
-					+ dt.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
-
 			Server srv = API.getServer(frame);
 
 			progressMonitor.setMaximum(dt
@@ -139,19 +134,40 @@ public class PDF extends Save {
 				txt += " " + i + " ";
 				txt += months[dat.get(GregorianCalendar.MONTH)].substring(0, 3);
 
-				Dag dag = srv.getSavedDag(new DagRequest(i, request.getMaand(),
-						request.getJaar()));
-				System.out.println(dag);
+				DagRequest r = new DagRequest(i, request.getMaand(),
+						request.getJaar());
+				Dag dag = (Dag) API.items.get(r);
 
-				
+				if (dag == null) {
+					dag = srv.getSavedDag(r);
+
+					if (dag == null) {
+						throw new OutputException("Kon " + r
+								+ " niet ophalen van de server.");
+					}
+				}
+
 				boolean open[] = dag.getOpen();
-				String[] zt = {
-						API.zaallijst(dag.getDeelZaalDienst(0), frame),
-						API.zaallijst(dag.getDeelZaalDienst(1), frame),
-						API.zaallijst(dag.getDeelZaalDienst(2), frame) };
+
+				String[] zt = null;
+
+				try {
+					String[] zt2 = {
+							API.zaallijst(dag.getDeelZaalDienst(0), frame),
+							API.zaallijst(dag.getDeelZaalDienst(1), frame),
+							API.zaallijst(dag.getDeelZaalDienst(2), frame) };
+					zt = zt2;
+				} catch (RuntimeException e) {
+					throw new OutputException(
+							"Zaaldienst kon niet gegenereerd worden.");
+				}
 
 				if (dat.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY
 						&& !open[0] && !open[1] && !open[2]) {
+					t.addCell("");
+					t.addCell("");
+					t.addCell("");
+					t.completeRow();
 					continue;
 				}
 
@@ -188,7 +204,13 @@ public class PDF extends Save {
 						t.addCell("?");
 					}
 				} else {
-					t.addCell("Gesloten");
+					if (dat.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SATURDAY
+							&& dat.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SUNDAY) {
+						t.addCell("Gesloten");
+
+					} else {
+						t.addCell("");
+					}
 				}
 
 				t.completeRow();

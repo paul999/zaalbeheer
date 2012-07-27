@@ -1,5 +1,6 @@
 package nl.paul.sohier.ttv;
 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -70,10 +71,12 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 			}
 		});
 
-		setBounds(100, 100, 450, 300);
+		//setBounds(100, 100, 450, 300);
+		pack();
+		setExtendedState(Frame.MAXIMIZED_BOTH);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+		setContentPane(contentPane);		
 
 		Server srv = API.getServer(this);
 		dag = srv.getSavedDag(request);

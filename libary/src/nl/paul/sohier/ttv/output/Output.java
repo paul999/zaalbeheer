@@ -2,10 +2,13 @@ package nl.paul.sohier.ttv.output;
 
 import java.io.File;
 
+import javax.swing.ProgressMonitor;
+
 import nl.paul.sohier.ttv.libary.DagRequest;
 
 public interface Output {
-	public void askDirectory();
+	public void askDirectory(boolean temp);
+	public void setBar(ProgressMonitor pg);
 	public void generate(DagRequest request) throws OutputException;
 	public void save() throws OutputException;
 	public String getFile();
