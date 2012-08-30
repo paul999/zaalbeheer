@@ -25,6 +25,11 @@ public class Generator {
 		genereer(false);
 	}
 
+	/**
+	 * 
+	 * @param temp
+	 * @return
+	 */
 	public boolean genereer(boolean temp) {
 		ProgressMonitor pm = null;
 
@@ -39,7 +44,7 @@ public class Generator {
 						31);
 				pm.setMillisToDecideToPopup(0);
 				generator.setBar(pm);
-				
+
 			} else {
 				generator.setBar(this.progressMonitor);
 			}
@@ -47,12 +52,17 @@ public class Generator {
 			generator.generate(dag);
 
 			generator.save();
-			if (this.progressMonitor == null) {
-				progressMonitor.close();
+
+			try {
+
+				generator.getBar().close();
+
+			} catch (NullPointerException e) {
 			}
 
 		} catch (OutputException e) {
 			String msg = e.getMessage();
+			if (progressMonitor != null)
 			progressMonitor.close();
 
 			JOptionPane.showMessageDialog(frame, msg,

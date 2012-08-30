@@ -65,7 +65,7 @@ public class PDF extends Save {
 
 			document.open();
 
-			PdfPTable t = new PdfPTable(4);
+			PdfPTable t = new PdfPTable(5);
 			t.setHeaderRows(2);
 
 			GregorianCalendar dt = new GregorianCalendar(request.getJaar(),
@@ -79,12 +79,12 @@ public class PDF extends Save {
 					+ months[dt.get(GregorianCalendar.MONTH)] + " "
 					+ dt.get(GregorianCalendar.YEAR)));
 			c1.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-			c1.setColspan(4);
+			c1.setColspan(5);
 			t.addCell(c1);
 
 			c1 = new PdfPCell(new Phrase(
 					"Kan je niet? Zorg dan zelf voor een vervanging!"));
-			c1.setColspan(4);
+			c1.setColspan(5);
 			c1.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
 
 			t.addCell(c1);
@@ -93,6 +93,7 @@ public class PDF extends Save {
 			t.addCell("Ochtend");
 			t.addCell("Middag");
 			t.addCell("Avond");
+			t.addCell("Team");
 
 			t.completeRow();
 			Server srv = API.getServer(frame);
@@ -167,6 +168,7 @@ public class PDF extends Save {
 					t.addCell("");
 					t.addCell("");
 					t.addCell("");
+					t.addCell("");
 					t.completeRow();
 					continue;
 				}
@@ -212,6 +214,12 @@ public class PDF extends Save {
 						t.addCell("");
 					}
 				}
+				String team = dag.getTeam();
+				
+				if (team == null || team.equals("null"))
+					team = "";
+				
+				t.addCell(team);
 
 				t.completeRow();
 				progressMonitor.setProgress(i);
@@ -233,6 +241,11 @@ public class PDF extends Save {
 	@Override
 	public String getTempDir() {
 		return tempDir;
+	}
+
+	@Override
+	public ProgressMonitor getBar() {
+		return progressMonitor;
 	}
 
 }

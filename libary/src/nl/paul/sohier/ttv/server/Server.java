@@ -8,6 +8,7 @@ import javax.jws.soap.SOAPBinding.Use;
 
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
+import nl.paul.sohier.ttv.libary.Team;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 
@@ -25,6 +26,7 @@ public interface Server{
 	@WebMethod ZaalDienst saveZaalDienst(ZaalDienst dienst);
 	
 	@WebMethod ZaalDienst[] getAlleZaalDiensten();
+	@WebMethod Team[] getAlleTeams();
 	
 
 }

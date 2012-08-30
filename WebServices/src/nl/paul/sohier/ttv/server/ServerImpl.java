@@ -9,6 +9,7 @@ import nl.paul.sohier.ttv.DataBase.DataBase;
 import nl.paul.sohier.ttv.libary.API;
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
+import nl.paul.sohier.ttv.libary.Team;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 
@@ -44,7 +45,7 @@ public class ServerImpl implements Server {
 			ResultSet r2 = db.runSelect(sql);
 
 			try {
-				
+
 				r2.next();
 				while (true) {
 					switch (r2.getInt("type")) {
@@ -67,26 +68,23 @@ public class ServerImpl implements Server {
 					r2.next();
 				}
 			} catch (SQLException e) {
-				
+
 			}
-			
+
 			zaaldienst[0] = new int[co];
 			zaaldienst[1] = new int[cm];
 			zaaldienst[2] = new int[ca];
-			
-			for (int i = 0; i < co; i++)
-			{
+
+			for (int i = 0; i < co; i++) {
 				zaaldienst[0][i] = o[i];
 			}
-			for (int i = 0; i < cm; i++)
-			{
+			for (int i = 0; i < cm; i++) {
 				zaaldienst[1][i] = m[i];
 			}
-			for (int i = 0; i < ca; i++)
-			{
+			for (int i = 0; i < ca; i++) {
 				zaaldienst[2][i] = a[i];
 			}
-			
+
 			dt.setZaaldienst(zaaldienst);
 
 			boolean[] open = { false, false, false };
@@ -97,8 +95,8 @@ public class ServerImpl implements Server {
 			dt.setOpen(open);
 
 			dt.setId(r.getInt("id"));
+			dt.setTeam(r.getString("team"));
 			dt.setChanged(false);
-
 
 		} catch (SQLException e) {
 
@@ -127,11 +125,12 @@ public class ServerImpl implements Server {
 		}
 		sql += "SET ";
 
-		sql += "dag = %d, maand = %d, jaar = %d, ochtend = %d, middag = %d, avond = %d";
+		sql += "dag = %d, maand = %d, jaar = %d, ochtend = %d, middag = %d, avond = %d, team = '%s'";
 
 		sql = String.format(sql, dag.getDag(), dag.getMaand(), dag.getJaar(),
-				dag.getDeelOpeni(0), dag.getDeelOpeni(1), dag.getDeelOpeni(2));
-
+				dag.getDeelOpeni(0), dag.getDeelOpeni(1), dag.getDeelOpeni(2), dag.getTeam());
+		
+		System.out.println("SQL: " + sql);
 
 		boolean result = false;
 		if (!nw) {
@@ -151,7 +150,7 @@ public class ServerImpl implements Server {
 		if (id != -1) {
 			sql = "DELETE FROM dienst WHERE dag = " + id;
 			db.runUpdate(sql);
-			
+
 			int[] o = dag.getDeelZaalDienst(0);
 			int[] m = dag.getDeelZaalDienst(1);
 			int[] a = dag.getDeelZaalDienst(2);
@@ -319,5 +318,11 @@ public class ServerImpl implements Server {
 
 		db.closeDatabase();
 		return data;
+	}
+
+	@Override
+	public Team[] getAlleTeams() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

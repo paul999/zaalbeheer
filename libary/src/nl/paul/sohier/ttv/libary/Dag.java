@@ -16,8 +16,15 @@ public class Dag implements DagInterface, Item {
 	private int[] ochtend = {};
 	private int[] middag = {};
 	private int[] avond = {};
+	private int[] teams = {};
+	private String team;
 
 	public Dag(DagRequest d) {
+		if (d == null)
+		{
+			throw new RuntimeException("Dagrequest is missing.");
+		}
+			
 		dag = d.getDag();
 		maand = d.getMaand();
 		jaar = d.getJaar();
@@ -55,6 +62,16 @@ public class Dag implements DagInterface, Item {
 	public void setOpen(int optie, boolean open) {
 		changed = true;
 		this.open[optie] = open;
+	}
+	
+	public void setTeams(int[] teams)
+	{
+		changed = true;
+		this.teams = teams;
+	}
+	public int[] getTeams()
+	{
+		return teams;
 	}
 
 	public int[] getDeelZaalDienst(int i) {
@@ -258,6 +275,20 @@ public class Dag implements DagInterface, Item {
 	 */
 	public int[] getAvond() {
 		return avond;
+	}
+
+	/**
+	 * @return the team
+	 */
+	public String getTeam() {
+		return team;
+	}
+
+	/**
+	 * @param team the team to set
+	 */
+	public void setTeam(String team) {
+		this.team = team;
 	}
 	
 }

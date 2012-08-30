@@ -243,6 +243,13 @@ public class API {
 
 		return dt;
 	}
+	
+	public static Team[] getTeams(int[] teams)
+	{
+		Team[] team = new Team[teams.length];
+		
+		return team;
+	}
 
 	public static Properties getProperties() {
 
