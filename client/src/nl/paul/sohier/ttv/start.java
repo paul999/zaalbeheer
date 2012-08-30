@@ -413,7 +413,7 @@ public class start {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				new SendAllMail(new DagRequest(0, currentMonth, currentYear), window);
+				new SendAllMail(new DagRequest(-1, currentMonth, currentYear), window);
 				
 
 			}

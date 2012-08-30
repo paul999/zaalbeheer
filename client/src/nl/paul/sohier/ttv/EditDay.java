@@ -8,12 +8,15 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import nl.paul.sohier.ttv.libary.API;
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
+import nl.paul.sohier.ttv.libary.Team;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.server.Server;
 
@@ -28,8 +31,10 @@ import javax.swing.JOptionPane;
 
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
+import javax.swing.JTextField;
 
-public class EditDay extends JFrame implements ActionListener, ListSelectionListener {
+public class EditDay extends JFrame implements ActionListener,
+		ListSelectionListener, DocumentListener {
 
 	/**
 	 * 
@@ -45,12 +50,17 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 	private JButton btnOpslaan;
 	private JButton button;
 	private ZaalDienst[] s;
+	private Team[] t;
 	private int[] ids;
 	private start parent;
 	private boolean load = false;
 	private JList dienstochtend;
 	private JList dienstmiddag;
 	private JList dienstavond;
+	private JLabel lblTeams;
+	private JLabel lblTeamZaaldienst;
+	private JList teamsthuis;
+	private JTextField teamzaaldienst;
 
 	/**
 	 * Create the frame.
@@ -71,12 +81,12 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 			}
 		});
 
-		//setBounds(100, 100, 450, 300);
+		// setBounds(100, 100, 450, 300);
 		pack();
 		setExtendedState(Frame.MAXIMIZED_BOTH);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);		
+		setContentPane(contentPane);
 
 		Server srv = API.getServer(this);
 		dag = srv.getSavedDag(request);
@@ -85,7 +95,7 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 				new ColumnSpec[] { FormFactory.RELATED_GAP_COLSPEC,
 						FormFactory.DEFAULT_COLSPEC,
 						FormFactory.RELATED_GAP_COLSPEC,
-						FormFactory.DEFAULT_COLSPEC,
+						ColumnSpec.decode("default:grow"),
 						FormFactory.RELATED_GAP_COLSPEC,
 						FormFactory.DEFAULT_COLSPEC,
 						FormFactory.RELATED_GAP_COLSPEC,
@@ -99,7 +109,7 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 						FormFactory.RELATED_GAP_ROWSPEC,
 						FormFactory.DEFAULT_ROWSPEC,
 						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC,
+						RowSpec.decode("default:grow"),
 						FormFactory.RELATED_GAP_ROWSPEC,
 						FormFactory.DEFAULT_ROWSPEC,
 						FormFactory.RELATED_GAP_ROWSPEC,
@@ -149,23 +159,13 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 		dienstavond.setVisibleRowCount(4);
 		contentPane.add(dienstavond, "8, 8, fill, fill");
 
-		btnOpslaan = new JButton("Opslaan");
-		contentPane.add(btnOpslaan, "2, 10, left, default");
-
-		btnOpslaan.addActionListener(new btnSave());
-
-		button = new JButton("Annuleren");
-		contentPane.add(button, "4, 10, left, default");
-		button.addActionListener(new btnCancel());
-
 		ochtend.addActionListener(this);
 		middag.addActionListener(this);
 		avond.addActionListener(this);
-		
+
 		dienstochtend.addListSelectionListener(this);
 		dienstmiddag.addListSelectionListener(this);
 		dienstavond.addListSelectionListener(this);
-		
 
 		// Set initial values.
 		ochtend.setSelected(dag.getDeelOpen(0));
@@ -173,6 +173,7 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 		avond.setSelected(dag.getDeelOpen(2));
 
 		s = srv.getAlleZaalDiensten();
+		t = srv.getAlleTeams();
 
 		ids = new int[s.length];
 
@@ -213,10 +214,49 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 		dienstochtend.setModel(mo);
 		dienstavond.setModel(mo);
 		dienstmiddag.setModel(mo);
-		
+
 		dienstochtend.setSelectedIndices(lo);
 		dienstmiddag.setSelectedIndices(lm);
 		dienstavond.setSelectedIndices(la);
+		
+		int[] teams = dag.getTeams();
+		Team[] team = API.getTeams(teams);
+ 
+		lblTeams = new JLabel("Teams thuis:");
+		contentPane.add(lblTeams, "2, 10");
+
+		teamsthuis = new JList();
+		teamsthuis.setVisibleRowCount(4);
+		teamsthuis.setSelectedIndices(new int[] {});
+		contentPane.add(teamsthuis, "4, 10, fill, fill");
+
+		lblTeamZaaldienst = new JLabel("Team zaaldienst");
+		contentPane.add(lblTeamZaaldienst, "2, 12, right, default");
+
+		teamzaaldienst = new JTextField();
+		contentPane.add(teamzaaldienst, "4, 12, fill, default");
+		teamzaaldienst.setColumns(10);
+		
+		String tm = dag.getTeam();
+		
+		if (tm == null || tm.equals("null"))
+		{
+			tm = "";
+		}
+		
+		teamzaaldienst.setText(tm);
+		
+		teamzaaldienst.addActionListener(this);
+		teamzaaldienst.getDocument().addDocumentListener(this);
+
+		btnOpslaan = new JButton("Opslaan");
+		contentPane.add(btnOpslaan, "2, 14, left, default");
+
+		button = new JButton("Annuleren");
+		contentPane.add(button, "4, 14, left, default");
+		button.addActionListener(new btnCancel());
+
+		btnOpslaan.addActionListener(new btnSave());
 
 		load = true;
 		upd();
@@ -308,6 +348,7 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 	}
 
 	private void upd() {
+		System.out.println("hiero");
 		if (!load)
 			return;
 		boolean[] open = { false, false, false };
@@ -346,54 +387,48 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 		}
 
 		int[][] dienst = new int[3][];
-		
+
 		int[] o = dienstochtend.getSelectedIndices();
 		int[] m = dienstmiddag.getSelectedIndices();
 		int[] a = dienstavond.getSelectedIndices();
-		
+
 		dienst[0] = new int[o.length];
 		dienst[1] = new int[m.length];
 		dienst[2] = new int[a.length];
-		
-		model om = (model)dienstochtend.getModel();
-		model mm = (model)dienstmiddag.getModel();
-		model am = (model)dienstavond.getModel();
-		
-		if (o.length > 0)
-		{
+
+		model om = (model) dienstochtend.getModel();
+		model mm = (model) dienstmiddag.getModel();
+		model am = (model) dienstavond.getModel();
+
+		if (o.length > 0) {
 			int i = 0;
-			
-			for (int j = 0; j < o.length; j++)
-			{
-				dienst[0][i] = findId((String)om.getElementAt(o[i]));
+
+			for (int j = 0; j < o.length; j++) {
+				dienst[0][i] = findId((String) om.getElementAt(o[i]));
 				i++;
 			}
 		}
-		
-		if (m.length > 0)
-		{
+
+		if (m.length > 0) {
 			int i = 0;
-			
-			for (int j = 0; j < m.length; j++)
-			{
-				dienst[1][i] = findId((String)mm.getElementAt(m[i]));
+
+			for (int j = 0; j < m.length; j++) {
+				dienst[1][i] = findId((String) mm.getElementAt(m[i]));
 				i++;
 			}
 		}
-		
-		if (a.length > 0)
-		{
+
+		if (a.length > 0) {
 			int i = 0;
-			
-			for (int j = 0; j < a.length; j++)
-			{
-				dienst[2][i] = findId((String)am.getElementAt(a[i]));
+
+			for (int j = 0; j < a.length; j++) {
+				dienst[2][i] = findId((String) am.getElementAt(a[i]));
 				i++;
 			}
 		}
-		
-				
+
 		dag.setZaaldienst(dienst); // TODO Fix.
+		dag.setTeam(teamzaaldienst.getText());
 
 	}
 
@@ -435,6 +470,24 @@ public class EditDay extends JFrame implements ActionListener, ListSelectionList
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
 		upd();
+
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent arg0) {
+		upd();
+		
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent arg0) {
+		// TODO Auto-generated method stub
 		
 	}
 }
