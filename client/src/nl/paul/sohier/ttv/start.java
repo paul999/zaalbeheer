@@ -51,10 +51,9 @@ public class start {
 	private JLabel lblMonth;
 	private DefaultTableModel mtblCalendar;
 	private JProgressBar progressBar;
+	public static ZaalDienst ik;
 
 	private int realYear, realMonth, realDay, currentYear, currentMonth;
-
-	
 
 	private Stack<Request> queue;
 	private Stack<Request> wait;
@@ -75,15 +74,13 @@ public class start {
 			public void run() {
 				try {
 					// We gaan eerst maar even inloggen... :)
-					
+
 					Login login = new Login();
 					login.setVisible(true);
-					
-					
-					
-					
+
 				} catch (Exception e) {
-					API.createIssue("Global Exception", "Global exception in applicatie: ", e);
+					API.createIssue("Global Exception",
+							"Global exception in applicatie: ", e);
 				}
 			}
 		});
@@ -93,7 +90,7 @@ public class start {
 	 * Create the application.
 	 */
 	public start() {
-				
+
 		initialize();
 
 		t = new Thread(new runQueue());
@@ -185,7 +182,7 @@ public class start {
 				throw new RuntimeException("Task not defined");
 			}
 			if (add == null) {
-				
+
 				return null;
 			}
 
@@ -339,14 +336,27 @@ public class start {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				AddZaalWacht w = new AddZaalWacht();
+				AddZaalWacht w = new AddZaalWacht(null);
 				w.setVisible(true);
 
 			}
 		});
-		
+
 		JMenuItem mntmWijzig = new JMenuItem("Wijzig persoon");
 		mnBestand.add(mntmWijzig);
+		
+		JMenuItem mntmMijzelf = new JMenuItem("Mijn account");
+		mnBestand.add(mntmMijzelf);
+		
+		mntmMijzelf.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				AddZaalWacht w = new AddZaalWacht(ik);
+				w.setVisible(true);
+
+			}
+		});		
 
 		JMenuItem mntmSave = new JMenuItem("Opslaan");
 		mnBestand.add(mntmSave);
@@ -357,7 +367,7 @@ public class start {
 				save();
 			}
 		});
-		
+
 		JMenuItem mntmSet = new JMenuItem("Instellingen");
 		mnBestand.add(mntmSet);
 		mntmSet.addActionListener(new ActionListener() {
@@ -367,7 +377,7 @@ public class start {
 				Settings st = new Settings();
 				st.setVisible(true);
 			}
-		});		
+		});
 
 		JMenuItem mntmRefresh = new JMenuItem("Vernieuwen");
 		mnBestand.add(mntmRefresh);
@@ -403,43 +413,44 @@ public class start {
 
 		JMenuItem mntmPdf = new JMenuItem("PDF");
 		mnUitvoer.add(mntmPdf);
-		
+
 		JMenu menuEmail = new JMenu("Email");
-		
+
 		JMenuItem mntmIedereen = new JMenuItem("Iedereen");
 		menuEmail.add(mntmIedereen);
 		JMenuItem mntmBestuur = new JMenuItem("Bestuur");
 		menuEmail.add(mntmBestuur);
 		JMenuItem mntmEnkel = new JMenuItem("Persoon");
 		menuEmail.add(mntmEnkel);
-		
+
 		mnUitvoer.add(menuEmail);
-		
+
 		mntmIedereen.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				new SendAllMail(new DagRequest(-1, currentMonth, currentYear), window);
-				
+				new SendAllMail(new DagRequest(-1, currentMonth, currentYear),
+						window);
 
 			}
-		});		
+		});
 
 		mntmPdf.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				PDF p = new PDF(frame);
-				Generator g = new Generator(frame, p, new DagRequest(-1, currentMonth, currentYear), null);
-				
+				Generator g = new Generator(frame, p, new DagRequest(-1,
+						currentMonth, currentYear), null);
+
 				g.genereer();
-				JOptionPane.showMessageDialog(frame, "PDF is opgeslagen op " + p.getFile(),
-						"PDF Opgeslagen.",
-						JOptionPane.INFORMATION_MESSAGE);					
+				JOptionPane.showMessageDialog(frame, "PDF is opgeslagen op "
+						+ p.getFile(), "PDF Opgeslagen.",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 
 		});
-		
+
 		menuBar.add(mntmRefresh);
 
 	}
@@ -456,26 +467,16 @@ public class start {
 
 	private void refreshCalendar(int month, int year) {
 		count++;
-		
+
 		// Variables
 		String[] months = { "januari", "februari", "maart", "april", "mei",
 				"juni", "juli", "augustus", "september", "oktober", "november",
 				"december" };
 		int nod, column; // Number Of Days, Start Of Month
 
-		// Allow/disallow buttons
-
-		// if (month == 0 && year <= realYear-10){btnPrev.setEnabled(false);}
-		// //Too early
-		// if (month == 11 && year >= realYear+100){btnNext.setEnabled(false);}
-		// //Too late
 		String st = months[month] + " " + currentYear;
 
 		lblMonth.setText(st); // Refresh the month label (at the top)
-		// lblMonth.setBounds(160 - lblMonth.getPreferredSize().width / 2, 25,
-		// 180, 25); // Re-align label with calendar
-		// cmbYear.setSelectedItem(String.valueOf(year)); //Select the correct
-		// year in the combo box
 
 		// Clear table
 		for (int i = 0; i < 6; i++) {
@@ -528,8 +529,10 @@ public class start {
 
 						boolean opn[] = dag.getOpen();
 
-						vl += addDeel("Ochtend", opn[0], dag.getDeelZaalDienst(0));
-						vl += addDeel("Middag", opn[1], dag.getDeelZaalDienst(1));
+						vl += addDeel("Ochtend", opn[0],
+								dag.getDeelZaalDienst(0));
+						vl += addDeel("Middag", opn[1],
+								dag.getDeelZaalDienst(1));
 						vl += addDeel("Avond", opn[2], dag.getDeelZaalDienst(2));
 
 						if (open) {
@@ -590,35 +593,29 @@ public class start {
 
 				vl += "Geen zaaldienst toegewezen<br />";
 				zaaldienst = false;
-			} else {			
+			} else {
 				String dt = "";
-				
-				for (int i = 0; i < dienst.length; i++)
-				{
-					if (dienst[i] == 0)
-					{
-						
+
+				for (int i = 0; i < dienst.length; i++) {
+					if (dienst[i] == 0) {
+
 						// Skip it.
 						continue;
 					}
 					ZaalDienstRequest r = new ZaalDienstRequest(dienst[i]);
-					ZaalDienst zt = (ZaalDienst)API.items.get(r);
-						
-					if (i != 0)
-					{
+					ZaalDienst zt = (ZaalDienst) API.items.get(r);
+
+					if (i != 0) {
 						dt += ", ";
 					}
-					
-					if (zt == null)
-					{
+
+					if (zt == null) {
 						addQueue(r);
 						dt += "Ophalen";
-					}
-					else
-					{
+					} else {
 						dt += zt.getNaam();
 					}
-				}				
+				}
 
 				vl += "Zaaldienst: " + dt + "<br />";
 			}

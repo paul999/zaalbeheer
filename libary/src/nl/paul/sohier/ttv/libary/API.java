@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.math.BigInteger;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Properties;
@@ -156,11 +159,11 @@ public class API {
 
 	public static Collectie items;
 	private static Properties properties;
-	
-	public static ArrayList<ZaalDienst> zaallijsten(DagRequest request, JFrame frame)
-	{
+
+	public static ArrayList<ZaalDienst> zaallijsten(DagRequest request,
+			JFrame frame) {
 		ArrayList<ZaalDienst> list = new ArrayList<ZaalDienst>();
-		
+
 		GregorianCalendar dt = new GregorianCalendar(request.getJaar(),
 				request.getMaand(), 1);
 
@@ -181,19 +184,16 @@ public class API {
 							+ " niet ophalen van de server.");
 				}
 			}
-			
-			for (int j = 0; j < 3; j++)
-			{
+
+			for (int j = 0; j < 3; j++) {
 				int t[] = dag.getDeelZaalDienst(j);
-				
-				for (int k = 0; k < t.length; k++)
-				{
+
+				for (int k = 0; k < t.length; k++) {
 					ZaalDienstRequest zr = new ZaalDienstRequest();
-					
-					ZaalDienst z = (ZaalDienst)API.items.get(zr);
-					
-					if (z == null)
-					{
+
+					ZaalDienst z = (ZaalDienst) API.items.get(zr);
+
+					if (z == null) {
 						z = srv.getZaalDienst(zr);
 
 						if (z == null) {
@@ -204,11 +204,11 @@ public class API {
 						API.items.add(z);
 					}
 					list.add(z);
-					
+
 				}
 			}
-		}		
-		
+		}
+
 		return list;
 	}
 
@@ -243,11 +243,10 @@ public class API {
 
 		return dt;
 	}
-	
-	public static Team[] getTeams(int[] teams)
-	{
+
+	public static Team[] getTeams(int[] teams) {
 		Team[] team = new Team[teams.length];
-		
+
 		return team;
 	}
 
@@ -258,7 +257,8 @@ public class API {
 			properties = new Properties();
 			FileInputStream appStream;
 			try {
-				appStream = new FileInputStream(getSettingsDirectory() + "app.properties");
+				appStream = new FileInputStream(getSettingsDirectory()
+						+ "app.properties");
 				properties.load(appStream);
 				appStream.close();
 			} catch (FileNotFoundException e) {
@@ -283,9 +283,8 @@ public class API {
 		return properties;
 
 	}
-	
-	public static void saveProperties()
-	{
+
+	public static void saveProperties() {
 		saveProperties(properties);
 	}
 
@@ -318,27 +317,40 @@ public class API {
 		}
 		return settingsDirectory.getAbsolutePath() + "/";
 	}
-	
-	public static String get(String name)
-	{
+
+	public static String get(String name) {
 		Object tmp = null;
-		
+
 		tmp = getProperties().get(name);
-		
-		if (tmp == null)
-		{
+
+		if (tmp == null) {
 			return "";
 		}
 		return tmp.toString();
-		
-		
+
 	}
 
-	public static void put(String key, String value)
-	{
-		if (value != null)
-		{
+	public static void put(String key, String value) {
+		if (value != null) {
 			getProperties().put(key, value);
 		}
+	}
+
+	/**
+	 * Generate a MD5 string 
+	 * 
+	 * @param s Data to encrypt
+	 * @return
+	 */
+	public static String md5(String s) {
+		try {
+			MessageDigest m = MessageDigest.getInstance("MD5");
+			m.update(s.getBytes(), 0, s.length());
+			BigInteger i = new BigInteger(1, m.digest());
+			return String.format("%1$032x", i);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

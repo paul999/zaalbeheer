@@ -23,7 +23,6 @@ import nl.paul.sohier.ttv.libary.DagRequest;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 import nl.paul.sohier.ttv.output.Generator;
-import nl.paul.sohier.ttv.output.OutputException;
 import nl.paul.sohier.ttv.output.PDF;
 import nl.paul.sohier.ttv.server.Server;
 
@@ -46,7 +45,7 @@ public class SendAllMail extends JFrame implements ActionListener {
 	private static final long serialVersionUID = -7267299796421679215L;
 	private JPanel contentPane;
 	private JButton button;
-	private start parent;
+//	private start parent;
 	private JLabel lblOnderwerp;
 	private JCheckBox chckbxCcBestuur;
 	private JLabel lblCc;
@@ -70,7 +69,7 @@ public class SendAllMail extends JFrame implements ActionListener {
 	public SendAllMail(DagRequest request, start parent) {
 		frame = this;
 
-		this.parent = parent;
+//		this.parent = parent;
 
 		setTitle("E-mail sturen " + request);
 		this.request = request;
@@ -210,7 +209,7 @@ public class SendAllMail extends JFrame implements ActionListener {
 			}
 
 			boolean bestuur = chckbxCcBestuur.isSelected();
-			boolean lees = chckbxLeesbevestiging.isSelected();
+//			boolean lees = chckbxLeesbevestiging.isSelected();
 			boolean lijst = chckbxVoegLijstAls.isSelected();
 
 			PDF generator = new PDF(frame);
@@ -302,9 +301,6 @@ public class SendAllMail extends JFrame implements ActionListener {
 				for (int i = 1; i <= dt
 						.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); i++) {
 					System.out.println(i);
-
-					GregorianCalendar dat = new GregorianCalendar(
-							request.getJaar(), request.getMaand(), i);
 
 					DagRequest r = new DagRequest(i, request.getMaand(),
 							request.getJaar());

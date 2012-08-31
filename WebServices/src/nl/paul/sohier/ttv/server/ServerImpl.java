@@ -239,12 +239,12 @@ public class ServerImpl implements Server {
 
 		sql += "naam = '%s', email = '%s', aantal = %d, maandag = %d"
 				+ ", dinsdag = %d, woensdag = %d, donderdag = %d, "
-				+ "vrijdag = %d, zaterdag = %d, zondag = %d";
+				+ "vrijdag = %d, zaterdag = %d, zondag = %d, canlogin = %d, password = '%d'";
 
 		sql = String.format(sql, dienst.getNaam(), dienst.getEmail(),
 				dienst.getAantal(), dienst.getDagi(0), dienst.getDagi(1),
 				dienst.getDagi(2), dienst.getDagi(3), dienst.getDagi(4),
-				dienst.getDagi(5), dienst.getDagi(6));
+				dienst.getDagi(5), dienst.getDagi(6), (dienst.isCanlogin() ? 1 : 0), dienst.getPassword());
 
 		boolean result = false;
 		if (!nw) {
@@ -303,6 +303,8 @@ public class ServerImpl implements Server {
 				tmp.setDag(6, r.getBoolean("zondag"));
 
 				tmp.setId(r.getInt("id"));
+				tmp.setPassword(r.getString("password"));
+				tmp.setCanlogin(r.getBoolean("canlogin"));
 
 				data[i] = tmp;
 				i++;
@@ -357,6 +359,9 @@ public class ServerImpl implements Server {
 				tmp.setDag(6, r.getBoolean("zondag"));
 
 				tmp.setId(r.getInt("id"));
+				tmp.setPassword(r.getString("password"));
+				tmp.setCanlogin(r.getBoolean("canlogin"));
+				
 				
 				if (r.getInt("canlogin") == 0)
 				{

@@ -159,7 +159,7 @@ public class Login extends JFrame {
 				return;
 			}
 			Server srv = API.getServer(frame);
-			ZaalDienst t = srv.login(gbr, pass);
+			ZaalDienst t = srv.login(gbr, API.md5(pass));
 			
 			if (t == null)
 			{
@@ -169,6 +169,7 @@ public class Login extends JFrame {
 			
 			dispose();
 			start.window = new start();
+			start.ik = t;
 			start.window.frame.setVisible(true);
 		}
 	}	

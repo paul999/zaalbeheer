@@ -9,6 +9,7 @@ public class ZaalDienst implements Item, ZaalDienstInterface {
 	private int aantal;
 	private boolean changed = false;
 	private boolean saved = false;
+	private boolean canlogin = false;
 
 	private int id = -1;
 
@@ -165,16 +166,42 @@ public class ZaalDienst implements Item, ZaalDienstInterface {
 	}
 
 	/**
-	 * @return the password
+	 * @return the encrypted password
 	 */
 	public String getPassword() {
 		return password;
 	}
 
 	/**
-	 * @param password the password to set
+	 * @param password the encrypted password to set
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+		this.changed = true;
+	}
+	
+	/**
+	 * Save the plaintext password for the user.
+	 * The encryption is done within this method.
+	 * @param password
+	 */
+	public void setPlainPassword(String password)
+	{
+		this.password = API.md5(password);
+		this.changed = true;
+	}
+
+	/**
+	 * @return the canlogin
+	 */
+	public boolean isCanlogin() {
+		return canlogin;
+	}
+
+	/**
+	 * @param canlogin the canlogin to set
+	 */
+	public void setCanlogin(boolean canlogin) {
+		this.canlogin = canlogin;
 	}
 }
