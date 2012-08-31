@@ -58,13 +58,10 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 	 * Create the frame.
 	 */
 	public AddZaalWacht(ZaalDienst zt) {
-		if (zt == null)
-		{
+		if (zt == null) {
 			dienst = new ZaalDienst();
 			setTitle("Zaalwacht toevoegen");
-		}
-		else
-		{
+		} else {
 			dienst = zt;
 			setTitle("Zaalwacht aanpassen");
 		}
@@ -79,9 +76,9 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 				askSave();
 			}
 		});
-		
+
 		pack();
-		setExtendedState(Frame.MAXIMIZED_BOTH);		
+		setExtendedState(Frame.MAXIMIZED_BOTH);
 
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -126,7 +123,6 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 		jEmail.setColumns(10);
 		jEmail.setText(dienst.getEmail());
 		jEmail.getDocument().addDocumentListener(this);
-		
 
 		canlogin = new JCheckBox("Kan inloggen in systeem (Volledig beheer!)");
 		contentPane.add(canlogin, "2, 6, 3, 1");
@@ -188,7 +184,7 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 
 		chckbxZaterdag = new JCheckBox("Zaterdag");
 		panel.add(chckbxZaterdag, "6, 4");
-		
+
 		boolean tmp[] = dienst.getDagen();
 		chckbxMaandag.setSelected(tmp[0]);
 		chckbxDinsdag.setSelected(tmp[1]);
@@ -196,8 +192,8 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 		chckbxDonderdag.setSelected(tmp[3]);
 		chckbxVrijdag.setSelected(tmp[4]);
 		chckbxZaterdag.setSelected(tmp[5]);
-		chckbxZondag.setSelected(tmp[6]);		
-		
+		chckbxZondag.setSelected(tmp[6]);
+
 		chckbxMaandag.addActionListener(this);
 		chckbxDinsdag.addActionListener(this);
 		chckbxWoensdag.addActionListener(this);
@@ -205,7 +201,6 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 		chckbxVrijdag.addActionListener(this);
 		chckbxZaterdag.addActionListener(this);
 		chckbxZondag.addActionListener(this);
-				
 
 		btnOpslaan = new JButton("Opslaan");
 		contentPane.add(btnOpslaan, "2, 14");
@@ -215,7 +210,7 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 
 		btnOpslaan.addActionListener(new btnSave());
 		btnAnnuleren.addActionListener(new btnCancel());
-		
+
 		load = true;
 
 	}
@@ -293,11 +288,10 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 
 	@SuppressWarnings("deprecation")
 	private void upd() {
-		if (!load)
-		{
+		if (!load) {
 			return;
 		}
-		
+
 		boolean[] tmp = { false, false, false, false, false, false, false };
 		tmp[0] = chckbxMaandag.isSelected();
 		tmp[1] = chckbxDinsdag.isSelected();

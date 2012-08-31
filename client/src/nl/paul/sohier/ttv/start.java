@@ -226,6 +226,7 @@ public class start {
 
 		frame = new JFrame();
 		frame.setTitle("TTV Alexandria zaalbeheer");
+		
 		// frame.setBounds(100, 100, 450, 300);
 		frame.pack();
 		frame.setExtendedState(Frame.MAXIMIZED_BOTH);

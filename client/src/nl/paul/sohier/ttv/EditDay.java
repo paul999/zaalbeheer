@@ -32,6 +32,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
 import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
 
 public class EditDay extends JFrame implements ActionListener,
 		ListSelectionListener, DocumentListener {
@@ -61,6 +63,10 @@ public class EditDay extends JFrame implements ActionListener,
 	private JLabel lblTeamZaaldienst;
 	private JList teamsthuis;
 	private JTextField teamzaaldienst;
+	private JLabel lblOpmerkingen;
+	private JTextArea opmerkingen;
+	private JLabel lblNewLabel;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Create the frame.
@@ -84,80 +90,88 @@ public class EditDay extends JFrame implements ActionListener,
 		// setBounds(100, 100, 450, 300);
 		pack();
 		setExtendedState(Frame.MAXIMIZED_BOTH);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+		//setContentPane(contentPane);
 
 		Server srv = API.getServer(this);
 		dag = srv.getSavedDag(request);
 
-		contentPane.setLayout(new FormLayout(
-				new ColumnSpec[] { FormFactory.RELATED_GAP_COLSPEC,
-						FormFactory.DEFAULT_COLSPEC,
-						FormFactory.RELATED_GAP_COLSPEC,
-						ColumnSpec.decode("default:grow"),
-						FormFactory.RELATED_GAP_COLSPEC,
-						FormFactory.DEFAULT_COLSPEC,
-						FormFactory.RELATED_GAP_COLSPEC,
-						FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] {
-						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC,
-						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC,
-						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC,
-						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC,
-						FormFactory.RELATED_GAP_ROWSPEC,
-						RowSpec.decode("default:grow"),
-						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC,
-						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC, }));
-
+		contentPane.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,}));
+		
 		JLabel lblDatum = new JLabel("Datum:");
-		contentPane.add(lblDatum, "2, 2");
+		contentPane.add(lblDatum, "2, 4");
 
 		JLabel lblDate = new JLabel(dag.toString());
-		contentPane.add(lblDate, "4, 2, left, default");
+		contentPane.add(lblDate, "4, 4, left, default");
 
 		JLabel lblOchtend = new JLabel("Ochtend");
-		contentPane.add(lblOchtend, "4, 4, left, default");
+		contentPane.add(lblOchtend, "4, 6, left, default");
 
 		JLabel lblMiddag = new JLabel("Middag");
-		contentPane.add(lblMiddag, "6, 4, left, default");
+		contentPane.add(lblMiddag, "6, 6, left, default");
 
 		JLabel lblAvond = new JLabel("Avond");
-		contentPane.add(lblAvond, "8, 4, left, default");
+		contentPane.add(lblAvond, "8, 6, left, default");
 
 		JLabel lblZaalOpen = new JLabel("Zaal open");
-		contentPane.add(lblZaalOpen, "2, 6");
+		contentPane.add(lblZaalOpen, "2, 8");
 
 		ochtend = new JCheckBox("");
 
-		contentPane.add(ochtend, "4, 6, left, default");
+		contentPane.add(ochtend, "4, 8, left, default");
 
 		middag = new JCheckBox("");
-		contentPane.add(middag, "6, 6, left, default");
+		contentPane.add(middag, "6, 8, left, default");
 
 		avond = new JCheckBox("");
-		contentPane.add(avond, "8, 6, left, default");
+		contentPane.add(avond, "8, 8, left, default");
 
 		lblZaaldienst = new JLabel("Zaaldienst");
-		contentPane.add(lblZaaldienst, "2, 8");
+		contentPane.add(lblZaaldienst, "2, 10");
 
 		dienstochtend = new JList();
 		dienstochtend.setVisibleRowCount(4);
 
-		contentPane.add(dienstochtend, "4, 8, fill, fill");
+		contentPane.add(dienstochtend, "4, 10, fill, fill");
 
 		dienstmiddag = new JList();
 		dienstmiddag.setVisibleRowCount(4);
-		contentPane.add(dienstmiddag, "6, 8, fill, fill");
+		contentPane.add(dienstmiddag, "6, 10, fill, fill");
 
 		dienstavond = new JList();
 		dienstavond.setVisibleRowCount(4);
-		contentPane.add(dienstavond, "8, 8, fill, fill");
+		contentPane.add(dienstavond, "8, 10, fill, fill");
 
 		ochtend.addActionListener(this);
 		middag.addActionListener(this);
@@ -223,18 +237,20 @@ public class EditDay extends JFrame implements ActionListener,
 		Team[] team = API.getTeams(teams);
  
 		lblTeams = new JLabel("Teams thuis:");
-		contentPane.add(lblTeams, "2, 10");
+		contentPane.add(lblTeams, "2, 12");
 
-		teamsthuis = new JList();
+/*
+  		teamsthuis = new JList();
 		teamsthuis.setVisibleRowCount(4);
 		teamsthuis.setSelectedIndices(new int[] {});
-		contentPane.add(teamsthuis, "4, 10, fill, fill");
-
+		contentPane.add(teamsthuis, "4, 10, center, center");
+*/
+		
 		lblTeamZaaldienst = new JLabel("Team zaaldienst");
-		contentPane.add(lblTeamZaaldienst, "2, 12, right, default");
+		contentPane.add(lblTeamZaaldienst, "2, 14, fill, default");
 
 		teamzaaldienst = new JTextField();
-		contentPane.add(teamzaaldienst, "4, 12, fill, default");
+		contentPane.add(teamzaaldienst, "4, 14, fill, default");
 		teamzaaldienst.setColumns(10);
 		
 		String tm = dag.getTeam();
@@ -248,15 +264,34 @@ public class EditDay extends JFrame implements ActionListener,
 		
 		teamzaaldienst.addActionListener(this);
 		teamzaaldienst.getDocument().addDocumentListener(this);
+		
+		lblNewLabel = new JLabel("<html>Opmerkingen worden niet weergeven op het zaalsschema,<br />deze zijn enkel informatief voor de maker van het schema</html>");
+		contentPane.add(lblNewLabel, "2, 18, 7, 1");
+		
+		lblOpmerkingen = new JLabel("Opmerkingen");
+		contentPane.add(lblOpmerkingen, "2, 16");
+		
+		opmerkingen = new JTextArea();
+		contentPane.add(opmerkingen, "4, 16, 5, 1, fill, fill");
+		opmerkingen.setText(dag.getOpmerkingen());
+		opmerkingen.getDocument().addDocumentListener(this);
+		
 
 		btnOpslaan = new JButton("Opslaan");
-		contentPane.add(btnOpslaan, "2, 14, left, default");
+		contentPane.add(btnOpslaan, "2, 20, left, default");
 
 		button = new JButton("Annuleren");
-		contentPane.add(button, "4, 14, left, default");
+		contentPane.add(button, "4, 20, left, default");
 		button.addActionListener(new btnCancel());
 
 		btnOpslaan.addActionListener(new btnSave());
+		
+		
+		
+		scrollPane = new JScrollPane(contentPane);
+		scrollPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		scrollPane.setSize(getSize());
+		setContentPane(scrollPane);
 
 		load = true;
 		upd();
@@ -429,6 +464,7 @@ public class EditDay extends JFrame implements ActionListener,
 
 		dag.setZaaldienst(dienst); // TODO Fix.
 		dag.setTeam(teamzaaldienst.getText());
+		dag.setOpmerkingen(opmerkingen.getText());
 
 	}
 

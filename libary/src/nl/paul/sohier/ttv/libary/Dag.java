@@ -18,6 +18,7 @@ public class Dag implements DagInterface, Item {
 	private int[] avond = {};
 	private int[] teams = {};
 	private String team;
+	private String opmerkingen;
 
 	public Dag(DagRequest d) {
 		if (d == null)
@@ -289,6 +290,20 @@ public class Dag implements DagInterface, Item {
 	 */
 	public void setTeam(String team) {
 		this.team = team;
+	}
+
+	/**
+	 * @return the opmerkingen
+	 */
+	public String getOpmerkingen() {
+		return opmerkingen;
+	}
+
+	/**
+	 * @param opmerkingen the opmerkingen to set
+	 */
+	public void setOpmerkingen(String opmerkingen) {
+		this.opmerkingen = opmerkingen;
 	}
 	
 }

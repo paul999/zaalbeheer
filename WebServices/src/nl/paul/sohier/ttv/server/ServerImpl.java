@@ -96,6 +96,7 @@ public class ServerImpl implements Server {
 
 			dt.setId(r.getInt("id"));
 			dt.setTeam(r.getString("team"));
+			dt.setOpmerkingen(r.getString("opmerkingen"));
 			dt.setChanged(false);
 
 		} catch (SQLException e) {
@@ -125,11 +126,11 @@ public class ServerImpl implements Server {
 		}
 		sql += "SET ";
 
-		sql += "dag = %d, maand = %d, jaar = %d, ochtend = %d, middag = %d, avond = %d, team = '%s'";
+		sql += "dag = %d, maand = %d, jaar = %d, ochtend = %d, middag = %d, avond = %d, team = '%s', opmerkingen = '%s'";
 
 		sql = String.format(sql, dag.getDag(), dag.getMaand(), dag.getJaar(),
 				dag.getDeelOpeni(0), dag.getDeelOpeni(1), dag.getDeelOpeni(2),
-				dag.getTeam());
+				dag.getTeam(), dag.getOpmerkingen());
 
 		System.out.println("SQL: " + sql);
 
