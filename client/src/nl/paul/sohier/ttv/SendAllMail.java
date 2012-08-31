@@ -2,6 +2,7 @@ package nl.paul.sohier.ttv;
 
 import java.awt.Frame;
 import java.util.*;
+
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
@@ -17,9 +18,14 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import nl.paul.sohier.ttv.libary.API;
+import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
+import nl.paul.sohier.ttv.libary.ZaalDienst;
+import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 import nl.paul.sohier.ttv.output.Generator;
+import nl.paul.sohier.ttv.output.OutputException;
 import nl.paul.sohier.ttv.output.PDF;
+import nl.paul.sohier.ttv.server.Server;
 
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -55,6 +61,8 @@ public class SendAllMail extends JFrame implements ActionListener {
 	private JCheckBox chckbxVoegLijstAls;
 	private JFrame frame;
 	private DagRequest request;
+	private JLabel lblTestMode;
+	private JLabel testmode;
 
 	/**
 	 * Create the frame.
@@ -84,31 +92,34 @@ public class SendAllMail extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		contentPane.setLayout(new FormLayout(
-				new ColumnSpec[] { FormFactory.RELATED_GAP_COLSPEC,
-						FormFactory.DEFAULT_COLSPEC,
-						FormFactory.RELATED_GAP_COLSPEC,
-						ColumnSpec.decode("default:grow"),
-						FormFactory.RELATED_GAP_COLSPEC,
-						FormFactory.DEFAULT_COLSPEC,
-						FormFactory.RELATED_GAP_COLSPEC,
-						FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] {
-						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC,
-						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC,
-						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC,
-						FormFactory.RELATED_GAP_ROWSPEC,
-						RowSpec.decode("default:grow"),
-						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC,
-						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC,
-						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC,
-						FormFactory.RELATED_GAP_ROWSPEC,
-						FormFactory.DEFAULT_ROWSPEC, }));
+		contentPane.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("default:grow"),
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,}));
 
 		lblOnderwerp = new JLabel("Onderwerp");
 		contentPane.add(lblOnderwerp, "2, 2, left, default");
@@ -116,44 +127,51 @@ public class SendAllMail extends JFrame implements ActionListener {
 		onderwerp = new JTextField();
 		contentPane.add(onderwerp, "4, 2, fill, default");
 		onderwerp.setColumns(10);
+		
+		lblTestMode = new JLabel("Test mode");
+		contentPane.add(lblTestMode, "2, 4");
+		
+		testmode = new JLabel("Nog bedenken");
+		contentPane.add(testmode, "4, 4");
+		testmode.setText((Boolean.parseBoolean(API.get("testmode")) ? "Ja" : "Nee"));
 
 		lblCc = new JLabel("CC");
-		contentPane.add(lblCc, "2, 4, left, default");
+		contentPane.add(lblCc, "2, 6, left, default");
 
 		cc = new JTextField();
-		contentPane.add(cc, "4, 4, fill, default");
+		contentPane.add(cc, "4, 6, fill, default");
 		cc.setColumns(10);
 
 		lblBcc = new JLabel("BCC");
-		contentPane.add(lblBcc, "2, 6, left, default");
+		contentPane.add(lblBcc, "2, 8, left, default");
 
 		bcc = new JTextField();
-		contentPane.add(bcc, "4, 6, fill, default");
+		contentPane.add(bcc, "4, 8, fill, default");
 		bcc.setColumns(10);
 
 		lblBericht = new JLabel("Bericht");
-		contentPane.add(lblBericht, "2, 8, left, top");
+		contentPane.add(lblBericht, "2, 10, left, top");
 
 		bericht = new JEditorPane();
-		contentPane.add(bericht, "4, 8, default, top");
+		contentPane.add(bericht, "4, 10, default, top");
 
 		chckbxCcBestuur = new JCheckBox("CC Bestuur");
-		contentPane.add(chckbxCcBestuur, "2, 10, left, default");
+		contentPane.add(chckbxCcBestuur, "2, 12, left, default");
 
 		chckbxLeesbevestiging = new JCheckBox("Leesbevestiging");
-		contentPane.add(chckbxLeesbevestiging, "2, 12");
+		contentPane.add(chckbxLeesbevestiging, "2, 14");
 
 		chckbxVoegLijstAls = new JCheckBox(
 				"Voeg lijst als bijlage toe (PDF en Excel)");
-		contentPane.add(chckbxVoegLijstAls, "2, 14");
+		contentPane.add(chckbxVoegLijstAls, "2, 16");
 
 		btnVerstuur = new JButton("Verstuur");
-		contentPane.add(btnVerstuur, "2, 16");
+		contentPane.add(btnVerstuur, "2, 18");
 
 		btnVerstuur.addActionListener(new btnVerstuur());
 
 		button = new JButton("Annuleren");
-		contentPane.add(button, "4, 16, left, default");
+		contentPane.add(button, "4, 18, left, default");
 		button.addActionListener(new btnCancel());
 
 		if (API.get("smtpserver").equals("")) {
@@ -184,11 +202,10 @@ public class SendAllMail extends JFrame implements ActionListener {
 			String dcc = cc.getText();
 			String dbcc = bcc.getText();
 			String dmessage = bericht.getText();
-			
+
 			boolean testmode = Boolean.parseBoolean(API.get("testmode"));
-			
-			if (testmode)
-			{
+
+			if (testmode) {
 				dmessage += "\n\n\nRunning in test mode. Mail not send to users.";
 			}
 
@@ -270,6 +287,84 @@ public class SendAllMail extends JFrame implements ActionListener {
 							new InternetAddress("bestuur@ttv-alexandria.nl"));
 				}
 
+				/**
+				 * Alle diensten die deze maand er zijn moeten nu opgehaald
+				 * worden. Voor alle gebruikers wordt een aparte BCC aangemaakt.
+				 */
+
+				GregorianCalendar dt = new GregorianCalendar(request.getJaar(),
+						request.getMaand(), 1);
+
+				Server srv = API.getServer(frame);
+
+				ArrayList<Integer> users = new ArrayList<Integer>();
+
+				for (int i = 1; i <= dt
+						.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); i++) {
+					System.out.println(i);
+
+					GregorianCalendar dat = new GregorianCalendar(
+							request.getJaar(), request.getMaand(), i);
+
+					DagRequest r = new DagRequest(i, request.getMaand(),
+							request.getJaar());
+					Dag dag = (Dag) API.items.get(r);
+
+					if (dag == null) {
+						dag = srv.getSavedDag(r);
+
+						if (dag == null) {
+							throw new RuntimeException("Kon " + r
+									+ " niet ophalen van de server.");
+						}
+					}
+
+					for (int j = 0; j < 3; j++) {
+						int[] tmp = dag.getDeelZaalDienst(j);
+						for (int k = 0; k < tmp.length; k++) {
+							if (!users.contains(tmp[k]))
+							{
+								users.add(tmp[k]);
+							}
+						}
+					}
+				}
+				
+				for (int i = 0; i < users.size(); i++)
+				{
+					
+					ZaalDienstRequest r = new ZaalDienstRequest(users.get(i));
+					ZaalDienst zt = (ZaalDienst) API.items.get(r);
+
+					if (zt == null) {
+						zt = srv.getZaalDienst(r);
+
+						if (zt == null) {
+							// Should not happen?
+							throw new RuntimeException(
+									"There is no result found at the server?");
+						}
+						API.items.add(zt);
+					}
+
+					String naam = zt.getNaam();
+					String email = zt.getEmail();
+					
+					if (testmode)
+					{
+						email = API.get("naaremail");
+					}
+					
+					if (email.isEmpty())
+					{
+						throw new RuntimeException("Email adres voor gebruiker " + naam + " is leeg.");
+					}
+					
+					System.out.println("Adding mail: " + email);
+					message.addRecipient(Message.RecipientType.BCC,
+							new InternetAddress(email, naam));					
+				}
+
 				// Set Subject: header field
 				message.setSubject(subject);
 
@@ -310,20 +405,17 @@ public class SendAllMail extends JFrame implements ActionListener {
 				System.out.println("Sent message successfully....");
 
 				frame.dispose();
-				
+
 				String t = "";
-				
-				if (testmode)
-				{
+
+				if (testmode) {
 					t += "\n\nTest mode ingeschakeld: Enkel verstuurd naar to email ipv users email!";
 				}
 
-				JOptionPane
-						.showMessageDialog(
-								frame,
-								"De email is verstuurd naar iedereen die deze maand zaaldienst heeft." + t,
-								"Mail verstuurd",
-								JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(frame,
+						"De email is verstuurd naar iedereen die deze maand zaaldienst heeft."
+								+ t, "Mail verstuurd",
+						JOptionPane.INFORMATION_MESSAGE);
 			} catch (MessagingException mex) {
 				mex.printStackTrace();
 
@@ -340,6 +432,16 @@ public class SendAllMail extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(frame,
 						"Er was een error bij het versturen van de email.",
 						"Kon mail niet versturen", JOptionPane.ERROR_MESSAGE);
+			}
+			catch (RuntimeException e2)
+			{
+				e2.printStackTrace();
+
+				frame.dispose();
+
+				JOptionPane.showMessageDialog(frame,
+						"Er gebeurde iets wat nite hoorde: " + e2.getMessage(),
+						"Kon mail niet versturen", JOptionPane.ERROR_MESSAGE);				
 			}
 
 		}

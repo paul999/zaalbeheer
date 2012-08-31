@@ -8,7 +8,6 @@ import java.util.NoSuchElementException;
 public class Collectie {
 	private ArrayList<Item>items;
 	
-	@SuppressWarnings("unused")
 	private boolean inUse = false;
 
 	/**
@@ -90,6 +89,14 @@ public class Collectie {
 	 */
 	private void waitForLock()
 	{
+		while (inUse)
+		{
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				
+			}
+		}
 		inUse = true;
 	}
 	
@@ -137,6 +144,8 @@ public class Collectie {
 		return false;
 	}
 	public void removeAll(){
+		waitForLock();
 		items.clear();
+		removeLock();
 	}
 }
