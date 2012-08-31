@@ -27,6 +27,7 @@ public interface Server{
 	
 	@WebMethod ZaalDienst[] getAlleZaalDiensten();
 	@WebMethod Team[] getAlleTeams();
+	@WebMethod ZaalDienst login(String user, String password);
 	
 
 }

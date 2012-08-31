@@ -4,6 +4,7 @@ public class ZaalDienst implements Item, ZaalDienstInterface {
 
 	private String naam;
 	private String email;
+	private String password;
 	private boolean[] dagen = { false, false, false, false, false, false, false };
 	private int aantal;
 	private boolean changed = false;
@@ -54,7 +55,6 @@ public class ZaalDienst implements Item, ZaalDienstInterface {
 
 	@Override
 	public boolean isChanged() {
-		// TODO Auto-generated method stub
 		return changed;
 	}
 
@@ -162,5 +162,19 @@ public class ZaalDienst implements Item, ZaalDienstInterface {
 	 */
 	public boolean isSaved() {
 		return saved;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

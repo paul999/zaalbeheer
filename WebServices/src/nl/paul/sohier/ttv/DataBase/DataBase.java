@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import nl.paul.sohier.ttv.libary.API;
+
 public class DataBase {
 
 	private Connection conn;
@@ -40,6 +42,7 @@ public class DataBase {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			API.createIssue("Database Exception", "Could not run query ", e);
 			return null;
 		}
 
@@ -51,6 +54,7 @@ public class DataBase {
 		} catch (SQLException e) {
 
 			e.printStackTrace();
+			API.createIssue("Database Exception", "Could not run query ", e);
 			return -1;
 		}
 
@@ -72,6 +76,7 @@ public class DataBase {
 		} catch (SQLException e) {
 
 			e.printStackTrace();
+			API.createIssue("Database Exception", "Could not run query ", e);
 			return key;
 		}
 	}

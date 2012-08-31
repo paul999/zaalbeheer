@@ -46,7 +46,7 @@ import nl.paul.sohier.ttv.server.Server;
 
 public class start {
 
-	private JFrame frame;
+	public JFrame frame;
 	private JTable table;
 	private JLabel lblMonth;
 	private DefaultTableModel mtblCalendar;
@@ -65,7 +65,7 @@ public class start {
 	private Color[][] kleur;
 
 	private Thread t;
-	static start window;
+	public static start window;
 
 	/**
 	 * Launch the application.
@@ -74,8 +74,14 @@ public class start {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					window = new start();
-					window.frame.setVisible(true);
+					// We gaan eerst maar even inloggen... :)
+					
+					Login login = new Login();
+					login.setVisible(true);
+					
+					
+					
+					
 				} catch (Exception e) {
 					API.createIssue("Global Exception", "Global exception in applicatie: ", e);
 				}

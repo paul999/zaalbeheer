@@ -128,8 +128,9 @@ public class ServerImpl implements Server {
 		sql += "dag = %d, maand = %d, jaar = %d, ochtend = %d, middag = %d, avond = %d, team = '%s'";
 
 		sql = String.format(sql, dag.getDag(), dag.getMaand(), dag.getJaar(),
-				dag.getDeelOpeni(0), dag.getDeelOpeni(1), dag.getDeelOpeni(2), dag.getTeam());
-		
+				dag.getDeelOpeni(0), dag.getDeelOpeni(1), dag.getDeelOpeni(2),
+				dag.getTeam());
+
 		System.out.println("SQL: " + sql);
 
 		boolean result = false;
@@ -324,5 +325,55 @@ public class ServerImpl implements Server {
 	public Team[] getAlleTeams() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public ZaalDienst login(String user, String password) {
+		DataBase db = new DataBase();
+
+		try {
+			ResultSet r = db.runSelect(String.format("SELECT * FROM zaaldienst WHERE email = '%s' AND password = '%s'", user, password));
+			
+			if (r == null)
+			{
+				db.closeDatabase();
+				return null;
+			}
+
+			r.next();
+			while (true) {
+				ZaalDienst tmp = new ZaalDienst();
+
+				tmp.setNaam(r.getString("naam"));
+				tmp.setEmail(r.getString("email"));
+				tmp.setAantal(r.getInt("aantal"));
+
+				tmp.setDag(0, r.getBoolean("maandag"));
+				tmp.setDag(1, r.getBoolean("dinsdag"));
+				tmp.setDag(2, r.getBoolean("woensdag"));
+				tmp.setDag(3, r.getBoolean("donderdag"));
+				tmp.setDag(4, r.getBoolean("vrijdag"));
+				tmp.setDag(5, r.getBoolean("zaterdag"));
+				tmp.setDag(6, r.getBoolean("zondag"));
+
+				tmp.setId(r.getInt("id"));
+				
+				if (r.getInt("canlogin") == 0)
+				{
+					db.closeDatabase();
+					return null;
+				}
+				
+				db.closeDatabase();
+				return tmp;
+			}
+		} catch (NullPointerException e2)
+		{
+			db.closeDatabase();
+			return null;
+		} catch (SQLException e) {
+			db.closeDatabase();
+			return null;
+		}
 	}
 }
