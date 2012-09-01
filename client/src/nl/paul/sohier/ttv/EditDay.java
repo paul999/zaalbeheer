@@ -95,7 +95,7 @@ public class EditDay extends JFrame implements ActionListener,
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		//setContentPane(contentPane);
 
-		Server srv = API.getServer(this);
+		Server srv = API.getServer();
 		dag = srv.getSavedDag(request);
 
 		contentPane.setLayout(new FormLayout(new ColumnSpec[] {
@@ -357,7 +357,7 @@ public class EditDay extends JFrame implements ActionListener,
 		button.setVisible(false);
 		btnOpslaan.setText("Bezig met opslaan...");
 
-		Server srv = API.getServer(this);
+		Server srv = API.getServer();
 		Dag dt = srv.saveDag(dag);
 		if (dt == null || !dt.isSaved()) {
 			JOptionPane

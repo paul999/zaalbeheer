@@ -96,7 +96,7 @@ public class PDF extends Save {
 			t.addCell("Team");
 
 			t.completeRow();
-			Server srv = API.getServer(frame);
+			Server srv = API.getServer();
 
 			progressMonitor.setMaximum(dt
 					.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
@@ -154,11 +154,14 @@ public class PDF extends Save {
 
 				try {
 					String[] zt2 = {
-							API.zaallijst(dag.getDeelZaalDienst(0), frame),
-							API.zaallijst(dag.getDeelZaalDienst(1), frame),
-							API.zaallijst(dag.getDeelZaalDienst(2), frame) };
+							API.zaallijst(dag.getDeelZaalDienst(0)),
+							API.zaallijst(dag.getDeelZaalDienst(1)),
+							API.zaallijst(dag.getDeelZaalDienst(2)) };
 					zt = zt2;
 				} catch (RuntimeException e) {
+					throw new OutputException(
+							"Zaaldienst kon niet gegenereerd worden.");
+				} catch (Exception e) {
 					throw new OutputException(
 							"Zaaldienst kon niet gegenereerd worden.");
 				}
@@ -235,6 +238,8 @@ public class PDF extends Save {
 		} catch (FileNotFoundException e) {
 
 			throw new OutputException("Bestand bestaat niet");
+		} catch (Exception e1) {
+			throw new OutputException("Generieke server error");
 		}
 	}
 

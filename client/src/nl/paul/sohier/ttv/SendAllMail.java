@@ -294,7 +294,12 @@ public class SendAllMail extends JFrame implements ActionListener {
 				GregorianCalendar dt = new GregorianCalendar(request.getJaar(),
 						request.getMaand(), 1);
 
-				Server srv = API.getServer(frame);
+				Server srv;
+				try {
+					srv = API.getServer();
+				} catch (Exception e1) {
+					throw new RuntimeException(e1.getMessage());
+				}
 
 				ArrayList<Integer> users = new ArrayList<Integer>();
 

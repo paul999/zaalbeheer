@@ -170,10 +170,10 @@ public class start {
 
 			if (task instanceof DagRequest) {
 
-				add = API.getDag((DagRequest) task, frame);
+				add = API.getDag((DagRequest) task);
 
 			} else if (task instanceof ZaalDienstRequest) {
-				add = API.getZaalDienst((ZaalDienstRequest) task, frame);
+				add = API.getZaalDienst((ZaalDienstRequest) task);
 
 			}
 
@@ -181,6 +181,7 @@ public class start {
 			{
 				throw new RuntimeException("Task not defined");
 			}
+
 			if (add == null) {
 
 				return null;
@@ -226,7 +227,7 @@ public class start {
 
 		frame = new JFrame();
 		frame.setTitle("TTV Alexandria zaalbeheer");
-		
+
 		// frame.setBounds(100, 100, 450, 300);
 		frame.pack();
 		frame.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -345,10 +346,10 @@ public class start {
 
 		JMenuItem mntmWijzig = new JMenuItem("Wijzig persoon");
 		mnBestand.add(mntmWijzig);
-		
+
 		JMenuItem mntmMijzelf = new JMenuItem("Mijn account");
 		mnBestand.add(mntmMijzelf);
-		
+
 		mntmMijzelf.addActionListener(new ActionListener() {
 
 			@Override
@@ -357,7 +358,7 @@ public class start {
 				w.setVisible(true);
 
 			}
-		});		
+		});
 
 		JMenuItem mntmSave = new JMenuItem("Opslaan");
 		mnBestand.add(mntmSave);
@@ -653,10 +654,12 @@ public class start {
 	}
 
 	private void save() {
+		Server srv = null;
+
+		srv = API.getServer();
+
 		while (API.items.changed()) {
 			Item upd = API.items.getChanged();
-
-			Server srv = API.getServer(frame);
 
 			if (upd instanceof Dag) {
 				srv.saveDag((Dag) upd);

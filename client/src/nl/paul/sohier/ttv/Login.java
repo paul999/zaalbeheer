@@ -149,7 +149,7 @@ public class Login extends JFrame {
 				error("Gebruikersnaam/wachtwoord is leeg");
 				return;
 			}
-			Server srv = API.getServer(frame);
+			Server srv = API.getServer();
 			ZaalDienst t = srv.login(gbr, API.md5(pass));
 
 			if (t == null) {

@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -16,8 +17,6 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Properties;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
@@ -28,8 +27,8 @@ import org.eclipse.egit.github.core.service.IssueService;
 import nl.paul.sohier.ttv.server.Server;
 
 public class API {
-	public static Dag getDag(DagRequest request, JFrame frame) {
-		Server srv = API.getServer(frame);
+	public static Dag getDag(DagRequest request)  {
+		Server srv = API.getServer();
 
 		try {
 			return srv.getSavedDag(request);
@@ -38,9 +37,8 @@ public class API {
 		}
 	}
 
-	public static ZaalDienst getZaalDienst(ZaalDienstRequest request,
-			JFrame frame) {
-		Server srv = API.getServer(frame);
+	public static ZaalDienst getZaalDienst(ZaalDienstRequest request)  {
+		Server srv = API.getServer();
 
 		try {
 			return srv.getZaalDienst(request);
@@ -51,7 +49,7 @@ public class API {
 
 	private static boolean displayed = false;
 
-	public static Server getServer(JFrame frame) {
+	public static Server getServer()  {
 		URL url;
 		try {
 			url = new URL("http://91.196.170.37:9999/ws/hello?wsdl");
@@ -65,7 +63,7 @@ public class API {
 
 			service = Service.create(url, qname);
 			return service.getPort(Server.class);
-		} catch (Exception e) {
+		} catch (MalformedURLException e) {
 
 			if (!displayed) {
 				displayed = true;
@@ -73,18 +71,7 @@ public class API {
 				API.createIssue("Server failed",
 						"There was a error during the server request: ", e);
 
-				frame.dispose();
-				// gapi.issues.open("paul999", "zaalbeheer",
-				// "Server not responding",
-				// "The remote server is not responding. \nException: " +
-				// e.getStackTrace());
-
-				JOptionPane.showMessageDialog(frame,
-						"Fout bij het verbinden met server: " + e.getMessage(),
-						"Kon geen verbinding maken met de server",
-						JOptionPane.ERROR_MESSAGE);
-				System.exit(1); // We exit here to make sure nothing bad
-								// happens...
+				throw new RuntimeException("There was a error during a request to the server: " + e.getMessage());
 			}
 
 			return null;
@@ -160,14 +147,14 @@ public class API {
 	public static Collectie items;
 	private static Properties properties;
 
-	public static ArrayList<ZaalDienst> zaallijsten(DagRequest request,
-			JFrame frame) {
+	public static ArrayList<ZaalDienst> zaallijsten(DagRequest request
+			) {
 		ArrayList<ZaalDienst> list = new ArrayList<ZaalDienst>();
 
 		GregorianCalendar dt = new GregorianCalendar(request.getJaar(),
 				request.getMaand(), 1);
 
-		Server srv = API.getServer(frame);
+		Server srv = API.getServer();
 
 		for (int i = 1; i <= dt
 				.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); i++) {
@@ -212,13 +199,13 @@ public class API {
 		return list;
 	}
 
-	public static String zaallijst(int[] lijst, JFrame frame) {
+	public static String zaallijst(int[] lijst)  {
 		if (lijst.length == 0) {
 			return null;
 		}
 
 		String dt = "";
-		Server srv = API.getServer(frame);
+		Server srv = API.getServer();
 
 		for (int i = 0; i < lijst.length; i++) {
 			ZaalDienstRequest r = new ZaalDienstRequest(lijst[i]);
