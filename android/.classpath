@@ -4,5 +4,8 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry exported="true" kind="lib" path="libs/ksoap2-android-assembly-2.6.5-jar-with-dependencies.jar"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/libary"/>
+	<classpathentry exported="true" kind="lib" path="/libary/lib/org.eclipse.egit.github.core-1.2.1-20120113.162445-8.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

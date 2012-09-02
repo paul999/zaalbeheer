@@ -304,6 +304,5 @@ public class Dag implements DagInterface, Item {
 	 */
 	public void setOpmerkingen(String opmerkingen) {
 		this.opmerkingen = opmerkingen;
-	}
-	
+	}	
 }

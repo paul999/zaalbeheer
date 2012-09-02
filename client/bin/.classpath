@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="/libary/lib/org.eclipse.egit.github.core-1.2.1-20120113.162445-8.jar"/>
 	<classpathentry kind="lib" path="/libary/lib/gson-2.2.1.jar"/>
 	<classpathentry kind="lib" path="/libary/lib/mail.jar"/>
+	<classpathentry kind="lib" path="/libary/lib/itextpdf-5.3.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

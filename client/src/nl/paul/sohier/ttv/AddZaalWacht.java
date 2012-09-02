@@ -21,7 +21,6 @@ import javax.swing.JLabel;
 
 import javax.swing.JButton;
 
-import nl.paul.sohier.ttv.libary.API;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.server.Server;
 

@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-import nl.paul.sohier.ttv.libary.API;
 import javax.swing.JCheckBox;
 
 public class Settings extends JFrame {

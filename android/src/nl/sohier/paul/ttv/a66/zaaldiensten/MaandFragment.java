@@ -3,14 +3,19 @@
  */
 package nl.sohier.paul.ttv.a66.zaaldiensten;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+
 import java.util.GregorianCalendar;
 
 import java.util.List;
+
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
+
+import nl.paul.sohier.ttv.libary.API;
+import nl.paul.sohier.ttv.libary.Dag;
+import nl.paul.sohier.ttv.libary.DagRequest;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -37,10 +42,13 @@ public class MaandFragment extends Fragment {
 	private GridCellAdapter adapter;
 	private int month, year;
 	private View view;
+	Zaalbeheer zb;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
+		zb = (Zaalbeheer) getActivity();
 
 		view = inflater.inflate(R.layout.month_main, container, false);
 		Bundle arg = getArguments();
@@ -77,12 +85,9 @@ public class MaandFragment extends Fragment {
 
 		private Button gridcell;
 
-		private final SimpleDateFormat dateFormatter = new SimpleDateFormat(
-				"dd-MMM-yyyy");
-
 		// Days in Current Month
 		public GridCellAdapter(Context context, int textViewResourceId,
-				int month, int year) {
+				final int month, final int year) {
 			super();
 			this._context = context;
 			this.list = new ArrayList<WeekDag>();
@@ -92,9 +97,24 @@ public class MaandFragment extends Fragment {
 			Calendar calendar = Calendar.getInstance();
 
 			Log.d(tag, "New Calendar:= " + calendar.getTime().toString());
+			
+			GregorianCalendar cal = new GregorianCalendar(year, month, 1);
+
+			int nod = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+
+
+			// Draw calendar
+			for (int i = 1; i <= nod; i++) {
+				
+				zb.addQueue(new DagRequest(i, month, year));
+			}
+			
 
 			// Print Month
 			printMonth(month, year);
+
+ 
+
 		}
 
 		public WeekDag getItem(int position) {
@@ -196,4 +216,6 @@ public class MaandFragment extends Fragment {
 
 		}
 	}
+
+
 }

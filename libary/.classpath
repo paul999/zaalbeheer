@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/itextpdf-5.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.egit.github.core-1.2.1-20120113.162445-8.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.egit.github.core-1.2.1-20120113.162445-8.jar"/>
+	<classpathentry exported="true" kind="lib" path="/nl.sohier.paul.ttv.a66.zaaldiensten.Zaalbeheer/libs/ksoap2-android-assembly-2.6.5-jar-with-dependencies.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

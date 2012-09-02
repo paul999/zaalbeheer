@@ -18,7 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 
-import nl.paul.sohier.ttv.libary.API;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.server.Server;
 

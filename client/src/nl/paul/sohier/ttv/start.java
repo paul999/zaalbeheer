@@ -32,7 +32,6 @@ import java.util.Stack;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import nl.paul.sohier.ttv.libary.API;
 import nl.paul.sohier.ttv.libary.Collectie;
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;

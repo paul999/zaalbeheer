@@ -9,75 +9,19 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Properties;
-
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
 
 import org.eclipse.egit.github.core.Issue;
 import org.eclipse.egit.github.core.client.GitHubClient;
 import org.eclipse.egit.github.core.service.IssueService;
-
-import nl.paul.sohier.ttv.server.Server;
+import org.ksoap2.serialization.SoapObject;
 
 public class API {
-	public static Dag getDag(DagRequest request)  {
-		Server srv = API.getServer();
 
-		try {
-			return srv.getSavedDag(request);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	public static ZaalDienst getZaalDienst(ZaalDienstRequest request)  {
-		Server srv = API.getServer();
-
-		try {
-			return srv.getZaalDienst(request);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	private static boolean displayed = false;
-
-	public static Server getServer()  {
-		URL url;
-		try {
-			url = new URL("http://91.196.170.37:9999/ws/hello?wsdl");
-
-			// 1st argument service URI, refer to wsdl document above
-			// 2nd argument is service name, refer to wsdl document above
-			QName qname = new QName("http://server.ttv.sohier.paul.nl/",
-					"ServerImplService");
-
-			Service service = null;
-
-			service = Service.create(url, qname);
-			return service.getPort(Server.class);
-		} catch (MalformedURLException e) {
-
-			if (!displayed) {
-				displayed = true;
-
-				API.createIssue("Server failed",
-						"There was a error during the server request: ", e);
-
-				throw new RuntimeException("There was a error during a request to the server: " + e.getMessage());
-			}
-
-			return null;
-		}
-
-	}
+	protected static boolean displayed = false;
 
 	public static Dag createStandardDag(DagRequest d) {
 		Dag dag = new Dag(d);
@@ -146,90 +90,6 @@ public class API {
 
 	public static Collectie items;
 	private static Properties properties;
-
-	public static ArrayList<ZaalDienst> zaallijsten(DagRequest request
-			) {
-		ArrayList<ZaalDienst> list = new ArrayList<ZaalDienst>();
-
-		GregorianCalendar dt = new GregorianCalendar(request.getJaar(),
-				request.getMaand(), 1);
-
-		Server srv = API.getServer();
-
-		for (int i = 1; i <= dt
-				.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); i++) {
-
-			DagRequest r = new DagRequest(i, request.getMaand(),
-					request.getJaar());
-			Dag dag = (Dag) API.items.get(r);
-
-			if (dag == null) {
-				dag = srv.getSavedDag(r);
-
-				if (dag == null) {
-					throw new RuntimeException("Kon " + r
-							+ " niet ophalen van de server.");
-				}
-			}
-
-			for (int j = 0; j < 3; j++) {
-				int t[] = dag.getDeelZaalDienst(j);
-
-				for (int k = 0; k < t.length; k++) {
-					ZaalDienstRequest zr = new ZaalDienstRequest();
-
-					ZaalDienst z = (ZaalDienst) API.items.get(zr);
-
-					if (z == null) {
-						z = srv.getZaalDienst(zr);
-
-						if (z == null) {
-							// Should not happen?
-							throw new RuntimeException(
-									"There is no result found at the server?");
-						}
-						API.items.add(z);
-					}
-					list.add(z);
-
-				}
-			}
-		}
-
-		return list;
-	}
-
-	public static String zaallijst(int[] lijst)  {
-		if (lijst.length == 0) {
-			return null;
-		}
-
-		String dt = "";
-		Server srv = API.getServer();
-
-		for (int i = 0; i < lijst.length; i++) {
-			ZaalDienstRequest r = new ZaalDienstRequest(lijst[i]);
-			ZaalDienst zt = (ZaalDienst) API.items.get(r);
-
-			if (zt == null) {
-				zt = srv.getZaalDienst(r);
-
-				if (zt == null) {
-					// Should not happen?
-					throw new RuntimeException(
-							"There is no result found at the server?");
-				}
-				API.items.add(zt);
-			}
-
-			if (i != 0) {
-				dt += ", ";
-			}
-			dt += zt.getNaam();
-		}
-
-		return dt;
-	}
 
 	public static Team[] getTeams(int[] teams) {
 		Team[] team = new Team[teams.length];
@@ -324,9 +184,10 @@ public class API {
 	}
 
 	/**
-	 * Generate a MD5 string 
+	 * Generate a MD5 string
 	 * 
-	 * @param s Data to encrypt
+	 * @param s
+	 *            Data to encrypt
 	 * @return
 	 */
 	public static String md5(String s) {
@@ -340,4 +201,6 @@ public class API {
 		}
 		return null;
 	}
+
+
 }
