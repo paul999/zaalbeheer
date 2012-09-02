@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -94,7 +95,7 @@ public class Zaalbeheer extends FragmentActivity implements OnNavigationListener
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
      * sections of the app.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     	private String[] months = { "januari", "februari", "maart", "april", "mei",
 				"juni", "juli", "augustus", "september", "oktober", "november",
 				"december" };
@@ -105,10 +106,15 @@ public class Zaalbeheer extends FragmentActivity implements OnNavigationListener
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = new DummySectionFragment();
+        	Log.d("ttv", "Item: " + i);
+            
+            
+            Fragment fragment = new MaandFragment();
             Bundle args = new Bundle();
-            args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, i + 1);
+            args.putInt("maand", i );
+            args.putInt("jaar", currentYear);
             fragment.setArguments(args);
+            
             return fragment;
         }
 
