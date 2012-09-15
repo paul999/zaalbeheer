@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Stack;
 
 import org.ksoap2.serialization.SoapObject;
-
+import org.ksoap2.serialization.SoapPrimitive;
 import nl.paul.sohier.ttv.libary.API;
 import nl.paul.sohier.ttv.libary.Collectie;
 import nl.paul.sohier.ttv.libary.Dag;
@@ -15,11 +15,16 @@ import nl.paul.sohier.ttv.libary.Request;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 
 import android.app.ActionBar;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.preference.Preference;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -41,20 +46,36 @@ import android.widget.TextView;
 public class Zaalbeheer extends FragmentActivity implements
 		OnNavigationListener {
 
-	/**
-	 * The {@link android.support.v4.view.PagerAdapter} that will provide
-	 * fragments for each of the sections. We use a
-	 * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which
-	 * will keep every loaded fragment in memory. If this becomes too memory
-	 * intensive, it may be best to switch to a
-	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-	 */
-	SectionsPagerAdapter mSectionsPagerAdapter;
+	private static final int PROGRESS_DIALOG = 0;
 
-	/**
-	 * The {@link ViewPager} that will host the section contents.
-	 */
-	ViewPager mViewPager;
+	protected static final int DISMISS_DIALOG = 1;
+
+	protected static final int DIALOG_SIZE = 2;
+
+	private ProgressDialog progressDialog;
+
+	protected Dialog onCreateDialog(int id) {
+		Log.d("ttv", "oncreatedialog");
+		switch (id) {
+		case PROGRESS_DIALOG:
+			progressDialog = new ProgressDialog(Zaalbeheer.this);
+			progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			progressDialog.setMessage("Loading...");
+			progressDialog.setProgress(0);
+			// progressDialog.show();
+			return progressDialog;
+		default:
+			return null;
+		}
+	}
+
+	protected void onPrepareDialog(int id, Dialog dialog) {
+		switch (id) {
+		case PROGRESS_DIALOG:
+			progressDialog.setProgress(0);
+		}
+
+	}
 
 	private int realMonth;
 
@@ -71,10 +92,15 @@ public class Zaalbeheer extends FragmentActivity implements
 
 	private int size = 0;
 
+	private GregorianCalendar cal;
+
+	static Zaalbeheer zb;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_zaalbeheer);
+		zb = this;
 
 		API.items = new Collectie();
 
@@ -85,22 +111,11 @@ public class Zaalbeheer extends FragmentActivity implements
 		t.start();
 
 		// Get real month/year
-		GregorianCalendar cal = new GregorianCalendar(); // Create calendar
+		cal = new GregorianCalendar(); // Create calendar
 		realDay = cal.get(GregorianCalendar.DAY_OF_MONTH); // Get day
 		realMonth = cal.get(GregorianCalendar.MONTH); // Get month
 		currentMonth = realMonth;
 		currentYear = cal.get(GregorianCalendar.YEAR);
-
-		// Create the adapter that will return a fragment for each of the three
-		// primary sections
-		// of the app.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(
-				getSupportFragmentManager());
-
-		// Set up the ViewPager with the sections adapter.
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mSectionsPagerAdapter);
-		mViewPager.setCurrentItem(currentMonth, true);
 
 		ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -120,76 +135,24 @@ public class Zaalbeheer extends FragmentActivity implements
 		return true;
 	}
 
-	/**
-	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-	 * one of the primary sections of the app.
-	 */
-	public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
-		private String[] months = { "januari", "februari", "maart", "april",
-				"mei", "juni", "juli", "augustus", "september", "oktober",
-				"november", "december" };
-
-		public SectionsPagerAdapter(FragmentManager fm) {
-			super(fm);
-		}
-
-		@Override
-		public Fragment getItem(int i) {
-			Log.d("ttv", "Item: " + i);
-
-			Fragment fragment = new MaandFragment();
-			Bundle args = new Bundle();
-			args.putInt("maand", i);
-			args.putInt("jaar", currentYear);
-			fragment.setArguments(args);
-
-			return fragment;
-		}
-
-		@Override
-		public int getCount() {
-			return months.length;
-		}
-
-		@Override
-		public CharSequence getPageTitle(int position) {
-
-			if (months[position] != null) {
-				return months[position];
-			}
-			return null;
-		}
-	}
-
-	/**
-	 * A dummy fragment representing a section of the app, but that simply
-	 * displays dummy text.
-	 */
-	public static class DummySectionFragment extends Fragment {
-		public DummySectionFragment() {
-		}
-
-		public static final String ARG_SECTION_NUMBER = "section_number";
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			TextView textView = new TextView(getActivity());
-			textView.setGravity(Gravity.CENTER);
-			Bundle args = getArguments();
-			textView.setText(Integer.toString(args.getInt(ARG_SECTION_NUMBER)));
-			return textView;
-		}
-	}
-
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		Log.d("ttv", "Changed year? :)");
+
+		int nod = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+		DagRequest d[] = new DagRequest[nod];
+
+		// Draw calendar
+		for (int j = 1; j <= nod; j++) {
+
+			d[j-1] = new DagRequest(j, currentMonth, currentYear);
+		}
+		addQueue(d);
+
 		return false;
 	}
 
 	public void addQueue(Request d) {
-		if (wait.contains(d) || queue.contains(d)) {
+		if (wait.contains(d) || queue.contains(d) || API.items.get(d) != null) {
 			return;
 		}
 
@@ -199,10 +162,51 @@ public class Zaalbeheer extends FragmentActivity implements
 
 	}
 
+	public void addQueue(Request[] d) {
+		for (int i = 0; i < d.length; i++) {
+			if (wait.contains(d[i]) || queue.contains(d[i]) || API.items.get(d[i]) != null) {
+				Log.d("ttv", "Already, queued, waiting or saved...");
+				continue;
+			}
+
+			queue.add(d[i]);
+		}
+
+		interruptThread();
+	}
+
 	private void interruptThread() {
 		synchronized (t) {
 			t.interrupt();
 		}
+	}
+
+	final static Handler handler = new Handler() {
+		@SuppressWarnings("deprecation")
+		public void handleMessage(Message msg) {
+			switch (msg.arg2) {
+			case SHOW_DIALOG:
+				zb.showDialog(msg.arg1);
+				break;
+			case DISMISS_DIALOG:
+				zb.dismissDialog(msg.arg1);
+				break;
+			case DIALOG_SIZE:
+				zb.progressDialog.setMax(msg.arg1);
+				zb.progressDialog.setProgress(0);
+				break;
+			}
+
+		}
+	};
+
+	public static final int SHOW_DIALOG = 0;
+
+	private void sendMsg(int a1, int a2) {
+		Message m = handler.obtainMessage();
+		m.arg1 = a1;
+		m.arg2 = a2;
+		handler.sendMessage(m);
 	}
 
 	public class runQueue implements Runnable {
@@ -213,8 +217,15 @@ public class Zaalbeheer extends FragmentActivity implements
 				if (queue.size() != 0) {
 					size += queue.size();
 
-					// progressBar.setMaximum(size);
-					// progressBar.setStringPainted(true);
+					sendMsg(PROGRESS_DIALOG, SHOW_DIALOG);
+					try {
+						Thread.sleep(5);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					sendMsg(queue.size(), DIALOG_SIZE);
 
 					Iterator<Request> itr = queue.iterator();
 
@@ -282,6 +293,7 @@ public class Zaalbeheer extends FragmentActivity implements
 			API.items.add(add);
 
 			wait.remove(task);
+			done();
 
 			return null;
 
@@ -291,8 +303,8 @@ public class Zaalbeheer extends FragmentActivity implements
 		 * Executed in event dispatching thread
 		 */
 		public void done() {
-			// int progress = progressBar.getValue() + 1;
-			// progressBar.setValue(progress);
+			int progress = progressDialog.getProgress() + 1;
+			progressDialog.setProgress(progress);
 
 			size--;
 
@@ -300,37 +312,72 @@ public class Zaalbeheer extends FragmentActivity implements
 				size = 0;
 			}
 
+			Log.d("ttv", "Size: " + size);
+
 			if (size == 0) {
 				// Done.
+				Log.d("ttv", "Dismissing dialog...");
+				sendMsg(PROGRESS_DIALOG, DISMISS_DIALOG);
 			}
 
 		}
 
 	}
-	
+
 	public static Dag convertDag(SoapObject c) {
 		Dag d = new Dag();
-		
-		
 
 		try {
 
-			d.setChanged(Boolean.parseBoolean(c.getProperty(0).toString()));
-			d.setDag(Integer.parseInt(c.getProperty(1).toString()));
-			d.setId(Integer.parseInt(c.getProperty(2).toString()));
-			d.setJaar(Integer.parseInt(c.getProperty(3).toString()));
-			d.setMaand(Integer.parseInt(c.getProperty(4).toString()));
-			boolean[] o = { Boolean.parseBoolean(c.getProperty(5).toString()),
+			d.setChanged(Boolean.parseBoolean(c.getProperty("changed")
+					.toString()));
+			d.setDag(Integer.parseInt(c.getProperty("dag").toString()));
+			d.setId(Integer.parseInt(c.getProperty("id").toString()));
+			d.setJaar(Integer.parseInt(c.getProperty("jaar").toString()));
+			d.setMaand(Integer.parseInt(c.getProperty("maand").toString()));
+
+			boolean[] o = {
+					Boolean.parseBoolean(c.getProperty("open").toString()),
 					Boolean.parseBoolean(c.getProperty(6).toString()),
 					Boolean.parseBoolean(c.getProperty(7).toString()) };
 			d.setOpen(o);
-			d.setSaved(Boolean.parseBoolean(c.getProperty(8).toString()));
+			d.setSaved(Boolean.parseBoolean(c.getProperty("saved").toString()));
 			d.setChanged(false);
 		} catch (Exception e) {
-			Log.d("ttv", "Parsing error...");
+			Log.d("ttv", "Parsing error...", e);
 			return null;
 		}
-		Log.d("ttv", "Parsed ok...");
+
 		return d;
-	}	
+	}
+
+	/**
+	 * @return the queue
+	 */
+	public Stack<Request> getQueue() {
+		return queue;
+	}
+
+	/**
+	 * @param queue
+	 *            the queue to set
+	 */
+	public void setQueue(Stack<Request> queue) {
+		this.queue = queue;
+	}
+
+	/**
+	 * @return the wait
+	 */
+	public Stack<Request> getWait() {
+		return wait;
+	}
+
+	/**
+	 * @param wait
+	 *            the wait to set
+	 */
+	public void setWait(Stack<Request> wait) {
+		this.wait = wait;
+	}
 }

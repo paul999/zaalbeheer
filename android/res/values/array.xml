@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="action_list">
-        <item>2011</item>
-        <item>2012</item>
-        <item>2013</item>
+        <item>Januari</item>
+        <item>Februari</item>
+        <item>Maart</item>
+        <item>April</item>
+        <item>Mei</item>
+        <item>Juni</item>
+        <item>Juli</item>
+        <item>Augustus</item>
+        <item>September</item>
+        <item>Oktober</item>
+        <item>November</item>
+        <item>December</item>
     </string-array>
 </resources>

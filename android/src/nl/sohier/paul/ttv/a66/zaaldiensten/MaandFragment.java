@@ -10,16 +10,12 @@ import java.util.GregorianCalendar;
 
 import java.util.List;
 
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
-
-import nl.paul.sohier.ttv.libary.API;
-import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+
 import android.support.v4.app.Fragment;
 
 import android.util.Log;
@@ -43,20 +39,24 @@ public class MaandFragment extends Fragment {
 	private int month, year;
 	private View view;
 	Zaalbeheer zb;
+	static MaandFragment mf;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		zb = (Zaalbeheer) getActivity();
+		mf = this;
 
 		view = inflater.inflate(R.layout.month_main, container, false);
 		Bundle arg = getArguments();
 
-		Log.d("ttv", "Dag gekregen: " + arg.getInt("maand"));
+//		Log.d("ttv", "Dag gekregen: " + arg.getInt("maand"));
 
-		month = arg.getInt("maand");
-		year = arg.getInt("jaar");
+		//month = arg.getInt("maand");
+		//year = arg.getInt("jaar");
+		month = 1;
+		year = 2012;
 
 		init();
 
@@ -89,6 +89,7 @@ public class MaandFragment extends Fragment {
 		public GridCellAdapter(Context context, int textViewResourceId,
 				final int month, final int year) {
 			super();
+
 			this._context = context;
 			this.list = new ArrayList<WeekDag>();
 
@@ -97,23 +98,9 @@ public class MaandFragment extends Fragment {
 			Calendar calendar = Calendar.getInstance();
 
 			Log.d(tag, "New Calendar:= " + calendar.getTime().toString());
-			
-			GregorianCalendar cal = new GregorianCalendar(year, month, 1);
-
-			int nod = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-
-
-			// Draw calendar
-			for (int i = 1; i <= nod; i++) {
-				
-				zb.addQueue(new DagRequest(i, month, year));
-			}
-			
 
 			// Print Month
 			printMonth(month, year);
-
- 
 
 		}
 
@@ -216,6 +203,5 @@ public class MaandFragment extends Fragment {
 
 		}
 	}
-
 
 }

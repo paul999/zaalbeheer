@@ -1,5 +1,6 @@
 package nl.sohier.paul.ttv.a66.zaaldiensten;
 
+import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
 
 import org.ksoap2.SoapEnvelope;
@@ -43,6 +44,8 @@ public class Srv {
 
 		envelope.addMapping("http://server.ttv.sohier.paul.nl/",
 				DagRequest.class.getSimpleName(), DagRequest.class);
+		envelope.addMapping("http://server.ttv.sohier.paul.nl/",
+				Dag.class.getSimpleName(), Dag.class);
 		// Marshal floatMarshal = new MarshalFloat();
 		// floatMarshal.register(envelope);
 
