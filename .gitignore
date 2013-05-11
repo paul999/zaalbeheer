@@ -5,6 +5,9 @@
 *.ear
 start.jar
 server.jar
+WebServices/target/*
+libary/target/*
+client/target/*
 
 # Android dir.
 android/bin/*
