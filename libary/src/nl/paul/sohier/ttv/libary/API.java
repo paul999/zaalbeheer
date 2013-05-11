@@ -25,8 +25,8 @@ public class API {
 	public static Dag createStandardDag(DagRequest d) {
 		Dag dag = new Dag(d);
 
-		GregorianCalendar cal = new GregorianCalendar(d.getJaar(),
-				d.getMaand(), d.getDag());
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTime(d.getDatum());
 
 		int lt = cal.get(GregorianCalendar.DAY_OF_WEEK);
 
@@ -48,7 +48,7 @@ public class API {
 		default:
 
 		}
-		dag.setOpen(open);
+		//dag.setOpen(open);
 		dag.setId(-1);
 		dag.setChanged(false);
 

@@ -1,64 +1,18 @@
 package nl.paul.sohier.ttv.libary;
 
-public class DagRequest implements DagInterface, Request {
-	private int dag;
-	private int maand;
-	private int jaar;
+import java.util.Date;
 
+public class DagRequest implements DagInterface, Request {
+	private Date datum;
 	public DagRequest() {
 
 	}
 
-	public DagRequest(int dag, int maand, int jaar) {
-		this.dag = dag;
-		this.maand = maand;
-		this.jaar = jaar;
+	public DagRequest(Date datum) {
+		this.datum = datum;
 	}
 
-	/**
-	 * @param dag
-	 *            the dag to set
-	 */
-	public void setDag(int dag) {
-		this.dag = dag;
-	}
 
-	/**
-	 * @return the dag
-	 */
-	public int getDag() {
-		return dag;
-	}
-
-	/**
-	 * @param maand
-	 *            the maand to set
-	 */
-	public void setMaand(int maand) {
-		this.maand = maand;
-	}
-
-	/**
-	 * @return the maand
-	 */
-	public int getMaand() {
-		return maand;
-	}
-
-	/**
-	 * @param jaar
-	 *            the jaar to set
-	 */
-	public void setJaar(int jaar) {
-		this.jaar = jaar;
-	}
-
-	/**
-	 * @return the jaar
-	 */
-	public int getJaar() {
-		return jaar;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -77,13 +31,7 @@ public class DagRequest implements DagInterface, Request {
 		} else
 			return false;
 
-		if (getJaar() != ob.getJaar())
-			return false;
-
-		if (getDag() != ob.getDag())
-			return false;
-
-		if (getMaand() != ob.getMaand())
+		if (getDatum() != ob.getDatum())
 			return false;
 
 		return true;
@@ -96,6 +44,12 @@ public class DagRequest implements DagInterface, Request {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return getDag() + "/" + getMaand() + "/" + getJaar();
+		return getDatum().toString();
+	}
+
+	@Override
+	public Date getDatum() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

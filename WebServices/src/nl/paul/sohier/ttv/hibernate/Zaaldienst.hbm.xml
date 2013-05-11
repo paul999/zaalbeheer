@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 11-mei-2013 20:58:55 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="test.Zaaldienst" table="zaaldienst" catalog="ttv">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="naam" type="string">
+            <column name="naam" not-null="true" unique="true" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" not-null="true" />
+        </property>
+        <property name="aantal" type="int">
+            <column name="aantal" not-null="true" />
+        </property>
+        <property name="maandag" type="boolean">
+            <column name="maandag" not-null="true" />
+        </property>
+        <property name="dinsdag" type="boolean">
+            <column name="dinsdag" not-null="true" />
+        </property>
+        <property name="woensdag" type="boolean">
+            <column name="woensdag" not-null="true" />
+        </property>
+        <property name="donderdag" type="boolean">
+            <column name="donderdag" not-null="true" />
+        </property>
+        <property name="vrijdag" type="boolean">
+            <column name="vrijdag" not-null="true" />
+        </property>
+        <property name="zaterdag" type="boolean">
+            <column name="zaterdag" not-null="true" />
+        </property>
+        <property name="zondag" type="boolean">
+            <column name="zondag" not-null="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" not-null="true" />
+        </property>
+        <property name="canlogin" type="boolean">
+            <column name="canlogin" not-null="true" />
+        </property>
+        <set name="diensts" table="dienst" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="user" not-null="true" />
+            </key>
+            <one-to-many class="test.Dienst" />
+        </set>
+    </class>
+</hibernate-mapping>

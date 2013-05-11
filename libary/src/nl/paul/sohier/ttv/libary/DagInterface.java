@@ -1,9 +1,9 @@
 package nl.paul.sohier.ttv.libary;
 
+import java.util.Date;
+
 public interface DagInterface {
-	public int getDag();
-	public int getMaand();
-	public int getJaar();
+	public Date getDatum();
 	public boolean equals(Object obj);
 	
 }

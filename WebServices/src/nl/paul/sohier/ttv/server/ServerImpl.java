@@ -1,9 +1,17 @@
 package nl.paul.sohier.ttv.server;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
+import javax.jws.WebMethod;
 import javax.jws.WebService;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import nl.paul.sohier.ttv.DataBase.DataBase;
 import nl.paul.sohier.ttv.libary.API;
@@ -18,97 +26,24 @@ import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 @WebService(endpointInterface = "nl.paul.sohier.ttv.server.Server")
 public class ServerImpl implements Server {
 
+	private SessionFactory sf = null;
+	public ServerImpl(SessionFactory sf) {
+		this.sf = sf;
+	}
+
 	@Override
-	public Dag getSavedDag(DagRequest request)  throws ServerException{
+	public Dag getSavedDag(DagRequest request) throws ServerException {
 		Dag dt = new Dag(request);
 
-		DataBase db = null;
-		try {
-			db = new DataBase();
+		Session session = sf.openSession();
 
-			ResultSet r = db
-					.runSelect(String
-							.format("SELECT * FROM dag WHERE dag = %d AND maand = %d AND jaar = %d",
-									request.getDag(), request.getMaand(),
-									request.getJaar()));
-
-			r.next();
-
-			int[][] zaaldienst = new int[3][];
-
-			int[] o = new int[100];
-			int[] m = new int[100];
-			int[] a = new int[100];
-
-			int co = 0, ca = 0, cm = 0;
-
-			String sql = "SELECT * FROM dienst WHERE dag = " + r.getInt("id");
-
-			ResultSet r2 = db.runSelect(sql);
-
-			try {
-
-				r2.next();
-				while (true) {
-					switch (r2.getInt("type")) {
-					case 0:
-						o[co] = r2.getInt("user");
-						co++;
-						break;
-					case 1:
-						m[cm] = r2.getInt("user");
-						cm++;
-						break;
-					case 2:
-						a[ca] = r2.getInt("user");
-						ca++;
-						break;
-					}
-					if (r2.isLast()) {
-						break;
-					}
-					r2.next();
-				}
-			} catch (SQLException e) {
-
-			}
-
-			zaaldienst[0] = new int[co];
-			zaaldienst[1] = new int[cm];
-			zaaldienst[2] = new int[ca];
-
-			for (int i = 0; i < co; i++) {
-				zaaldienst[0][i] = o[i];
-			}
-			for (int i = 0; i < cm; i++) {
-				zaaldienst[1][i] = m[i];
-			}
-			for (int i = 0; i < ca; i++) {
-				zaaldienst[2][i] = a[i];
-			}
-
-			dt.setZaaldienst(zaaldienst);
-
-			boolean[] open = { false, false, false };
-
-			open[0] = r.getInt("ochtend") == 1 ? true : false;
-			open[1] = r.getInt("middag") == 1 ? true : false;
-			open[2] = r.getInt("avond") == 1 ? true : false;
-			dt.setOpen(open);
-
-			dt.setId(r.getInt("id"));
-			dt.setTeam(r.getString("team"));
-			dt.setOpmerkingen(r.getString("opmerkingen"));
-			dt.setChanged(false);
-
-		} catch (SQLException e) {
-
+		@SuppressWarnings("unchecked")
+		List<Dag> dag = (List<Dag>)session.createQuery("from Dag where datum = ?").setDate(0, request.getDatum()).list();
+		session.close();
+		
+		if (dag.size() == 0)
+		{
 			return API.createStandardDag(request);
-		} finally {
-			if (db != null)
-			{
-				db.closeDatabase();
-			}
 		}
 
 		return dt;
@@ -116,7 +51,7 @@ public class ServerImpl implements Server {
 	}
 
 	@Override
-	public Dag saveDag(Dag dag)  throws ServerException{
+	public Dag saveDag(Dag dag) throws ServerException {
 		DataBase db = null;
 		try {
 			db = new DataBase();
@@ -135,10 +70,10 @@ public class ServerImpl implements Server {
 
 			sql += "dag = %d, maand = %d, jaar = %d, ochtend = %d, middag = %d, avond = %d, team = '%s', opmerkingen = '%s'";
 
-			sql = String.format(sql, dag.getDag(), dag.getMaand(),
+/*			sql = String.format(sql, dag.getDag(), dag.getMaand(),
 					dag.getJaar(), dag.getDeelOpeni(0), dag.getDeelOpeni(1),
 					dag.getDeelOpeni(2), dag.getTeam(), dag.getOpmerkingen());
-
+*/
 			System.out.println("SQL: " + sql);
 
 			boolean result = false;
@@ -160,17 +95,17 @@ public class ServerImpl implements Server {
 				sql = "DELETE FROM dienst WHERE dag = " + id;
 				db.runUpdate(sql);
 
-				int[] o = dag.getDeelZaalDienst(0);
+/*				int[] o = dag.getDeelZaalDienst(0);
 				int[] m = dag.getDeelZaalDienst(1);
 				int[] a = dag.getDeelZaalDienst(2);
 				int l = o.length + m.length + a.length;
-
-				String[] s = new String[l];
+*/
+//				String[] s = new String[l];
 
 				sql = "INSERT INTO dienst SET type = %d, user = %d, dag = %d";
 
 				int c = 0;
-
+/*
 				for (int i = 0; i < o.length; i++) {
 					s[c] = String.format(sql, 0, o[i], id);
 					c++;
@@ -184,23 +119,22 @@ public class ServerImpl implements Server {
 				for (int i = 0; i < a.length; i++) {
 					s[c] = String.format(sql, 2, a[i], id);
 					c++;
-				}
+				}*/
 
-				for (int i = 0; i < s.length; i++) {
-					db.runInsert(s[i]);
-				}
+//				for (int i = 0; i < s.length; i++) {
+	//				db.runInsert(s[i]);
+		//		}
 			}
 
 			if (result) {
-				dag.setSaved(true);
+		//		dag.setSaved(true);
 			}
 
 		} catch (SQLException e) {
-			dag.setSaved(false);
+		//	dag.setSaved(false);
 			throw new ServerException(e);
 		} finally {
-			if (db != null)
-			{
+			if (db != null) {
 				db.closeDatabase();
 			}
 		}
@@ -208,13 +142,14 @@ public class ServerImpl implements Server {
 	}
 
 	@Override
-	public boolean deleteDag(DagRequest dag)  throws ServerException{
+	public boolean deleteDag(DagRequest dag) throws ServerException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public ZaalDienst getZaalDienst(ZaalDienstRequest request)  throws ServerException{
+	public ZaalDienst getZaalDienst(ZaalDienstRequest request)
+			throws ServerException {
 		DataBase db = null;
 		try {
 			ZaalDienst dt = new ZaalDienst(request);
@@ -233,15 +168,14 @@ public class ServerImpl implements Server {
 		} catch (SQLException e) {
 			throw new ServerException(e);
 		} finally {
-			if (db != null)
-			{
+			if (db != null) {
 				db.closeDatabase();
 			}
 		}
 	}
 
 	@Override
-	public ZaalDienst saveZaalDienst(ZaalDienst dienst)  throws ServerException{
+	public ZaalDienst saveZaalDienst(ZaalDienst dienst) throws ServerException {
 		DataBase db = null;
 		try {
 			db = new DataBase();
@@ -289,8 +223,7 @@ public class ServerImpl implements Server {
 			dienst.setSaved(false);
 			throw new ServerException(e);
 		} finally {
-			if (db != null)
-			{
+			if (db != null) {
 				db.closeDatabase();
 			}
 		}
@@ -299,7 +232,7 @@ public class ServerImpl implements Server {
 	}
 
 	@Override
-	public ZaalDienst[] getAlleZaalDiensten()  throws ServerException{
+	public ZaalDienst[] getAlleZaalDiensten() throws ServerException {
 
 		ZaalDienst[] data;
 
@@ -347,8 +280,7 @@ public class ServerImpl implements Server {
 		} catch (SQLException e) {
 			throw new ServerException(e);
 		} finally {
-			if (db != null)
-			{
+			if (db != null) {
 				db.closeDatabase();
 			}
 		}
@@ -357,13 +289,14 @@ public class ServerImpl implements Server {
 	}
 
 	@Override
-	public Team[] getAlleTeams()  throws ServerException{
+	public Team[] getAlleTeams() throws ServerException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ZaalDienst login(String user, String password)  throws ServerException{
+	public ZaalDienst login(String user, String password)
+			throws ServerException {
 
 		DataBase db = null;
 		try {
@@ -409,8 +342,7 @@ public class ServerImpl implements Server {
 			System.out.println("ERR: " + e);
 			throw new ServerException(e);
 		} finally {
-			if (db != null)
-			{
+			if (db != null) {
 				db.closeDatabase();
 			}
 		}
