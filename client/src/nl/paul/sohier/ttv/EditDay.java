@@ -15,6 +15,7 @@ import javax.swing.event.ListSelectionListener;
 
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
+import nl.paul.sohier.ttv.libary.ServerException;
 import nl.paul.sohier.ttv.libary.Team;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.server.Server;
@@ -95,7 +96,12 @@ public class EditDay extends JFrame implements ActionListener,
 		//setContentPane(contentPane);
 
 		Server srv = API.getServer();
-		dag = srv.getSavedDag(request);
+		try {
+			dag = srv.getSavedDag(request);
+		} catch (ServerException e) {
+			e.printStackTrace();
+			return;
+		}
 
 		contentPane.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
@@ -185,8 +191,15 @@ public class EditDay extends JFrame implements ActionListener,
 		middag.setSelected(dag.getDeelOpen(1));
 		avond.setSelected(dag.getDeelOpen(2));
 
-		s = srv.getAlleZaalDiensten();
-		t = srv.getAlleTeams();
+		try {
+			s = srv.getAlleZaalDiensten();
+			t = srv.getAlleTeams();
+		} catch (ServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
+		
 
 		ids = new int[s.length];
 
@@ -357,7 +370,12 @@ public class EditDay extends JFrame implements ActionListener,
 		btnOpslaan.setText("Bezig met opslaan...");
 
 		Server srv = API.getServer();
-		Dag dt = srv.saveDag(dag);
+		Dag dt = null;
+		try {
+			dt = srv.saveDag(dag);
+		} catch (ServerException e) {
+
+		}
 		if (dt == null || !dt.isSaved()) {
 			JOptionPane
 					.showMessageDialog(

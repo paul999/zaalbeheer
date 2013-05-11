@@ -9,6 +9,7 @@ import nl.paul.sohier.ttv.DataBase.DataBase;
 import nl.paul.sohier.ttv.libary.API;
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
+import nl.paul.sohier.ttv.libary.ServerException;
 import nl.paul.sohier.ttv.libary.Team;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
@@ -18,18 +19,19 @@ import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 public class ServerImpl implements Server {
 
 	@Override
-	public Dag getSavedDag(DagRequest request) {
+	public Dag getSavedDag(DagRequest request)  throws ServerException{
 		Dag dt = new Dag(request);
 
-		DataBase db = new DataBase();
-
-		ResultSet r = db
-				.runSelect(String
-						.format("SELECT * FROM dag WHERE dag = %d AND maand = %d AND jaar = %d",
-								request.getDag(), request.getMaand(),
-								request.getJaar()));
-
+		DataBase db = null;
 		try {
+			db = new DataBase();
+
+			ResultSet r = db
+					.runSelect(String
+							.format("SELECT * FROM dag WHERE dag = %d AND maand = %d AND jaar = %d",
+									request.getDag(), request.getMaand(),
+									request.getJaar()));
+
 			r.next();
 
 			int[][] zaaldienst = new int[3][];
@@ -103,7 +105,10 @@ public class ServerImpl implements Server {
 
 			return API.createStandardDag(request);
 		} finally {
-			db.closeDatabase();
+			if (db != null)
+			{
+				db.closeDatabase();
+			}
 		}
 
 		return dt;
@@ -111,173 +116,198 @@ public class ServerImpl implements Server {
 	}
 
 	@Override
-	public Dag saveDag(Dag dag) {
-		DataBase db = new DataBase();
+	public Dag saveDag(Dag dag)  throws ServerException{
+		DataBase db = null;
+		try {
+			db = new DataBase();
 
-		String sql = "";
-		boolean nw = false;
-		int id = dag.getId();
+			String sql = "";
+			boolean nw = false;
+			int id = dag.getId();
 
-		if (id == -1) {
-			nw = true;
-			sql += "INSERT INTO dag ";
-		} else {
-			sql += "UPDATE dag ";
-		}
-		sql += "SET ";
-
-		sql += "dag = %d, maand = %d, jaar = %d, ochtend = %d, middag = %d, avond = %d, team = '%s', opmerkingen = '%s'";
-
-		sql = String.format(sql, dag.getDag(), dag.getMaand(), dag.getJaar(),
-				dag.getDeelOpeni(0), dag.getDeelOpeni(1), dag.getDeelOpeni(2),
-				dag.getTeam(), dag.getOpmerkingen());
-
-		System.out.println("SQL: " + sql);
-
-		boolean result = false;
-		if (!nw) {
-			sql += " WHERE id = " + dag.getId();
-
-			if (db.runUpdate(sql) != 0) {
-				result = true;
+			if (id == -1) {
+				nw = true;
+				sql += "INSERT INTO dag ";
+			} else {
+				sql += "UPDATE dag ";
 			}
-		} else {
-			id = (int) db.runInsert(sql);
+			sql += "SET ";
+
+			sql += "dag = %d, maand = %d, jaar = %d, ochtend = %d, middag = %d, avond = %d, team = '%s', opmerkingen = '%s'";
+
+			sql = String.format(sql, dag.getDag(), dag.getMaand(),
+					dag.getJaar(), dag.getDeelOpeni(0), dag.getDeelOpeni(1),
+					dag.getDeelOpeni(2), dag.getTeam(), dag.getOpmerkingen());
+
+			System.out.println("SQL: " + sql);
+
+			boolean result = false;
+			if (!nw) {
+				sql += " WHERE id = " + dag.getId();
+
+				if (db.runUpdate(sql) != 0) {
+					result = true;
+				}
+			} else {
+				id = (int) db.runInsert(sql);
+				if (id != -1) {
+					result = true;
+					dag.setId(id);
+				}
+			}
+
 			if (id != -1) {
-				result = true;
-				dag.setId(id);
+				sql = "DELETE FROM dienst WHERE dag = " + id;
+				db.runUpdate(sql);
+
+				int[] o = dag.getDeelZaalDienst(0);
+				int[] m = dag.getDeelZaalDienst(1);
+				int[] a = dag.getDeelZaalDienst(2);
+				int l = o.length + m.length + a.length;
+
+				String[] s = new String[l];
+
+				sql = "INSERT INTO dienst SET type = %d, user = %d, dag = %d";
+
+				int c = 0;
+
+				for (int i = 0; i < o.length; i++) {
+					s[c] = String.format(sql, 0, o[i], id);
+					c++;
+				}
+
+				for (int i = 0; i < m.length; i++) {
+					s[c] = String.format(sql, 1, m[i], id);
+					c++;
+				}
+
+				for (int i = 0; i < a.length; i++) {
+					s[c] = String.format(sql, 2, a[i], id);
+					c++;
+				}
+
+				for (int i = 0; i < s.length; i++) {
+					db.runInsert(s[i]);
+				}
+			}
+
+			if (result) {
+				dag.setSaved(true);
+			}
+
+		} catch (SQLException e) {
+			dag.setSaved(false);
+			throw new ServerException(e);
+		} finally {
+			if (db != null)
+			{
+				db.closeDatabase();
 			}
 		}
-
-		if (id != -1) {
-			sql = "DELETE FROM dienst WHERE dag = " + id;
-			db.runUpdate(sql);
-
-			int[] o = dag.getDeelZaalDienst(0);
-			int[] m = dag.getDeelZaalDienst(1);
-			int[] a = dag.getDeelZaalDienst(2);
-			int l = o.length + m.length + a.length;
-
-			String[] s = new String[l];
-
-			sql = "INSERT INTO dienst SET type = %d, user = %d, dag = %d";
-
-			int c = 0;
-
-			for (int i = 0; i < o.length; i++) {
-				s[c] = String.format(sql, 0, o[i], id);
-				c++;
-			}
-
-			for (int i = 0; i < m.length; i++) {
-				s[c] = String.format(sql, 1, m[i], id);
-				c++;
-			}
-
-			for (int i = 0; i < a.length; i++) {
-				s[c] = String.format(sql, 2, a[i], id);
-				c++;
-			}
-
-			for (int i = 0; i < s.length; i++) {
-				db.runInsert(s[i]);
-			}
-		}
-
-		if (result) {
-			dag.setSaved(true);
-		}
-
 		return dag;
-
 	}
 
 	@Override
-	public boolean deleteDag(DagRequest dag) {
+	public boolean deleteDag(DagRequest dag)  throws ServerException{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public ZaalDienst getZaalDienst(ZaalDienstRequest request) {
-		ZaalDienst dt = new ZaalDienst(request);
-
-		DataBase db = new DataBase();
-
-		ResultSet r = db.runSelect("SELECT * FROM zaaldienst WHERE id = "
-				+ request.getId());
-
+	public ZaalDienst getZaalDienst(ZaalDienstRequest request)  throws ServerException{
+		DataBase db = null;
 		try {
+			ZaalDienst dt = new ZaalDienst(request);
+
+			db = new DataBase();
+
+			ResultSet r = db.runSelect("SELECT * FROM zaaldienst WHERE id = "
+					+ request.getId());
+
 			r.next();
 			dt.setEmail(r.getString("email"));
 			dt.setNaam(r.getString("naam"));
 			dt.setChanged(false);
+
+			return dt;
 		} catch (SQLException e) {
-
-			return null;
+			throw new ServerException(e);
 		} finally {
-
-			db.closeDatabase();
+			if (db != null)
+			{
+				db.closeDatabase();
+			}
 		}
-
-		return dt;
 	}
 
 	@Override
-	public ZaalDienst saveZaalDienst(ZaalDienst dienst) {
-		DataBase db = new DataBase();
+	public ZaalDienst saveZaalDienst(ZaalDienst dienst)  throws ServerException{
+		DataBase db = null;
+		try {
+			db = new DataBase();
 
-		String sql = "";
-		boolean nw = false;
+			String sql = "";
+			boolean nw = false;
 
-		if (dienst.getId() == -1) {
-			nw = true;
-			sql += "INSERT INTO zaaldienst ";
-		} else {
-			sql += "UPDATE zaaldienst ";
-		}
-		sql += "SET ";
-
-		sql += "naam = '%s', email = '%s', aantal = %d, maandag = %d"
-				+ ", dinsdag = %d, woensdag = %d, donderdag = %d, "
-				+ "vrijdag = %d, zaterdag = %d, zondag = %d, canlogin = %d, password = '%d'";
-
-		sql = String.format(sql, dienst.getNaam(), dienst.getEmail(),
-				dienst.getAantal(), dienst.getDagi(0), dienst.getDagi(1),
-				dienst.getDagi(2), dienst.getDagi(3), dienst.getDagi(4),
-				dienst.getDagi(5), dienst.getDagi(6), (dienst.isCanlogin() ? 1 : 0), dienst.getPassword());
-
-		boolean result = false;
-		if (!nw) {
-			sql += " WHERE id = " + dienst.getId();
-
-			if (db.runUpdate(sql) != 0) {
-				result = true;
+			if (dienst.getId() == -1) {
+				nw = true;
+				sql += "INSERT INTO zaaldienst ";
+			} else {
+				sql += "UPDATE zaaldienst ";
 			}
-		} else {
-			int id = (int) db.runInsert(sql);
-			if (id != -1) {
-				result = true;
-				dienst.setId(id);
-			}
-		}
+			sql += "SET ";
 
-		if (result) {
-			dienst.setSaved(true);
+			sql += "naam = '%s', email = '%s', aantal = %d, maandag = %d"
+					+ ", dinsdag = %d, woensdag = %d, donderdag = %d, "
+					+ "vrijdag = %d, zaterdag = %d, zondag = %d, canlogin = %d, password = '%d'";
+
+			sql = String.format(sql, dienst.getNaam(), dienst.getEmail(),
+					dienst.getAantal(), dienst.getDagi(0), dienst.getDagi(1),
+					dienst.getDagi(2), dienst.getDagi(3), dienst.getDagi(4),
+					dienst.getDagi(5), dienst.getDagi(6),
+					(dienst.isCanlogin() ? 1 : 0), dienst.getPassword());
+
+			boolean result = false;
+			if (!nw) {
+				sql += " WHERE id = " + dienst.getId();
+
+				if (db.runUpdate(sql) != 0) {
+					result = true;
+				}
+			} else {
+				int id = (int) db.runInsert(sql);
+				if (id != -1) {
+					result = true;
+					dienst.setId(id);
+				}
+			}
+
+			if (result) {
+				dienst.setSaved(true);
+			}
+		} catch (SQLException e) {
+			dienst.setSaved(false);
+			throw new ServerException(e);
+		} finally {
+			if (db != null)
+			{
+				db.closeDatabase();
+			}
 		}
 
 		return dienst;
 	}
 
 	@Override
-	public ZaalDienst[] getAlleZaalDiensten() {
-		DataBase db = new DataBase();
+	public ZaalDienst[] getAlleZaalDiensten()  throws ServerException{
+
 		ZaalDienst[] data;
 
-		ResultSet r = db.runSelect("SELECT COUNT(id) as t FROM zaaldienst");
-
+		DataBase db = null;
 		int id;
 		try {
+			db = new DataBase();
+			ResultSet r = db.runSelect("SELECT COUNT(id) as t FROM zaaldienst");
 			r.next();
 
 			id = r.getInt("t");
@@ -314,32 +344,36 @@ public class ServerImpl implements Server {
 				}
 				r.next();
 			}
-
 		} catch (SQLException e) {
-
-			return null;
+			throw new ServerException(e);
+		} finally {
+			if (db != null)
+			{
+				db.closeDatabase();
+			}
 		}
 
-		db.closeDatabase();
 		return data;
 	}
 
 	@Override
-	public Team[] getAlleTeams() {
+	public Team[] getAlleTeams()  throws ServerException{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ZaalDienst login(String user, String password) {
-		DataBase db = new DataBase();
+	public ZaalDienst login(String user, String password)  throws ServerException{
 
+		DataBase db = null;
 		try {
-			ResultSet r = db.runSelect(String.format("SELECT * FROM zaaldienst WHERE email = '%s' AND password = '%s'", user, password));
-			
-			if (r == null)
-			{
-				db.closeDatabase();
+			db = new DataBase();
+			ResultSet r = db
+					.runSelect(String
+							.format("SELECT * FROM zaaldienst WHERE email = '%s' AND password = '%s'",
+									user, password));
+
+			if (r == null) {
 				return null;
 			}
 
@@ -362,24 +396,23 @@ public class ServerImpl implements Server {
 				tmp.setId(r.getInt("id"));
 				tmp.setPassword(r.getString("password"));
 				tmp.setCanlogin(r.getBoolean("canlogin"));
-				
-				
-				if (r.getInt("canlogin") == 0)
-				{
-					db.closeDatabase();
+
+				if (r.getInt("canlogin") == 0) {
 					return null;
 				}
-				
-				db.closeDatabase();
+
 				return tmp;
 			}
-		} catch (NullPointerException e2)
-		{
-			db.closeDatabase();
-			return null;
+		} catch (NullPointerException e2) {
+			throw new ServerException(e2);
 		} catch (SQLException e) {
-			db.closeDatabase();
-			return null;
+			System.out.println("ERR: " + e);
+			throw new ServerException(e);
+		} finally {
+			if (db != null)
+			{
+				db.closeDatabase();
+			}
 		}
 	}
 }

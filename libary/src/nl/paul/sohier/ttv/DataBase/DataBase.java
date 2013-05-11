@@ -10,69 +10,58 @@ public class DataBase {
 
 	private Connection conn;
 
-	public DataBase() {
+	public DataBase() throws SQLException {
 		try {
 			Class.forName("org.gjt.mm.mysql.Driver");
 
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/ttv",
 					"ttv", "ttv");
-		} catch (SQLException e) {
-			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 
 			e.printStackTrace();
 		}
-	}
-
-	public void closeDatabase() {
-		try {
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		catch (SQLException e)
+		{
+			System.out.println("SQL Exception: " + e);
+			throw e;
 		}
 	}
 
-	public ResultSet runSelect(String sql) {
-		try {
-			ResultSet rs = conn.createStatement().executeQuery(sql);
-
-			return rs;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+	public void closeDatabase()   {
+		if (conn != null) {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+	}
+
+	public ResultSet runSelect(String sql) throws SQLException {
+		ResultSet rs = conn.createStatement().executeQuery(sql);
+
+		return rs;
 
 	}
 
-	public int runUpdate(String sql) {
-		try {
-			return conn.createStatement().executeUpdate(sql);
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-			return -1;
-		}
+	public int runUpdate(String sql) throws SQLException {
+		return conn.createStatement().executeUpdate(sql);
 
 	}
 
-	public long runInsert(String sql) {
+	public long runInsert(String sql) throws SQLException {
 		long key = -1L;
 		Statement statement;
-		try {
-			statement = conn.createStatement();
 
-			statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-			ResultSet rs = statement.getGeneratedKeys();
-			if (rs != null && rs.next()) {
-				key = rs.getLong(1);
-			}
-			return key;
+		statement = conn.createStatement();
 
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-			return key;
+		statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+		ResultSet rs = statement.getGeneratedKeys();
+		if (rs != null && rs.next()) {
+			key = rs.getLong(1);
 		}
+		return key;
+
 	}
 }

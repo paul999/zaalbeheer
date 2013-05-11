@@ -1,11 +1,6 @@
 package nl.paul.sohier.ttv.libary;
 
-import java.util.Hashtable;
-
-import org.ksoap2.serialization.KvmSerializable;
-import org.ksoap2.serialization.PropertyInfo;
-
-public class DagRequest implements DagInterface, Request, KvmSerializable {
+public class DagRequest implements DagInterface, Request {
 	private int dag;
 	private int maand;
 	private int jaar;
@@ -102,65 +97,5 @@ public class DagRequest implements DagInterface, Request, KvmSerializable {
 	 */
 	public String toString() {
 		return getDag() + "/" + getMaand() + "/" + getJaar();
-	}
-
-	@Override
-	public Object getProperty(int arg0) {
-		// TODO Auto-generated method stub
-
-		switch (arg0) {
-		case 0:
-			return dag;
-		case 1:
-			return maand;
-		case 2:
-			return jaar;
-		}
-
-		return null;
-	}
-
-	@Override
-	public int getPropertyCount() {
-		// TODO Auto-generated method stub
-		return 3;
-	}
-
-	@Override
-	public void getPropertyInfo(int arg0,
-			@SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo arg2) {
-		arg2.type = PropertyInfo.INTEGER_CLASS;
-		
-		switch (arg0) {
-		case 0:
-			arg2.name = "dag";
-			break;
-		case 1:
-			arg2.name = "maand";
-			break;
-		case 2:
-			arg2.name = "jaar";
-			break;
-		default:
-			break;
-		}
-
-	}
-
-	@Override
-	public void setProperty(int arg0, Object arg1) {
-		switch (arg0) {
-		case 0:
-			dag = Integer.parseInt(arg1.toString());
-			break;
-		case 1:
-			maand = Integer.parseInt(arg1.toString());
-			break;
-		case 2:
-			jaar = Integer.parseInt(arg1.toString());
-			break;
-		default:
-			break;
-		}
 	}
 }

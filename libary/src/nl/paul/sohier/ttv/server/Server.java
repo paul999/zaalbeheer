@@ -8,6 +8,7 @@ import javax.jws.soap.SOAPBinding.Use;
 
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
+import nl.paul.sohier.ttv.libary.ServerException;
 import nl.paul.sohier.ttv.libary.Team;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
@@ -18,16 +19,16 @@ import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 @SOAPBinding(style = Style.DOCUMENT, use=Use.LITERAL)
 public interface Server{
  
-	@WebMethod Dag getSavedDag(DagRequest dagRequest);
-	@WebMethod Dag saveDag(Dag dag);
-	@WebMethod boolean deleteDag(DagRequest dag);
+	@WebMethod Dag getSavedDag(DagRequest dagRequest) throws ServerException;
+	@WebMethod Dag saveDag(Dag dag) throws ServerException;
+	@WebMethod boolean deleteDag(DagRequest dag) throws ServerException;
 	
-	@WebMethod ZaalDienst getZaalDienst(ZaalDienstRequest request);
-	@WebMethod ZaalDienst saveZaalDienst(ZaalDienst dienst);
+	@WebMethod ZaalDienst getZaalDienst(ZaalDienstRequest request) throws ServerException;
+	@WebMethod ZaalDienst saveZaalDienst(ZaalDienst dienst) throws ServerException;
 	
-	@WebMethod ZaalDienst[] getAlleZaalDiensten();
-	@WebMethod Team[] getAlleTeams();
-	@WebMethod ZaalDienst login(String user, String password);
+	@WebMethod ZaalDienst[] getAlleZaalDiensten() throws ServerException;
+	@WebMethod Team[] getAlleTeams() throws ServerException;
+	@WebMethod ZaalDienst login(String user, String password) throws ServerException;
 	
 
 }

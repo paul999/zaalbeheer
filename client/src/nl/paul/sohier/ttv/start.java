@@ -37,6 +37,7 @@ import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
 import nl.paul.sohier.ttv.libary.Item;
 import nl.paul.sohier.ttv.libary.Request;
+import nl.paul.sohier.ttv.libary.ServerException;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 import nl.paul.sohier.ttv.output.Generator;
@@ -660,13 +661,20 @@ public class start {
 		while (API.items.changed()) {
 			Item upd = API.items.getChanged();
 
-			if (upd instanceof Dag) {
-				srv.saveDag((Dag) upd);
-			} else if (upd instanceof ZaalDienst) {
-				srv.saveZaalDienst((ZaalDienst) upd);
-			} else {
-				upd.setChanged(false);
+			try {
+				if (upd instanceof Dag) {
+					srv.saveDag((Dag) upd);
+				} else if (upd instanceof ZaalDienst) {
+					srv.saveZaalDienst((ZaalDienst) upd);
+				} else {
+					upd.setChanged(false);
+				}
+			} catch (ServerException e) {
+				// Should not happen?
+				throw new RuntimeException(
+						"There is no result found at the server?");
 			}
+
 			API.items.remove(upd);
 		}
 	}

@@ -17,7 +17,6 @@ import java.util.Properties;
 import org.eclipse.egit.github.core.Issue;
 import org.eclipse.egit.github.core.client.GitHubClient;
 import org.eclipse.egit.github.core.service.IssueService;
-import org.ksoap2.serialization.SoapObject;
 
 public class API {
 

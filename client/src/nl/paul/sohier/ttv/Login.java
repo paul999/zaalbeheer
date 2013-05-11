@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 
+import nl.paul.sohier.ttv.libary.ServerException;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.server.Server;
 
@@ -149,7 +150,13 @@ public class Login extends JFrame {
 				return;
 			}
 			Server srv = API.getServer();
-			ZaalDienst t = srv.login(gbr, API.md5(pass));
+			ZaalDienst t = null;
+			try {
+				t = srv.login(gbr, API.md5(pass));
+			} catch (ServerException err) {
+				error("Server side error");
+				return;
+			}
 
 			if (t == null) {
 				error("Foute gebruikersnaam/wachtwoord");

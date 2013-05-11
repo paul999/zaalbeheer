@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
+import nl.paul.sohier.ttv.libary.ServerException;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 import nl.paul.sohier.ttv.output.Generator;
@@ -436,8 +437,16 @@ public class SendAllMail extends JFrame implements ActionListener {
 				frame.dispose();
 
 				JOptionPane.showMessageDialog(frame,
-						"Er gebeurde iets wat nite hoorde: " + e2.getMessage(),
+						"Er gebeurde iets wat niet hoorde: " + e2.getMessage(),
 						"Kon mail niet versturen", JOptionPane.ERROR_MESSAGE);
+			} catch (ServerException e1) {
+				e1.printStackTrace();
+
+				frame.dispose();
+
+				JOptionPane.showMessageDialog(frame,
+						"Er gebeurde iets wat nite hoorde: " + e1.getMessage(),
+						"Kon data niet ophalen van de server", JOptionPane.ERROR_MESSAGE);
 			}
 
 		}

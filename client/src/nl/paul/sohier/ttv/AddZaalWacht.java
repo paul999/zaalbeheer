@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 
 import javax.swing.JButton;
 
+import nl.paul.sohier.ttv.libary.ServerException;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.server.Server;
 
@@ -241,7 +242,13 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 		btnOpslaan.setText("Bezig met opslaan...");
 		btnAnnuleren.setVisible(false);
 
-		ZaalDienst saved = srv.saveZaalDienst(dienst);
+		ZaalDienst saved = null;
+		try {
+			saved = srv.saveZaalDienst(dienst);
+		} catch (ServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		if (saved != null && saved.isSaved()) {
 			dispose();

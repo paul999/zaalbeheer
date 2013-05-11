@@ -10,6 +10,7 @@ import javax.xml.ws.Service;
 
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
+import nl.paul.sohier.ttv.libary.ServerException;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 import nl.paul.sohier.ttv.server.Server;
@@ -18,7 +19,7 @@ public class API extends nl.paul.sohier.ttv.libary.API{
 	public static Server getServer() {
 		URL url;
 		try {
-			url = new URL("http://91.196.170.37:9999/ws/hello?wsdl");
+			url = new URL("http://127.0.0.1:9999/ws/hello?wsdl");
 
 			// 1st argument service URI, refer to wsdl document above
 			// 2nd argument is service name, refer to wsdl document above
@@ -83,7 +84,12 @@ public class API extends nl.paul.sohier.ttv.libary.API{
 			Dag dag = (Dag) API.items.get(r);
 
 			if (dag == null) {
-				dag = srv.getSavedDag(r);
+				try {
+					dag = srv.getSavedDag(r);
+				} catch (ServerException e) {
+					throw new RuntimeException("Kon " + r
+							+ " niet ophalen van de server.");
+				}
 
 				if (dag == null) {
 					throw new RuntimeException("Kon " + r
@@ -100,7 +106,13 @@ public class API extends nl.paul.sohier.ttv.libary.API{
 					ZaalDienst z = (ZaalDienst) API.items.get(zr);
 
 					if (z == null) {
-						z = srv.getZaalDienst(zr);
+						try {
+							z = srv.getZaalDienst(zr);
+						} catch (ServerException e) {
+							// Should not happen?
+							throw new RuntimeException(
+									"There is no result found at the server?");
+						}
 
 						if (z == null) {
 							// Should not happen?
@@ -131,7 +143,13 @@ public class API extends nl.paul.sohier.ttv.libary.API{
 			ZaalDienst zt = (ZaalDienst) API.items.get(r);
 
 			if (zt == null) {
-				zt = srv.getZaalDienst(r);
+				try {
+					zt = srv.getZaalDienst(r);
+				} catch (ServerException e) {
+					// Should not happen?
+					throw new RuntimeException(
+							"There is no result found at the server?");
+				}
 
 				if (zt == null) {
 					// Should not happen?
