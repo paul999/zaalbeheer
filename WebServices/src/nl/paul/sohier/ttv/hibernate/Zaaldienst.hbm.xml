@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 11-mei-2013 20:58:55 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="test.Zaaldienst" table="zaaldienst" catalog="ttv">
+    <class name="nl.paul.sohier.ttv.libary.ZaalDienst" table="zaaldienst" catalog="ttv">
         <id name="id" type="java.lang.Integer">
             <column name="id" />
             <generator class="identity" />
@@ -48,7 +48,7 @@
             <key>
                 <column name="user" not-null="true" />
             </key>
-            <one-to-many class="test.Dienst" />
+            <one-to-many class="nl.paul.sohier.ttv.libary.Dienst" />
         </set>
     </class>
 </hibernate-mapping>

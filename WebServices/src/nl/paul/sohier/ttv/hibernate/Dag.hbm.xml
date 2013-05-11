@@ -30,7 +30,7 @@
             <key>
                 <column name="dag" not-null="true" />
             </key>
-            <one-to-many class="test.Dienst" />
+            <one-to-many class="nl.paul.sohier.ttv.libary.Dienst" />
         </set>
     </class>
 </hibernate-mapping>

@@ -116,7 +116,7 @@ public class Collectie {
 		while (itr.hasNext()) {
 			Item d = (Item) itr.next();
 
-			if (d.isChanged()) {
+			if (false /*d.isChanged()*/) {
 				removeLock();
 				return d;
 			}
@@ -133,7 +133,7 @@ public class Collectie {
 		while (itr.hasNext()) {
 			Item d = (Item) itr.next();
 
-			if (d.isChanged()) {
+			if (false /*d.isChanged()*/) {
 				
 				removeLock();
 				return true;

@@ -50,7 +50,7 @@ public class API {
 		}
 		//dag.setOpen(open);
 		dag.setId(-1);
-		dag.setChanged(false);
+		//dag.setChanged(false);
 
 		return dag;
 	}
@@ -90,11 +90,7 @@ public class API {
 	public static Collectie items;
 	private static Properties properties;
 
-	public static Team[] getTeams(int[] teams) {
-		Team[] team = new Team[teams.length];
-
-		return team;
-	}
+	
 
 	public static Properties getProperties() {
 

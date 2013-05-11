@@ -9,7 +9,6 @@ import javax.jws.soap.SOAPBinding.Use;
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
 import nl.paul.sohier.ttv.libary.ServerException;
-import nl.paul.sohier.ttv.libary.Team;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 
@@ -27,7 +26,6 @@ public interface Server{
 	@WebMethod ZaalDienst saveZaalDienst(ZaalDienst dienst) throws ServerException;
 	
 	@WebMethod ZaalDienst[] getAlleZaalDiensten() throws ServerException;
-	@WebMethod Team[] getAlleTeams() throws ServerException;
 	@WebMethod ZaalDienst login(String user, String password) throws ServerException;
 	
 

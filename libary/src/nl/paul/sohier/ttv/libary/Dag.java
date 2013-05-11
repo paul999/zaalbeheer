@@ -16,7 +16,8 @@ public class Dag implements DagInterface, Item {
 	private String team;
 	private String opmerkingen;
 	private Date datum;
-	private Set diensts = new HashSet(0);
+	
+	private Set<?> diensts = new HashSet<Object>(0);
 
 	public Dag() {
 	}
@@ -36,7 +37,7 @@ public class Dag implements DagInterface, Item {
 	}
 
 	public Dag(boolean ochtend, boolean middag, boolean avond, String team,
-			String opmerkingen, Date datum, Set diensts) {
+			String opmerkingen, Date datum, Set<?> diensts) {
 		this.ochtend = ochtend;
 		this.middag = middag;
 		this.avond = avond;
@@ -50,7 +51,7 @@ public class Dag implements DagInterface, Item {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -102,11 +103,11 @@ public class Dag implements DagInterface, Item {
 		this.datum = datum;
 	}
 
-	public Set getDiensts() {
+	public Set<?> getDiensts() {
 		return this.diensts;
 	}
 
-	public void setDiensts(Set diensts) {
+	public void setDiensts(Set<?> diensts) {
 		this.diensts = diensts;
 	}
 
@@ -134,25 +135,4 @@ public class Dag implements DagInterface, Item {
 		return true;
 
 	}
-
-	@Override
-	public boolean isChanged() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setChanged(boolean changed) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setId(int id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
 }

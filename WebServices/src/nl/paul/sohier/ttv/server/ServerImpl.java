@@ -18,7 +18,6 @@ import nl.paul.sohier.ttv.libary.API;
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
 import nl.paul.sohier.ttv.libary.ServerException;
-import nl.paul.sohier.ttv.libary.Team;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 
@@ -162,7 +161,7 @@ public class ServerImpl implements Server {
 			r.next();
 			dt.setEmail(r.getString("email"));
 			dt.setNaam(r.getString("naam"));
-			dt.setChanged(false);
+			//dt.setChanged(false);
 
 			return dt;
 		} catch (SQLException e) {
@@ -195,11 +194,11 @@ public class ServerImpl implements Server {
 					+ ", dinsdag = %d, woensdag = %d, donderdag = %d, "
 					+ "vrijdag = %d, zaterdag = %d, zondag = %d, canlogin = %d, password = '%d'";
 
-			sql = String.format(sql, dienst.getNaam(), dienst.getEmail(),
+		/*	sql = String.format(sql, dienst.getNaam(), dienst.getEmail(),
 					dienst.getAantal(), dienst.getDagi(0), dienst.getDagi(1),
 					dienst.getDagi(2), dienst.getDagi(3), dienst.getDagi(4),
 					dienst.getDagi(5), dienst.getDagi(6),
-					(dienst.isCanlogin() ? 1 : 0), dienst.getPassword());
+					(dienst.isCanlogin() ? 1 : 0), dienst.getPassword());*/
 
 			boolean result = false;
 			if (!nw) {
@@ -217,10 +216,10 @@ public class ServerImpl implements Server {
 			}
 
 			if (result) {
-				dienst.setSaved(true);
+				//dienst.setSaved(true);
 			}
 		} catch (SQLException e) {
-			dienst.setSaved(false);
+		//	dienst.setSaved(false);
 			throw new ServerException(e);
 		} finally {
 			if (db != null) {
@@ -258,13 +257,13 @@ public class ServerImpl implements Server {
 				tmp.setEmail(r.getString("email"));
 				tmp.setAantal(r.getInt("aantal"));
 
-				tmp.setDag(0, r.getBoolean("maandag"));
+				/*tmp.setDag(0, r.getBoolean("maandag"));
 				tmp.setDag(1, r.getBoolean("dinsdag"));
 				tmp.setDag(2, r.getBoolean("woensdag"));
 				tmp.setDag(3, r.getBoolean("donderdag"));
 				tmp.setDag(4, r.getBoolean("vrijdag"));
 				tmp.setDag(5, r.getBoolean("zaterdag"));
-				tmp.setDag(6, r.getBoolean("zondag"));
+				tmp.setDag(6, r.getBoolean("zondag"));*/
 
 				tmp.setId(r.getInt("id"));
 				tmp.setPassword(r.getString("password"));
@@ -286,12 +285,6 @@ public class ServerImpl implements Server {
 		}
 
 		return data;
-	}
-
-	@Override
-	public Team[] getAlleTeams() throws ServerException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -318,13 +311,13 @@ public class ServerImpl implements Server {
 				tmp.setEmail(r.getString("email"));
 				tmp.setAantal(r.getInt("aantal"));
 
-				tmp.setDag(0, r.getBoolean("maandag"));
+			/*	tmp.setDag(0, r.getBoolean("maandag"));
 				tmp.setDag(1, r.getBoolean("dinsdag"));
 				tmp.setDag(2, r.getBoolean("woensdag"));
 				tmp.setDag(3, r.getBoolean("donderdag"));
 				tmp.setDag(4, r.getBoolean("vrijdag"));
 				tmp.setDag(5, r.getBoolean("zaterdag"));
-				tmp.setDag(6, r.getBoolean("zondag"));
+				tmp.setDag(6, r.getBoolean("zondag"));*/
 
 				tmp.setId(r.getInt("id"));
 				tmp.setPassword(r.getString("password"));
