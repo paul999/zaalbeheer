@@ -32,8 +32,6 @@ public class ServerImpl implements Server {
 
 	@Override
 	public Dag getSavedDag(DagRequest request) throws ServerException {
-		Dag dt = new Dag(request);
-
 		Session session = sf.openSession();
 
 		@SuppressWarnings("unchecked")
@@ -44,8 +42,7 @@ public class ServerImpl implements Server {
 		{
 			return API.createStandardDag(request);
 		}
-
-		return dt;
+		return dag.get(0);
 
 	}
 
@@ -149,28 +146,14 @@ public class ServerImpl implements Server {
 	@Override
 	public ZaalDienst getZaalDienst(ZaalDienstRequest request)
 			throws ServerException {
-		DataBase db = null;
-		try {
-			ZaalDienst dt = new ZaalDienst(request);
+		Session session = sf.openSession();
 
-			db = new DataBase();
-
-			ResultSet r = db.runSelect("SELECT * FROM zaaldienst WHERE id = "
-					+ request.getId());
-
-			r.next();
-			dt.setEmail(r.getString("email"));
-			dt.setNaam(r.getString("naam"));
-			//dt.setChanged(false);
-
-			return dt;
-		} catch (SQLException e) {
-			throw new ServerException(e);
-		} finally {
-			if (db != null) {
-				db.closeDatabase();
-			}
-		}
+		@SuppressWarnings("unchecked")
+		List<ZaalDienst> dag = (List<ZaalDienst>)session.createQuery("from Zaaldienst where id = ?").setInteger(0, request.getId()).list();
+		session.close();
+		
+		return dag.get(0);
+		
 	}
 
 	@Override
@@ -232,59 +215,12 @@ public class ServerImpl implements Server {
 
 	@Override
 	public ZaalDienst[] getAlleZaalDiensten() throws ServerException {
-
-		ZaalDienst[] data;
-
-		DataBase db = null;
-		int id;
-		try {
-			db = new DataBase();
-			ResultSet r = db.runSelect("SELECT COUNT(id) as t FROM zaaldienst");
-			r.next();
-
-			id = r.getInt("t");
-
-			data = new ZaalDienst[id];
-
-			r = db.runSelect("SELECT * FROM zaaldienst");
-
-			r.next();
-			int i = 0;
-			while (true) {
-				ZaalDienst tmp = new ZaalDienst();
-
-				tmp.setNaam(r.getString("naam"));
-				tmp.setEmail(r.getString("email"));
-				tmp.setAantal(r.getInt("aantal"));
-
-				/*tmp.setDag(0, r.getBoolean("maandag"));
-				tmp.setDag(1, r.getBoolean("dinsdag"));
-				tmp.setDag(2, r.getBoolean("woensdag"));
-				tmp.setDag(3, r.getBoolean("donderdag"));
-				tmp.setDag(4, r.getBoolean("vrijdag"));
-				tmp.setDag(5, r.getBoolean("zaterdag"));
-				tmp.setDag(6, r.getBoolean("zondag"));*/
-
-				tmp.setId(r.getInt("id"));
-				tmp.setPassword(r.getString("password"));
-				tmp.setCanlogin(r.getBoolean("canlogin"));
-
-				data[i] = tmp;
-				i++;
-				if (r.isLast()) {
-					break;
-				}
-				r.next();
-			}
-		} catch (SQLException e) {
-			throw new ServerException(e);
-		} finally {
-			if (db != null) {
-				db.closeDatabase();
-			}
-		}
-
-		return data;
+		Session session = sf.openSession();
+		@SuppressWarnings("unchecked")
+		List<ZaalDienst> dag = (List<ZaalDienst>)session.createQuery("from Zaaldienst").list();
+		session.close();
+		
+		return (ZaalDienst[])dag.toArray();
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import java.util.Set;
  * 
  */
 public class Dag implements DagInterface, Item { 
-	private Integer id;
+	private Integer id = -1;
 	private boolean ochtend;
 	private boolean middag; 
 	private boolean avond;

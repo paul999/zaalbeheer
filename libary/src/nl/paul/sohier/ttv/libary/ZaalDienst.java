@@ -6,11 +6,11 @@ import java.util.Set;
 public class ZaalDienst implements Item, ZaalDienstInterface {
 
 	public ZaalDienst(ZaalDienstRequest rt) {
-		this.id = rt.getId();
+		//this.id = rt.getId();
 
 	}
 
-	private Integer id;
+	private Integer id = -1;
 	private String naam;
 	private String email;
 	private int aantal;
@@ -27,6 +27,24 @@ public class ZaalDienst implements Item, ZaalDienstInterface {
 
 	public ZaalDienst() {
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public ZaalDienst(String naam, String email, int aantal, boolean maandag,
 			boolean dinsdag, boolean woensdag, boolean donderdag,

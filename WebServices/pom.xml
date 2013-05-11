@@ -36,18 +36,18 @@
 			<version>3.2.6.ga</version>
 		</dependency>
 
-<dependency>
-<groupId>log4j</groupId>
-<artifactId>log4j</artifactId>
-<version>1.2.16</version>
-</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
 
-<dependency>
-<groupId>org.slf4j</groupId>
-<artifactId>slf4j-log4j12</artifactId>
-<version>1.6.4</version>
-</dependency>		
-		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.4</version>
+		</dependency>
+
 
 	</dependencies>
 
@@ -60,7 +60,10 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>src/resources</directory>
+				<directory>src</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
 			</resource>
 			<resource>
 				<directory>src/main/config</directory>
@@ -79,21 +82,6 @@
 			</plugin>
 
 			<plugin>
-				<!-- Build an executable JAR -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>nl.paul.sohier.ttv.endpoint.Publish</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-
-			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.4</version>
 				<configuration>
@@ -102,8 +90,6 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
 							<mainClass>nl.paul.sohier.ttv.endpoint.Publish</mainClass>
 						</manifest>
 					</archive>

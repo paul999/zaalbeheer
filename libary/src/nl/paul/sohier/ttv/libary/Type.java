@@ -10,6 +10,10 @@ import java.util.Set;
  */
 public class Type implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -517382296640235934L;
 	private Integer id;
 	private String naam;
 	private int start;
