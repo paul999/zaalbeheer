@@ -185,7 +185,7 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 		chckbxZaterdag = new JCheckBox("Zaterdag");
 		panel.add(chckbxZaterdag, "6, 4");
 
-		boolean tmp[] = dienst.getDagen();
+/*		boolean tmp[] = dienst.getDagen();
 		chckbxMaandag.setSelected(tmp[0]);
 		chckbxDinsdag.setSelected(tmp[1]);
 		chckbxWoensdag.setSelected(tmp[2]);
@@ -193,7 +193,7 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 		chckbxVrijdag.setSelected(tmp[4]);
 		chckbxZaterdag.setSelected(tmp[5]);
 		chckbxZondag.setSelected(tmp[6]);
-
+*/
 		chckbxMaandag.addActionListener(this);
 		chckbxDinsdag.addActionListener(this);
 		chckbxWoensdag.addActionListener(this);
@@ -250,10 +250,10 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 			e.printStackTrace();
 		}
 
-		if (saved != null && saved.isSaved()) {
+/*		if (saved != null && saved.isSaved()) {
 			dispose();
 		} else {
-			JOptionPane
+	*/		JOptionPane
 					.showMessageDialog(
 							this,
 							"Er is iets misgegaan bij het opslaan, probeer het later nogmaals",
@@ -264,7 +264,7 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 			btnOpslaan.setText("Opslaan");
 			btnAnnuleren.setVisible(true);
 
-		}
+		//}
 
 	}
 
@@ -307,11 +307,11 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 		tmp[5] = chckbxZaterdag.isSelected();
 		tmp[6] = chckbxZondag.isSelected();
 
-		dienst.setDagen(tmp);
+//		dienst.setDagen(tmp);
 		dienst.setNaam(jnaam.getText());
 		dienst.setEmail(jEmail.getText());
 		dienst.setAantal(Integer.parseInt(aantal.getText()));
-		dienst.setPlainPassword(wachtwoord.getText());
+	//	dienst.setPlainPassword(wachtwoord.getText());
 		dienst.setCanlogin(canlogin.isSelected());
 
 	}

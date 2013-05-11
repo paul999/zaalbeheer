@@ -16,7 +16,6 @@ import javax.swing.event.ListSelectionListener;
 import nl.paul.sohier.ttv.libary.Dag;
 import nl.paul.sohier.ttv.libary.DagRequest;
 import nl.paul.sohier.ttv.libary.ServerException;
-import nl.paul.sohier.ttv.libary.Team;
 import nl.paul.sohier.ttv.libary.ZaalDienst;
 import nl.paul.sohier.ttv.server.Server;
 
@@ -52,7 +51,6 @@ public class EditDay extends JFrame implements ActionListener,
 	private JButton btnOpslaan;
 	private JButton button;
 	private ZaalDienst[] s;
-	private Team[] t;
 	private int[] ids;
 	private start parent;
 	private boolean load = false;
@@ -187,13 +185,14 @@ public class EditDay extends JFrame implements ActionListener,
 		dienstavond.addListSelectionListener(this);
 
 		// Set initial values.
+		/*
 		ochtend.setSelected(dag.getDeelOpen(0));
 		middag.setSelected(dag.getDeelOpen(1));
-		avond.setSelected(dag.getDeelOpen(2));
+		avond.setSelected(dag.getDeelOpen(2));*/
 
 		try {
 			s = srv.getAlleZaalDiensten();
-			t = srv.getAlleTeams();
+	//		t = srv.getAlleTeams();
 		} catch (ServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -203,14 +202,14 @@ public class EditDay extends JFrame implements ActionListener,
 
 		ids = new int[s.length];
 
-		int[] zochtend = dag.getDeelZaalDienst(0);
+/*		int[] zochtend = dag.getDeelZaalDienst(0);
 		int[] zmiddag = dag.getDeelZaalDienst(1);
 		int[] zavond = dag.getDeelZaalDienst(2);
-
-		int[] lo = new int[zochtend.length];
+*/
+/*		int[] lo = new int[zochtend.length];
 		int[] lm = new int[zmiddag.length];
 		int[] la = new int[zavond.length];
-
+*/
 		int o = 0, m = 0, a = 0;
 
 		for (int i = 0; i < s.length; i++) {
@@ -219,7 +218,7 @@ public class EditDay extends JFrame implements ActionListener,
 
 				ids[i] = s[i].getId();
 
-				if (inArray(zochtend, s[i].getId())) {
+		/*		if (inArray(zochtend, s[i].getId())) {
 					lo[o] = i;
 					o++;
 				}
@@ -233,7 +232,7 @@ public class EditDay extends JFrame implements ActionListener,
 					la[a] = i;
 					a++;
 				}
-			}
+*/			}
 		}
 		model mo = new model(s);
 
@@ -241,12 +240,12 @@ public class EditDay extends JFrame implements ActionListener,
 		dienstavond.setModel(mo);
 		dienstmiddag.setModel(mo);
 
-		dienstochtend.setSelectedIndices(lo);
+		/*dienstochtend.setSelectedIndices(lo);
 		dienstmiddag.setSelectedIndices(lm);
 		dienstavond.setSelectedIndices(la);
-		
-		int[] teams = dag.getTeams();
-		Team[] team = API.getTeams(teams);
+	*/	
+//		int[] teams = dag.getTeams();
+//		Team[] team = API.getTeams(teams);
  
 		lblTeams = new JLabel("Teams thuis:");
 		contentPane.add(lblTeams, "2, 12");
@@ -320,8 +319,8 @@ public class EditDay extends JFrame implements ActionListener,
 	}
 
 	protected void askSave() {
-		if (dag.isChanged()) {
-
+//		if (dag.isChanged()) {
+		if (true){
 			// Custom button text
 			Object[] options = { "Save", "Discard", "Cancel" };
 			int n = JOptionPane
@@ -349,11 +348,11 @@ public class EditDay extends JFrame implements ActionListener,
 	class btnSave implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// Save it....
-			if (dag.isChanged()) {
+			//if (dag.isChanged()) {
 				save();
-			} else {
+			//} else {
 				dispose();
-			}
+		//	}
 		}
 	}
 
@@ -376,7 +375,7 @@ public class EditDay extends JFrame implements ActionListener,
 		} catch (ServerException e) {
 
 		}
-		if (dt == null || !dt.isSaved()) {
+//		if (dt == null || !dt.isSaved()) {
 			JOptionPane
 					.showMessageDialog(
 							this,
@@ -387,10 +386,10 @@ public class EditDay extends JFrame implements ActionListener,
 			btnOpslaan.setEnabled(true);
 			btnOpslaan.setText("Opslaan");
 			button.setVisible(true);
-		} else {
-			parent.refresh();
+	/*	} else {
+	/		parent.refresh();
 			dispose();
-		}
+		}*/
 
 	}
 
@@ -409,7 +408,7 @@ public class EditDay extends JFrame implements ActionListener,
 		open[1] = middag.isSelected();
 		open[2] = avond.isSelected();
 
-		dag.setOpen(open);
+	//	dag.setOpen(open);
 
 		boolean hide = true;
 
@@ -479,7 +478,7 @@ public class EditDay extends JFrame implements ActionListener,
 			}
 		}
 
-		dag.setZaaldienst(dienst); // TODO Fix.
+	//	dag.setZaaldienst(dienst); // TODO Fix.
 		dag.setTeam(teamzaaldienst.getText());
 		dag.setOpmerkingen(opmerkingen.getText());
 

@@ -71,16 +71,16 @@ public class API extends nl.paul.sohier.ttv.libary.API{
 	public static ArrayList<ZaalDienst> zaallijsten(DagRequest request) {
 		ArrayList<ZaalDienst> list = new ArrayList<ZaalDienst>();
 
-		GregorianCalendar dt = new GregorianCalendar(request.getJaar(),
-				request.getMaand(), 1);
+		GregorianCalendar dt = new GregorianCalendar(/*request.getJaar(),
+				request.getMaand(), 1*/);
+		dt.setTime(request.getDatum());
 
 		Server srv = API.getServer();
 
 		for (int i = 1; i <= dt
 				.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); i++) {
 
-			DagRequest r = new DagRequest(i, request.getMaand(),
-					request.getJaar());
+			DagRequest r = new DagRequest(null); // TODO: DATUM
 			Dag dag = (Dag) API.items.get(r);
 
 			if (dag == null) {
@@ -98,7 +98,8 @@ public class API extends nl.paul.sohier.ttv.libary.API{
 			}
 
 			for (int j = 0; j < 3; j++) {
-				int t[] = dag.getDeelZaalDienst(j);
+				//int t[] = dag.getDeelZaalDienst(j);
+				int t [] = new int[0];
 
 				for (int k = 0; k < t.length; k++) {
 					ZaalDienstRequest zr = new ZaalDienstRequest();

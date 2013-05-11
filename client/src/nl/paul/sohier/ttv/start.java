@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Stack;
@@ -283,9 +284,9 @@ public class start {
 				if (data[row][col] != 0) {
 					// Here should we open a new frame.
 
-					EditDay frame = new EditDay(new DagRequest(data[row][col],
-							currentMonth, currentYear), window);
-					frame.setVisible(true);
+		//			EditDay frame = new EditDay(new DagRequest(data[row][col],
+		//					currentMonth, currentYear), window);
+		//			frame.setVisible(true);
 
 				} else {
 					return;
@@ -431,9 +432,9 @@ public class start {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				new SendAllMail(new DagRequest(-1, currentMonth, currentYear),
+		/*		new SendAllMail(new DagRequest(-1, currentMonth, currentYear),
 						window);
-
+*/
 			}
 		});
 
@@ -442,10 +443,10 @@ public class start {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				PDF p = new PDF(frame);
-				Generator g = new Generator(frame, p, new DagRequest(-1,
-						currentMonth, currentYear), null);
+			//	Generator g = new Generator(frame, p, new DagRequest(-1,
+			//			currentMonth, currentYear), null);
 
-				g.genereer();
+				//g.genereer();
 				JOptionPane.showMessageDialog(frame, "PDF is opgeslagen op "
 						+ p.getFile(), "PDF Opgeslagen.",
 						JOptionPane.INFORMATION_MESSAGE);
@@ -518,7 +519,7 @@ public class start {
 				}
 
 				if (i != 0) {
-					DagRequest d = new DagRequest(i, currentMonth, currentYear);
+					DagRequest d = new DagRequest(new Date()); // TODO: date
 
 					Dag dag = (Dag) API.items.get(d);
 
@@ -529,14 +530,14 @@ public class start {
 						String vl = "<html>" + Integer.toString(i);
 						vl += "<br />";
 
-						boolean opn[] = dag.getOpen();
+				/*		boolean opn[] = dag.getOpen();
 
 						vl += addDeel("Ochtend", opn[0],
 								dag.getDeelZaalDienst(0));
 						vl += addDeel("Middag", opn[1],
 								dag.getDeelZaalDienst(1));
 						vl += addDeel("Avond", opn[2], dag.getDeelZaalDienst(2));
-
+*/
 						if (open) {
 							if (!zaaldienst) {
 								kl = new Color(255, 0, 0);
@@ -667,7 +668,7 @@ public class start {
 				} else if (upd instanceof ZaalDienst) {
 					srv.saveZaalDienst((ZaalDienst) upd);
 				} else {
-					upd.setChanged(false);
+					//upd.setChanged(false);
 				}
 			} catch (ServerException e) {
 				// Should not happen?

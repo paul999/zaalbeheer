@@ -291,8 +291,8 @@ public class SendAllMail extends JFrame implements ActionListener {
 				 * worden. Voor alle gebruikers wordt een aparte BCC aangemaakt.
 				 */
 
-				GregorianCalendar dt = new GregorianCalendar(request.getJaar(),
-						request.getMaand(), 1);
+				GregorianCalendar dt = new GregorianCalendar(/*request.getJaar(),
+						request.getMaand(), 1*/);
 
 				Server srv;
 				try {
@@ -307,7 +307,7 @@ public class SendAllMail extends JFrame implements ActionListener {
 						.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); i++) {
 					System.out.println(i);
 
-					DagRequest r = new DagRequest(i, request.getMaand(),
+				/*	DagRequest r = new DagRequest(i, request.getMaand(),
 							request.getJaar());
 					Dag dag = (Dag) API.items.get(r);
 
@@ -327,7 +327,7 @@ public class SendAllMail extends JFrame implements ActionListener {
 								users.add(tmp[k]);
 							}
 						}
-					}
+					}*/
 				}
 
 				for (int i = 0; i < users.size(); i++) {
@@ -391,8 +391,8 @@ public class SendAllMail extends JFrame implements ActionListener {
 
 					DataSource source = new FileDataSource(filename);
 					messageBodyPart.setDataHandler(new DataHandler(source));
-					messageBodyPart.setFileName("schema_"
-							+ months[request.getMaand()] + ".pdf");
+				//	messageBodyPart.setFileName("schema_"
+				//			+ months[request.getMaand()] + ".pdf");
 					multipart.addBodyPart(messageBodyPart);
 				}
 
