@@ -32,7 +32,7 @@
         <mapping resource="nl/paul/sohier/ttv/hibernate/Dienst.hbm.xml"/>
         <mapping resource="nl/paul/sohier/ttv/hibernate/Type.hbm.xml"/>
         <mapping resource="nl/paul/sohier/ttv/hibernate/Zaaldienst.hbm.xml"/>
-         
+        <mapping resource="nl/paul/sohier/ttv/hibernate/Open.hbm.xml"/> 
           
     </session-factory>
 </hibernate-configuration>

@@ -10,14 +10,12 @@ import java.util.Set;
  */
 public class Dag implements DagInterface, Item { 
 	private Integer id = -1;
-	private boolean ochtend;
-	private boolean middag; 
-	private boolean avond;
 	private String team;
 	private String opmerkingen;
 	private Date datum;
 	
 	private Set<?> diensts = new HashSet<Object>(0);
+	private Set opens = new HashSet(0);
 
 	public Dag() {
 	}
@@ -26,21 +24,16 @@ public class Dag implements DagInterface, Item {
 		this.datum = dag.getDatum();
 	}
 
-	public Dag(boolean ochtend, boolean middag, boolean avond, String team,
+	public Dag(String team,
 			String opmerkingen, Date datum) {
-		this.ochtend = ochtend;
-		this.middag = middag;
-		this.avond = avond;
+
 		this.team = team;
 		this.opmerkingen = opmerkingen;
 		this.datum = datum;
 	}
 
-	public Dag(boolean ochtend, boolean middag, boolean avond, String team,
+	public Dag(String team,
 			String opmerkingen, Date datum, Set<?> diensts) {
-		this.ochtend = ochtend;
-		this.middag = middag;
-		this.avond = avond;
 		this.team = team;
 		this.opmerkingen = opmerkingen;
 		this.datum = datum;
@@ -53,30 +46,6 @@ public class Dag implements DagInterface, Item {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public boolean isOchtend() {
-		return this.ochtend;
-	}
-
-	public void setOchtend(boolean ochtend) {
-		this.ochtend = ochtend;
-	}
-
-	public boolean isMiddag() {
-		return this.middag;
-	}
-
-	public void setMiddag(boolean middag) {
-		this.middag = middag;
-	}
-
-	public boolean isAvond() {
-		return this.avond;
-	}
-
-	public void setAvond(boolean avond) {
-		this.avond = avond;
 	}
 
 	public String getTeam() {
@@ -109,6 +78,14 @@ public class Dag implements DagInterface, Item {
 
 	public void setDiensts(Set<?> diensts) {
 		this.diensts = diensts;
+	}
+
+	public Set getOpens() {
+		return this.opens;
+	}
+
+	public void setOpens(Set opens) {
+		this.opens = opens;
 	}
 
 	/*

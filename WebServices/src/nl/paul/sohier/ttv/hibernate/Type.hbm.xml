@@ -23,5 +23,11 @@
             </key>
             <one-to-many class="nl.paul.sohier.ttv.libary.Dienst" />
         </set>
+        <set name="opens" table="open" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="type" not-null="true" />
+            </key>
+            <one-to-many class="nl.paul.sohier.ttv.libary.Open" />
+        </set>                
     </class>
 </hibernate-mapping>

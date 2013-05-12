@@ -19,6 +19,7 @@ public class Type implements java.io.Serializable {
 	private int start;
 	private int eind;
 	private Set diensts = new HashSet(0);
+	private Set opens = new HashSet(0);
 
 	public Type() {
 	}
@@ -74,6 +75,14 @@ public class Type implements java.io.Serializable {
 
 	public void setDiensts(Set diensts) {
 		this.diensts = diensts;
+	}
+
+	public Set getOpens() {
+		return this.opens;
+	}
+
+	public void setOpens(Set opens) {
+		this.opens = opens;
 	}
 
 }

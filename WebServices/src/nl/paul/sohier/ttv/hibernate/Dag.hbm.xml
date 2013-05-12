@@ -8,15 +8,7 @@
             <column name="id" />
             <generator class="identity" />
         </id>
-        <property name="ochtend" type="boolean">
-            <column name="ochtend" not-null="true" />
-        </property>
-        <property name="middag" type="boolean">
-            <column name="middag" not-null="true" />
-        </property>
-        <property name="avond" type="boolean">
-            <column name="avond" not-null="true" />
-        </property>
+
         <property name="team" type="string">
             <column name="team" not-null="true" />
         </property>
@@ -32,5 +24,11 @@
             </key>
             <one-to-many class="nl.paul.sohier.ttv.libary.Dienst" />
         </set>
+        <set name="opens" table="open" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="dag" not-null="true" />
+            </key>
+            <one-to-many class="nl.paul.sohier.ttv.libary.Open" />
+        </set>        
     </class>
 </hibernate-mapping>
