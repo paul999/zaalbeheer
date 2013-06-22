@@ -21,9 +21,9 @@ import javax.swing.JLabel;
 
 import javax.swing.JButton;
 
-import nl.paul.sohier.ttv.libary.ServerException;
-import nl.paul.sohier.ttv.libary.ZaalDienst;
-import nl.paul.sohier.ttv.server.Server;
+import nl.ttva66.Zaaldienst;
+import nl.ttva66.libary.ServerException;
+
 
 import javax.swing.JCheckBox;
 import javax.swing.JPasswordField;
@@ -39,7 +39,7 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 	private JTextField jnaam;
 	private JTextField jEmail;
 	private JTextField aantal;
-	private ZaalDienst dienst;
+	private Zaaldienst dienst;
 	private JCheckBox chckbxZaterdag;
 	private JCheckBox chckbxDonderdag;
 	private JCheckBox chckbxDinsdag;
@@ -57,9 +57,9 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 	/**
 	 * Create the frame.
 	 */
-	public AddZaalWacht(ZaalDienst zt) {
+	public AddZaalWacht(Zaaldienst zt) {
 		if (zt == null) {
-			dienst = new ZaalDienst();
+			dienst = new Zaaldienst();
 			setTitle("Zaalwacht toevoegen");
 		} else {
 			dienst = zt;
@@ -236,19 +236,19 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 	}
 
 	public void save() {
-		Server srv = API.getServer();
+		
 
 		btnOpslaan.setEnabled(false);
 		btnOpslaan.setText("Bezig met opslaan...");
 		btnAnnuleren.setVisible(false);
 
-		ZaalDienst saved = null;
-		try {
+		Zaaldienst saved = null;
+		/*try {
 			saved = srv.saveZaalDienst(dienst);
 		} catch (ServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 
 /*		if (saved != null && saved.isSaved()) {
 			dispose();

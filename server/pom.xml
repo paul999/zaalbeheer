@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>
+		4.0.0
+	</modelVersion>
+	<artifactId>server</artifactId>
+	<packaging>ejb</packaging>
+
+	<parent>
+		<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+		<artifactId>ZaalBeheer</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<artifactId>entities</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<artifactId>libary</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>		
+
+		<!-- sun's ejb 3.0 api -->
+		<dependency>
+			<groupId>javax.ejb</groupId>
+			<artifactId>ejb-api</artifactId>
+			<version>3.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<version>1.0-rev-1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- jboss logging impl (jboss 5.1.0 GA) -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+			<scope>provided</scope>
+		</dependency>
+
+
+	</dependencies>
+	<build>
+		<plugins>
+
+			<!-- ejb 3.0 plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ejb-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<ejbVersion>3.0</ejbVersion>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+				
+			</plugin>
+
+		</plugins>
+	</build>
+</project>

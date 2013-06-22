@@ -18,9 +18,8 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 
-import nl.paul.sohier.ttv.libary.ServerException;
-import nl.paul.sohier.ttv.libary.ZaalDienst;
-import nl.paul.sohier.ttv.server.Server;
+import nl.ttva66.Zaaldienst;
+import nl.ttva66.libary.ServerException;
 
 import java.awt.Color;
 
@@ -149,14 +148,14 @@ public class Login extends JFrame {
 				error("Gebruikersnaam/wachtwoord is leeg");
 				return;
 			}
-			Server srv = API.getServer();
-			ZaalDienst t = null;
-			try {
+		//	Server srv = API.getServer();
+			Zaaldienst t = null;
+			/*try {
 				t = srv.login(gbr, API.md5(pass));
 			} catch (ServerException err) {
 				error("Server side error");
 				return;
-			}
+			}*/
 
 			if (t == null) {
 				error("Foute gebruikersnaam/wachtwoord");

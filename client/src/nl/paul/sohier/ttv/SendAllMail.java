@@ -17,14 +17,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import nl.paul.sohier.ttv.libary.Dag;
-import nl.paul.sohier.ttv.libary.DagRequest;
-import nl.paul.sohier.ttv.libary.ServerException;
-import nl.paul.sohier.ttv.libary.ZaalDienst;
-import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 import nl.paul.sohier.ttv.output.Generator;
 import nl.paul.sohier.ttv.output.PDF;
-import nl.paul.sohier.ttv.server.Server;
+import nl.ttva66.DagRequest;
+import nl.ttva66.ZaalDienstRequest;
+import nl.ttva66.Zaaldienst;
+import nl.ttva66.libary.ServerException;
 
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -294,12 +292,12 @@ public class SendAllMail extends JFrame implements ActionListener {
 				GregorianCalendar dt = new GregorianCalendar(/*request.getJaar(),
 						request.getMaand(), 1*/);
 
-				Server srv;
+				/*Server srv;
 				try {
 					srv = API.getServer();
 				} catch (Exception e1) {
 					throw new RuntimeException(e1.getMessage());
-				}
+				}*/
 
 				ArrayList<Integer> users = new ArrayList<Integer>();
 
@@ -333,10 +331,10 @@ public class SendAllMail extends JFrame implements ActionListener {
 				for (int i = 0; i < users.size(); i++) {
 
 					ZaalDienstRequest r = new ZaalDienstRequest(users.get(i));
-					ZaalDienst zt = (ZaalDienst) API.items.get(r);
+					Zaaldienst zt = (Zaaldienst) API.items.get(r);
 
 					if (zt == null) {
-						zt = srv.getZaalDienst(r);
+					//	zt = srv.getZaalDienst(r);
 
 						if (zt == null) {
 							// Should not happen?
@@ -439,7 +437,7 @@ public class SendAllMail extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(frame,
 						"Er gebeurde iets wat niet hoorde: " + e2.getMessage(),
 						"Kon mail niet versturen", JOptionPane.ERROR_MESSAGE);
-			} catch (ServerException e1) {
+		/*	} catch (ServerException e1) {
 				e1.printStackTrace();
 
 				frame.dispose();
@@ -447,13 +445,18 @@ public class SendAllMail extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(frame,
 						"Er gebeurde iets wat nite hoorde: " + e1.getMessage(),
 						"Kon data niet ophalen van de server", JOptionPane.ERROR_MESSAGE);
-			}
+			}*/
 
 		}
 	}
 
+
+
+}
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
-
 }

@@ -13,11 +13,10 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import nl.paul.sohier.ttv.libary.Dag;
-import nl.paul.sohier.ttv.libary.DagRequest;
-import nl.paul.sohier.ttv.libary.ServerException;
-import nl.paul.sohier.ttv.libary.ZaalDienst;
-import nl.paul.sohier.ttv.server.Server;
+import nl.ttva66.Dag;
+import nl.ttva66.DagRequest;
+import nl.ttva66.Zaaldienst;
+import nl.ttva66.libary.ServerException;
 
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -50,7 +49,7 @@ public class EditDay extends JFrame implements ActionListener,
 	private JLabel lblZaaldienst;
 	private JButton btnOpslaan;
 	private JButton button;
-	private ZaalDienst[] s;
+	private Zaaldienst[] s;
 	private int[] ids;
 	private start parent;
 	private boolean load = false;
@@ -93,14 +92,14 @@ public class EditDay extends JFrame implements ActionListener,
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		//setContentPane(contentPane);
 
-		Server srv = API.getServer();
+/*		Server srv = API.getServer();
 		try {
 			dag = srv.getSavedDag(request);
 		} catch (ServerException e) {
 			e.printStackTrace();
 			return;
 		}
-
+*/
 		contentPane.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
@@ -190,14 +189,14 @@ public class EditDay extends JFrame implements ActionListener,
 		middag.setSelected(dag.getDeelOpen(1));
 		avond.setSelected(dag.getDeelOpen(2));*/
 
-		try {
+	/*	try {
 			s = srv.getAlleZaalDiensten();
 	//		t = srv.getAlleTeams();
 		} catch (ServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return;
-		}
+		}*/
 		
 
 		ids = new int[s.length];
@@ -368,13 +367,13 @@ public class EditDay extends JFrame implements ActionListener,
 		button.setVisible(false);
 		btnOpslaan.setText("Bezig met opslaan...");
 
-		Server srv = API.getServer();
+	/*	Server srv = API.getServer();
 		Dag dt = null;
 		try {
 			dt = srv.saveDag(dag);
 		} catch (ServerException e) {
 
-		}
+		}*/
 //		if (dt == null || !dt.isSaved()) {
 			JOptionPane
 					.showMessageDialog(
@@ -499,9 +498,9 @@ public class EditDay extends JFrame implements ActionListener,
 		 */
 		private static final long serialVersionUID = -2596297853796654240L;
 		String[] values;
-		ZaalDienst[] dt;
+		Zaaldienst[] dt;
 
-		public model(ZaalDienst[] zt) {
+		public model(Zaaldienst[] zt) {
 
 			dt = zt;
 			values = new String[dt.length];

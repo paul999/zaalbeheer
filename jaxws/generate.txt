@@ -1,0 +1,1 @@
+wsconsume.bat -v -k -p nl.ttva66.client -s C:\Users\paul_000\Documents\GitHub\zaalbeheer\jaxws\src\main\java\ http://localhost:8080/server-0.0.1-SNAPSHOT/Service/ServiceBean?wsdl

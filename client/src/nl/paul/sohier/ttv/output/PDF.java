@@ -18,9 +18,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import nl.paul.sohier.ttv.API;
-import nl.paul.sohier.ttv.libary.Dag;
-import nl.paul.sohier.ttv.libary.DagRequest;
-import nl.paul.sohier.ttv.server.Server;
+import nl.ttva66.DagRequest;
 
 public class PDF extends Save {
 
@@ -95,7 +93,7 @@ public class PDF extends Save {
 			t.addCell("Team");
 
 			t.completeRow();
-			Server srv = API.getServer();
+//			Server srv = API.getServer();
 
 			progressMonitor.setMaximum(dt
 					.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));

@@ -4,7 +4,8 @@ import java.io.File;
 
 import javax.swing.ProgressMonitor;
 
-import nl.paul.sohier.ttv.libary.DagRequest;
+import nl.ttva66.DagRequest;
+
 
 public interface Output {
 	public void askDirectory(boolean temp);

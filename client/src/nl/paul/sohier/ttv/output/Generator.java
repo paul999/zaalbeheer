@@ -4,7 +4,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
 
-import nl.paul.sohier.ttv.libary.DagRequest;
+import nl.ttva66.DagRequest;
+
 
 public class Generator {
 

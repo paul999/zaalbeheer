@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>
+		4.0.0
+	</modelVersion>
+	<artifactId>ear</artifactId>
+	<packaging>ear</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>javax.ejb</groupId>
+			<artifactId>ejb-api</artifactId>
+			<version>3.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<version>1.0-rev-1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<artifactId>entities</artifactId>
+			<type>jar</type>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<artifactId>server</artifactId>
+			<type>ejb</type>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<artifactId>web</artifactId>
+			<type>war</type>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<artifactId>libary</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>				
+	</dependencies>
+
+	<parent>
+		<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+		<artifactId>ZaalBeheer</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-ear-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<!-- <modules> <webModule> <groupId>nl.paul.sohier.ttv.zaalbeheer</groupId> 
+						<artifactId>web</artifactId> <contextRoot>/zaaldienst</contextRoot> </webModule> 
+						<ejbModule> <groupId>nl.paul.sohier.ttv.zaalbeheer</groupId> <artifactId>server</artifactId> 
+						</ejbModule> </modules> -->
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
+
+					<generatedDescriptorLocation>${basedir}/src/main/application/META-INF</generatedDescriptorLocation>
+
+				</configuration>
+			</plugin>
+		</plugins>
+		<finalName>zaalbeheer</finalName>
+	</build>
+
+
+</project>

@@ -8,74 +8,51 @@ import java.util.GregorianCalendar;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
-import nl.paul.sohier.ttv.libary.Dag;
-import nl.paul.sohier.ttv.libary.DagRequest;
-import nl.paul.sohier.ttv.libary.ServerException;
-import nl.paul.sohier.ttv.libary.ZaalDienst;
-import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
-import nl.paul.sohier.ttv.server.Server;
 
-public class API extends nl.paul.sohier.ttv.libary.API{
-	public static Server getServer() {
-		URL url;
-		try {
-			url = new URL("http://127.0.0.1:9999/ws/hello?wsdl");
+import nl.ttva66.Dag;
+import nl.ttva66.DagRequest;
+import nl.ttva66.ZaalDienstRequest;
+import nl.ttva66.Zaaldienst;
+import nl.ttva66.libary.ServerException;
 
-			// 1st argument service URI, refer to wsdl document above
-			// 2nd argument is service name, refer to wsdl document above
-			QName qname = new QName("http://server.ttv.sohier.paul.nl/",
-					"ServerImplService");
 
-			Service service = null;
+public class API extends nl.ttva66.libary.API{
+	public static /*Server*/void getServer() {
 
-			service = Service.create(url, qname);
-			return service.getPort(Server.class);
-		} catch (MalformedURLException e) {
-
-			if (!displayed) {
-				displayed = true;
-
-				API.createIssue("Server failed",
-						"There was a error during the server request: ", e);
-
-				throw new RuntimeException(
-						"There was a error during a request to the server: "
-								+ e.getMessage());
-			}
-
-			return null;
-		}
+		
 
 	}
 	
 	public static Dag getDag(DagRequest request) {
-		Server srv = API.getServer();
+		/*Server srv = API.getServer();
 
 		try {
 			return srv.getSavedDag(request);
 		} catch (Exception e) {
 			return null;
-		}
+		}*/
+		return null;
 	}
 
-	public static ZaalDienst getZaalDienst(ZaalDienstRequest request) {
-		Server srv = API.getServer();
+	public static Zaaldienst getZaalDienst(ZaalDienstRequest request) {
+	/*	Server srv = API.getServer();
 
 		try {
 			return srv.getZaalDienst(request);
 		} catch (Exception e) {
 			return null;
-		}
+		}*/
+		return null;
 	}	
 	
-	public static ArrayList<ZaalDienst> zaallijsten(DagRequest request) {
-		ArrayList<ZaalDienst> list = new ArrayList<ZaalDienst>();
+	public static ArrayList<Zaaldienst> zaallijsten(DagRequest request) {
+		ArrayList<Zaaldienst> list = new ArrayList<Zaaldienst>();
 
 		GregorianCalendar dt = new GregorianCalendar(/*request.getJaar(),
 				request.getMaand(), 1*/);
 		dt.setTime(request.getDatum());
 
-		Server srv = API.getServer();
+		/*Server srv = API.getServer();
 
 		for (int i = 1; i <= dt
 				.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); i++) {
@@ -126,18 +103,18 @@ public class API extends nl.paul.sohier.ttv.libary.API{
 
 				}
 			}
-		}
+		}*/
 
 		return list;
 	}
 
 	public static String zaallijst(int[] lijst) {
-		if (lijst.length == 0) {
+		/*if (lijst.length == 0) {
 			return null;
 		}
-
+*/
 		String dt = "";
-		Server srv = API.getServer();
+	/*	Server srv = API.getServer();
 
 		for (int i = 0; i < lijst.length; i++) {
 			ZaalDienstRequest r = new ZaalDienstRequest(lijst[i]);
@@ -164,7 +141,7 @@ public class API extends nl.paul.sohier.ttv.libary.API{
 				dt += ", ";
 			}
 			dt += zt.getNaam();
-		}
+		}*/
 
 		return dt;
 	}	

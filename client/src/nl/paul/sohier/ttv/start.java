@@ -33,17 +33,17 @@ import java.util.Stack;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import nl.paul.sohier.ttv.libary.Collectie;
-import nl.paul.sohier.ttv.libary.Dag;
-import nl.paul.sohier.ttv.libary.DagRequest;
-import nl.paul.sohier.ttv.libary.Item;
-import nl.paul.sohier.ttv.libary.Request;
-import nl.paul.sohier.ttv.libary.ServerException;
-import nl.paul.sohier.ttv.libary.ZaalDienst;
-import nl.paul.sohier.ttv.libary.ZaalDienstRequest;
 import nl.paul.sohier.ttv.output.Generator;
 import nl.paul.sohier.ttv.output.PDF;
-import nl.paul.sohier.ttv.server.Server;
+import nl.ttva66.Dag;
+import nl.ttva66.DagRequest;
+import nl.ttva66.Item;
+import nl.ttva66.Request;
+import nl.ttva66.ZaalDienstRequest;
+import nl.ttva66.Zaaldienst;
+import nl.ttva66.libary.Collectie;
+
+import nl.ttva66.libary.ServerException;
 
 public class start {
 
@@ -52,7 +52,7 @@ public class start {
 	private JLabel lblMonth;
 	private DefaultTableModel mtblCalendar;
 	private JProgressBar progressBar;
-	public static ZaalDienst ik;
+	public static Zaaldienst ik;
 
 	private int realYear, realMonth, realDay, currentYear, currentMonth;
 
@@ -606,7 +606,7 @@ public class start {
 						continue;
 					}
 					ZaalDienstRequest r = new ZaalDienstRequest(dienst[i]);
-					ZaalDienst zt = (ZaalDienst) API.items.get(r);
+					Zaaldienst zt = (Zaaldienst) API.items.get(r);
 
 					if (i != 0) {
 						dt += ", ";
@@ -655,18 +655,18 @@ public class start {
 	}
 
 	private void save() {
-		Server srv = null;
+		//Server srv = null;
 
-		srv = API.getServer();
+		//srv = API.getServer();
 
 		while (API.items.changed()) {
 			Item upd = API.items.getChanged();
 
-			try {
+			/*try {
 				if (upd instanceof Dag) {
 					srv.saveDag((Dag) upd);
-				} else if (upd instanceof ZaalDienst) {
-					srv.saveZaalDienst((ZaalDienst) upd);
+				} else if (upd instanceof Zaaldienst) {
+					srv.saveZaalDienst((Zaaldienst) upd);
 				} else {
 					//upd.setChanged(false);
 				}
@@ -674,7 +674,7 @@ public class start {
 				// Should not happen?
 				throw new RuntimeException(
 						"There is no result found at the server?");
-			}
+			}*/
 
 			API.items.remove(upd);
 		}
