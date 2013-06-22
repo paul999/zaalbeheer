@@ -1,7 +1,6 @@
-package nl.ttva66.entities;
+package nl.ttva66.interfaces;
 
-import nl.ttva66.entities.ZaalDienstInterface;
-import nl.ttva66.entities.Zaaldienst;
+import nl.ttva66.dto.ZaaldienstDto;
 
 public class ZaalDienstRequest implements ZaalDienstInterface, Request{
 
@@ -37,8 +36,8 @@ public class ZaalDienstRequest implements ZaalDienstInterface, Request{
 			return true;
 
 		ZaalDienstInterface ob = null;
-		if (obj instanceof Zaaldienst) {
-			ob = (Zaaldienst) obj;
+		if (obj instanceof ZaaldienstDto) {
+			ob = (ZaaldienstDto) obj;
 		} else if (obj instanceof ZaalDienstRequest) {
 			ob = (ZaalDienstRequest) obj;
 		} else

@@ -4,7 +4,7 @@ import java.io.File;
 
 import javax.swing.ProgressMonitor;
 
-import nl.ttva66.entities.DagRequest;
+import nl.ttva66.interfaces.DagRequest;
 
 
 public interface Output {

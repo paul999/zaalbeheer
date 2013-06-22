@@ -9,10 +9,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import nl.ttva66.client.Service;
 import nl.ttva66.client.Service_Service;
-import nl.ttva66.entities.Dag;
-import nl.ttva66.entities.DagRequest;
-import nl.ttva66.entities.ZaalDienstRequest;
-import nl.ttva66.entities.Zaaldienst;
+import nl.ttva66.dto.DagDto;
+import nl.ttva66.dto.ZaaldienstDto;
+
+import nl.ttva66.interfaces.DagRequest;
+import nl.ttva66.interfaces.ZaalDienstRequest;
 
 
 public class API extends nl.ttva66.libary.API{
@@ -23,7 +24,7 @@ public class API extends nl.ttva66.libary.API{
 		return sv.getServiceBeanPort();
 	}
 	
-	public static Dag getDag(DagRequest request) {
+	public static DagDto getDag(DagRequest request) {
 		System.out.println("Getting data for dag: " + request.getDatum());
 		Service srv = getServer();
 		
@@ -35,12 +36,14 @@ public class API extends nl.ttva66.libary.API{
 		} catch (DatatypeConfigurationException e) {
 		
 		}
-		srv.getDagByDate(date2);
-		return null;//srv.getDagByDate(date2);
-
+		DagDto dt = srv.getDagByDate(date2);
+		
+		System.out.println("Got back: " + dt.getDatum());
+		
+		return dt;
 	}
 
-	public static Zaaldienst getZaalDienst(ZaalDienstRequest request) {
+	public static ZaaldienstDto getZaalDienst(ZaalDienstRequest request) {
 	/*	Server srv = API.getServer();
 
 		try {
@@ -51,8 +54,8 @@ public class API extends nl.ttva66.libary.API{
 		return null;
 	}	
 	
-	public static ArrayList<Zaaldienst> zaallijsten(DagRequest request) {
-		ArrayList<Zaaldienst> list = new ArrayList<Zaaldienst>();
+	public static ArrayList<ZaaldienstDto> zaallijsten(DagRequest request) {
+		ArrayList<ZaaldienstDto> list = new ArrayList<ZaaldienstDto>();
 
 		GregorianCalendar dt = new GregorianCalendar(/*request.getJaar(),
 				request.getMaand(), 1*/);

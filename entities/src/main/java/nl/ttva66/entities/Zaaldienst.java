@@ -21,7 +21,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "zaaldienst", catalog = "ttv", uniqueConstraints = @UniqueConstraint(columnNames = "naam"))
-public class Zaaldienst implements java.io.Serializable, ZaalDienstInterface, Item {
+public class Zaaldienst implements java.io.Serializable {
 
 	/**
 	 * 

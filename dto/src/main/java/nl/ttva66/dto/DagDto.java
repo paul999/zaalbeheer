@@ -6,9 +6,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import nl.ttva66.entities.DagInterface;
-import nl.ttva66.entities.Item;
-
+import nl.ttva66.interfaces.DagInterface;
+import nl.ttva66.interfaces.Item;
 
 
 public class DagDto implements java.io.Serializable, DagInterface, Item {

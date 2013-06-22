@@ -3,11 +3,12 @@ package nl.ttva66.dto;
 import java.util.HashSet;
 import java.util.Set;
 
-import nl.ttva66.entities.Item;
-import nl.ttva66.entities.ZaalDienstInterface;
+import nl.ttva66.interfaces.Item;
+import nl.ttva66.interfaces.ZaalDienstInterface;
+
 
 public class ZaaldienstDto implements java.io.Serializable,
-		ZaalDienstInterface, Item {
+		 Item,ZaalDienstInterface {
 
 	/**
 	 * 

@@ -21,7 +21,7 @@ import javax.swing.JLabel;
 
 import javax.swing.JButton;
 
-import nl.ttva66.entities.Zaaldienst;
+import nl.ttva66.dto.ZaaldienstDto;
 import nl.ttva66.libary.ServerException;
 
 
@@ -39,7 +39,7 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 	private JTextField jnaam;
 	private JTextField jEmail;
 	private JTextField aantal;
-	private Zaaldienst dienst;
+	private ZaaldienstDto dienst;
 	private JCheckBox chckbxZaterdag;
 	private JCheckBox chckbxDonderdag;
 	private JCheckBox chckbxDinsdag;
@@ -57,9 +57,9 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 	/**
 	 * Create the frame.
 	 */
-	public AddZaalWacht(Zaaldienst zt) {
+	public AddZaalWacht(ZaaldienstDto zt) {
 		if (zt == null) {
-			dienst = new Zaaldienst();
+			dienst = new ZaaldienstDto();
 			setTitle("Zaalwacht toevoegen");
 		} else {
 			dienst = zt;
@@ -242,7 +242,7 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 		btnOpslaan.setText("Bezig met opslaan...");
 		btnAnnuleren.setVisible(false);
 
-		Zaaldienst saved = null;
+		ZaaldienstDto saved = null;
 		/*try {
 			saved = srv.saveZaalDienst(dienst);
 		} catch (ServerException e) {

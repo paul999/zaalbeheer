@@ -17,10 +17,7 @@
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 			<artifactId>dto</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
-			<artifactId>entities</artifactId>
-		</dependency>		
+	
 		
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>

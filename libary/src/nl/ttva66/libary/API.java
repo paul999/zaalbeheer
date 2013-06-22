@@ -14,8 +14,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.GregorianCalendar;
 import java.util.Properties;
 
-import nl.ttva66.entities.Dag;
-import nl.ttva66.entities.DagRequest;
 
 import org.eclipse.egit.github.core.Issue;
 import org.eclipse.egit.github.core.client.GitHubClient;
@@ -25,38 +23,6 @@ public class API {
 
 	protected static boolean displayed = false;
 
-	public static Dag createStandardDag(DagRequest d) {
-		Dag dag = new Dag();
-
-		GregorianCalendar cal = new GregorianCalendar();
-		cal.setTime(d.getDatum());
-
-		int lt = cal.get(GregorianCalendar.DAY_OF_WEEK);
-
-		boolean[] open = { false, false, false };
-
-		switch (lt) {
-		case 3: // dinsdag
-			open[1] = true;
-		case 2:
-		case 4:
-		case 5:
-		case 6:
-			open[2] = true;
-			break;
-		case 7:
-			open[0] = true;
-			open[1] = true;
-			break;
-		default:
-
-		}
-		//dag.setOpen(open);
-		dag.setId(-1);
-		//dag.setChanged(false);
-
-		return dag;
-	}
 
 	public static void createIssue(String title, String body, Exception e) {
 		try {

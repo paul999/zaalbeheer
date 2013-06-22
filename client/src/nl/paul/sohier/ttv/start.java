@@ -37,13 +37,14 @@ import javax.swing.SwingConstants;
 
 import nl.paul.sohier.ttv.output.Generator;
 import nl.paul.sohier.ttv.output.PDF;
-import nl.ttva66.entities.Dag;
-import nl.ttva66.entities.DagRequest;
-import nl.ttva66.entities.Item;
-import nl.ttva66.entities.Open;
-import nl.ttva66.entities.Request;
-import nl.ttva66.entities.ZaalDienstRequest;
-import nl.ttva66.entities.Zaaldienst;
+
+import nl.ttva66.dto.DagDto;
+import nl.ttva66.dto.OpenDto;
+import nl.ttva66.dto.ZaaldienstDto;
+import nl.ttva66.interfaces.DagRequest;
+import nl.ttva66.interfaces.Item;
+import nl.ttva66.interfaces.Request;
+import nl.ttva66.interfaces.ZaalDienstRequest;
 import nl.ttva66.libary.Collectie;
 
 public class start {
@@ -53,7 +54,7 @@ public class start {
 	private JLabel lblMonth;
 	private DefaultTableModel mtblCalendar;
 	private JProgressBar progressBar;
-	public static Zaaldienst ik;
+	public static ZaaldienstDto ik;
 
 	private int realYear, realMonth, realDay, currentYear, currentMonth;
 
@@ -181,7 +182,12 @@ public class start {
 			}
 
 			if (add == null) {
+				System.out.println("Got null?");
 				return null;
+			}
+			else
+			{
+				System.out.println("Got valid data: " + add.getId() + " " + add.getClass());
 			}
 
 			API.items.add(add);
@@ -521,12 +527,12 @@ public class start {
 					dg.setMinutes(0);
 					dg.setSeconds(0);
 					dg.setMonth(this.currentMonth);
-					dg.setYear(this.currentYear);
+					dg.setYear(this.currentYear - 1900);
 					dg.setDate(i);
 					
 					DagRequest d = new DagRequest(dg); // TODO: date
 
-					Dag dag = (Dag) API.items.get(d);
+					DagDto dag = (DagDto) API.items.get(d);
 
 					if (dag == null) {
 						kl = new Color(255, 255, 0);
@@ -535,9 +541,9 @@ public class start {
 						String vl = "<html>" + Integer.toString(i);
 						vl += "<br />";
 						
-						Set<Open> delen = dag.getOpens();
+						Set<OpenDto> delen = dag.getOpens();
 						
-						for (Open deel : delen)
+						for (OpenDto deel : delen)
 						{
 							addDeel(deel.getType().getNaam(), deel.isOpen(), null);
 						}
@@ -610,7 +616,7 @@ public class start {
 						continue;
 					}
 					ZaalDienstRequest r = new ZaalDienstRequest(dienst[i]);
-					Zaaldienst zt = (Zaaldienst) API.items.get(r);
+					ZaaldienstDto zt = (ZaaldienstDto) API.items.get(r);
 
 					if (i != 0) {
 						dt += ", ";

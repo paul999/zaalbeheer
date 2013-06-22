@@ -1,9 +1,9 @@
-package nl.ttva66.entities;
+package nl.ttva66.interfaces;
 
 import java.util.Date;
 
+import nl.ttva66.dto.DagDto;
 import nl.ttva66.entities.Dag;
-import nl.ttva66.entities.DagInterface;
 
 public class DagRequest implements DagInterface, Request {
 	private Date datum;
@@ -27,8 +27,8 @@ public class DagRequest implements DagInterface, Request {
 			return true;
 
 		DagInterface ob = null;
-		if (obj instanceof Dag) {
-			ob = (Dag) obj;
+		if (obj instanceof DagDto) {
+			ob = (DagDto) obj;
 		} else if (obj instanceof DagRequest) {
 			ob = (DagRequest) obj;
 		} else

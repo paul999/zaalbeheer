@@ -19,9 +19,10 @@ import javax.swing.border.EmptyBorder;
 
 import nl.paul.sohier.ttv.output.Generator;
 import nl.paul.sohier.ttv.output.PDF;
-import nl.ttva66.entities.DagRequest;
-import nl.ttva66.entities.ZaalDienstRequest;
-import nl.ttva66.entities.Zaaldienst;
+
+import nl.ttva66.dto.ZaaldienstDto;
+import nl.ttva66.interfaces.DagRequest;
+import nl.ttva66.interfaces.ZaalDienstRequest;
 import nl.ttva66.libary.ServerException;
 
 import com.jgoodies.forms.layout.FormLayout;
@@ -331,7 +332,7 @@ public class SendAllMail extends JFrame implements ActionListener {
 				for (int i = 0; i < users.size(); i++) {
 
 					ZaalDienstRequest r = new ZaalDienstRequest(users.get(i));
-					Zaaldienst zt = (Zaaldienst) API.items.get(r);
+					ZaaldienstDto zt = (ZaaldienstDto) API.items.get(r);
 
 					if (zt == null) {
 					//	zt = srv.getZaalDienst(r);

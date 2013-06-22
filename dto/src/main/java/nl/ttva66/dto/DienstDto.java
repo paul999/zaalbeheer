@@ -1,6 +1,6 @@
 package nl.ttva66.dto;
 
-import nl.ttva66.entities.Item;
+import nl.ttva66.interfaces.Item;
 
 
 public class DienstDto implements java.io.Serializable, Item {

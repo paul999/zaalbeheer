@@ -1,4 +1,4 @@
-package nl.ttva66.entities;
+package nl.ttva66.interfaces;
 
 import java.util.Date;
 

@@ -23,7 +23,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "dag", catalog = "ttv", uniqueConstraints = @UniqueConstraint(columnNames = "datum"))
-public class Dag implements java.io.Serializable, DagInterface, Item {
+public class Dag implements java.io.Serializable {
 
 	/**
 	 * 

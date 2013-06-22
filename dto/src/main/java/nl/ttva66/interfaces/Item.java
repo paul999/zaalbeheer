@@ -1,4 +1,4 @@
-package nl.ttva66.entities;
+package nl.ttva66.interfaces;
 
 public interface Item {
 	public Integer getId();

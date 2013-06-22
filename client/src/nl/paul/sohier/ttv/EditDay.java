@@ -13,9 +13,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import nl.ttva66.entities.Dag;
-import nl.ttva66.entities.DagRequest;
-import nl.ttva66.entities.Zaaldienst;
+import nl.ttva66.dto.DagDto;
+import nl.ttva66.dto.ZaaldienstDto;
+import nl.ttva66.interfaces.DagRequest;
 import nl.ttva66.libary.ServerException;
 
 import com.jgoodies.forms.layout.FormLayout;
@@ -42,14 +42,14 @@ public class EditDay extends JFrame implements ActionListener,
 	private static final long serialVersionUID = -7267299796421679215L;
 	private JPanel contentPane;
 
-	private Dag dag;
+	private DagDto dag;
 	private JCheckBox ochtend;
 	private JCheckBox middag;
 	private JCheckBox avond;
 	private JLabel lblZaaldienst;
 	private JButton btnOpslaan;
 	private JButton button;
-	private Zaaldienst[] s;
+	private ZaaldienstDto[] s;
 	private int[] ids;
 	private start parent;
 	private boolean load = false;
@@ -498,9 +498,9 @@ public class EditDay extends JFrame implements ActionListener,
 		 */
 		private static final long serialVersionUID = -2596297853796654240L;
 		String[] values;
-		Zaaldienst[] dt;
+		ZaaldienstDto[] dt;
 
-		public model(Zaaldienst[] zt) {
+		public model(ZaaldienstDto[] zt) {
 
 			dt = zt;
 			values = new String[dt.length];

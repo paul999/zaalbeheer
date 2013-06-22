@@ -13,7 +13,7 @@
 		
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
-			<artifactId>entities</artifactId>
+			<artifactId>dto</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

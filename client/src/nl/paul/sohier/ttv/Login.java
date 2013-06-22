@@ -20,7 +20,6 @@ import javax.swing.JPasswordField;
 
 import nl.ttva66.client.Service;
 import nl.ttva66.dto.ZaaldienstDto;
-import nl.ttva66.entities.Zaaldienst;
 import nl.ttva66.libary.ServerException;
 
 import java.awt.Color;
@@ -161,7 +160,7 @@ public class Login extends JFrame {
 
 			dispose();
 			start.window = new start();
-			//start.ik = t;
+			start.ik = t;
 			start.window.frame.setVisible(true);
 		}
 	}

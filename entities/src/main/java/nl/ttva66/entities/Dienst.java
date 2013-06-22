@@ -18,7 +18,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "dienst", catalog = "ttv")
-public class Dienst implements java.io.Serializable, Item {
+public class Dienst implements java.io.Serializable{
 
 	/**
 	 * 
