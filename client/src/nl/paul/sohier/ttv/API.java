@@ -5,22 +5,21 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
-
-
 import nl.ttva66.Dag;
 import nl.ttva66.DagRequest;
 import nl.ttva66.ZaalDienstRequest;
 import nl.ttva66.Zaaldienst;
+import nl.ttva66.client.Service;
+import nl.ttva66.client.Service_Service;
 import nl.ttva66.libary.ServerException;
 
 
 public class API extends nl.ttva66.libary.API{
-	public static /*Server*/void getServer() {
+	public static Service getServer() {
 
-		
+		Service_Service sv = new Service_Service();
 
+		return sv.getServiceBeanPort();
 	}
 	
 	public static Dag getDag(DagRequest request) {

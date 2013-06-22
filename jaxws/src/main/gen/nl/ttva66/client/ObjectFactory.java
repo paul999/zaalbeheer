@@ -6,12 +6,6 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
-import nl.ttva66.Dag;
-import nl.ttva66.Dienst;
-import nl.ttva66.Open;
-import nl.ttva66.Type;
-import nl.ttva66.Zaaldienst;
-
 
 /**
  * This object contains factory methods for each 

@@ -17,12 +17,11 @@
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 			<artifactId>entities</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 			<artifactId>libary</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>		
 
@@ -30,14 +29,12 @@
 		<dependency>
 			<groupId>javax.ejb</groupId>
 			<artifactId>ejb-api</artifactId>
-			<version>3.0</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.persistence</groupId>
 			<artifactId>persistence-api</artifactId>
-			<version>1.0-rev-1</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -45,7 +42,6 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.14</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -61,6 +57,8 @@
 				<version>2.3</version>
 				<configuration>
 					<ejbVersion>3.0</ejbVersion>
+					<defaultLibBundleDir>lib</defaultLibBundleDir>
+					
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>

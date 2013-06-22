@@ -11,38 +11,41 @@
 		<dependency>
 			<groupId>javax.ejb</groupId>
 			<artifactId>ejb-api</artifactId>
-			<version>3.0</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>javax.persistence</groupId>
 			<artifactId>persistence-api</artifactId>
-			<version>1.0-rev-1</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 			<artifactId>entities</artifactId>
-			<type>jar</type>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 			<artifactId>server</artifactId>
 			<type>ejb</type>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 			<artifactId>web</artifactId>
 			<type>war</type>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 			<artifactId>libary</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>				
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.mylyn.github</groupId>
+			<artifactId>org.eclipse.egit.github.core</artifactId>
+		</dependency>
 	</dependencies>
 
 	<parent>
@@ -61,6 +64,7 @@
 						<artifactId>web</artifactId> <contextRoot>/zaaldienst</contextRoot> </webModule> 
 						<ejbModule> <groupId>nl.paul.sohier.ttv.zaalbeheer</groupId> <artifactId>server</artifactId> 
 						</ejbModule> </modules> -->
+					<defaultLibBundleDir>lib</defaultLibBundleDir>
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>

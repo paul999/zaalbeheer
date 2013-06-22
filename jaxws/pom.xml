@@ -17,7 +17,7 @@
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 			<artifactId>entities</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<build>

@@ -10,4 +10,5 @@ import javax.jws.WebService;
 public interface Service {
 
  public Dag getDagByDate(Date datum);
+ public Zaaldienst login(String user, String password);
 }

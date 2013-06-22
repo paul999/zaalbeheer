@@ -5,9 +5,20 @@
 *.ear
 start.jar
 server.jar
-WebServices/target/*
-libary/target/*
 client/target/*
+jaxws/target/*
+libary/target/*
+entities/target/*
+ear/target/*
+server/target/*
+web/target/*
+*/.settings/*
+*/.project
+*/.classpath
+
+.settings
+.project
+.classpath
 
 # Android dir.
 android/bin/*

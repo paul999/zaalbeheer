@@ -201,7 +201,7 @@ public class Zaaldienst implements java.io.Serializable, ZaalDienstInterface, It
 		this.canlogin = canlogin;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "zaaldienst")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "zaaldienst")
 	public Set<Dienst> getDiensts() {
 		return this.diensts;
 	}

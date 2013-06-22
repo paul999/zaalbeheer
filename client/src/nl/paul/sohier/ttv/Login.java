@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 
 import nl.ttva66.Zaaldienst;
+import nl.ttva66.client.Service;
 import nl.ttva66.libary.ServerException;
 
 import java.awt.Color;
@@ -148,14 +149,9 @@ public class Login extends JFrame {
 				error("Gebruikersnaam/wachtwoord is leeg");
 				return;
 			}
-		//	Server srv = API.getServer();
+			Service srv = API.getServer();
 			Zaaldienst t = null;
-			/*try {
-				t = srv.login(gbr, API.md5(pass));
-			} catch (ServerException err) {
-				error("Server side error");
-				return;
-			}*/
+			t = srv.login(gbr, API.md5(pass));
 
 			if (t == null) {
 				error("Foute gebruikersnaam/wachtwoord");
