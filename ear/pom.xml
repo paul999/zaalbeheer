@@ -6,6 +6,7 @@
 	</modelVersion>
 	<artifactId>ear</artifactId>
 	<packaging>ear</packaging>
+	<name>zaalbeheer-ear</name>
 
 	<dependencies>
 		<dependency>
@@ -24,6 +25,12 @@
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 			<artifactId>entities</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<artifactId>dto</artifactId>
+		</dependency>
+				
 
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>

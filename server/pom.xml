@@ -6,6 +6,7 @@
 	</modelVersion>
 	<artifactId>server</artifactId>
 	<packaging>ejb</packaging>
+	<name>zaalbeheer-server</name>
 
 	<parent>
 		<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
@@ -22,6 +23,11 @@
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 			<artifactId>libary</artifactId>
+			<scope>provided</scope>
+		</dependency>		
+		<dependency>
+			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<artifactId>dto</artifactId>
 			<scope>provided</scope>
 		</dependency>		
 

@@ -3,6 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.paul.sohier.ttv.client</groupId>
 	<artifactId>client</artifactId>
+	<name>zaalbeheer-client</name>
 
 	<dependencies>
 
@@ -14,8 +15,12 @@
 		
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
-			<artifactId>entities</artifactId>
+			<artifactId>dto</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<artifactId>entities</artifactId>
+		</dependency>		
 		
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>

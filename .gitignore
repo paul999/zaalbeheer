@@ -15,6 +15,7 @@ web/target/*
 */.settings/*
 */.project
 */.classpath
+*/bin/*
 
 .settings
 .project

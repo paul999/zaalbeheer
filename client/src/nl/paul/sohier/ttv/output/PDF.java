@@ -18,7 +18,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import nl.paul.sohier.ttv.API;
-import nl.ttva66.DagRequest;
+import nl.ttva66.entities.DagRequest;
 
 public class PDF extends Save {
 

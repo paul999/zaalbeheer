@@ -28,6 +28,8 @@ import java.awt.event.WindowEvent;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import javax.swing.JLabel;
@@ -35,15 +37,14 @@ import javax.swing.SwingConstants;
 
 import nl.paul.sohier.ttv.output.Generator;
 import nl.paul.sohier.ttv.output.PDF;
-import nl.ttva66.Dag;
-import nl.ttva66.DagRequest;
-import nl.ttva66.Item;
-import nl.ttva66.Request;
-import nl.ttva66.ZaalDienstRequest;
-import nl.ttva66.Zaaldienst;
+import nl.ttva66.entities.Dag;
+import nl.ttva66.entities.DagRequest;
+import nl.ttva66.entities.Item;
+import nl.ttva66.entities.Open;
+import nl.ttva66.entities.Request;
+import nl.ttva66.entities.ZaalDienstRequest;
+import nl.ttva66.entities.Zaaldienst;
 import nl.ttva66.libary.Collectie;
-
-import nl.ttva66.libary.ServerException;
 
 public class start {
 
@@ -172,28 +173,21 @@ public class start {
 			if (task instanceof DagRequest) {
 
 				add = API.getDag((DagRequest) task);
-
 			} else if (task instanceof ZaalDienstRequest) {
 				add = API.getZaalDienst((ZaalDienstRequest) task);
-
-			}
-
-			else // Don't remove this else! (It will cause a infitite loop)
+			} else // Don't remove this else! (It will cause a infitite loop)
 			{
 				throw new RuntimeException("Task not defined");
 			}
 
 			if (add == null) {
-
 				return null;
 			}
 
 			API.items.add(add);
-
 			wait.remove(task);
 
 			return null;
-
 		}
 
 		/*
@@ -284,9 +278,10 @@ public class start {
 				if (data[row][col] != 0) {
 					// Here should we open a new frame.
 
-		//			EditDay frame = new EditDay(new DagRequest(data[row][col],
-		//					currentMonth, currentYear), window);
-		//			frame.setVisible(true);
+					// EditDay frame = new EditDay(new
+					// DagRequest(data[row][col],
+					// currentMonth, currentYear), window);
+					// frame.setVisible(true);
 
 				} else {
 					return;
@@ -432,9 +427,10 @@ public class start {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-		/*		new SendAllMail(new DagRequest(-1, currentMonth, currentYear),
-						window);
-*/
+				/*
+				 * new SendAllMail(new DagRequest(-1, currentMonth,
+				 * currentYear), window);
+				 */
 			}
 		});
 
@@ -443,10 +439,10 @@ public class start {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				PDF p = new PDF(frame);
-			//	Generator g = new Generator(frame, p, new DagRequest(-1,
-			//			currentMonth, currentYear), null);
+				Generator g = new Generator(frame, p, new DagRequest(/* TODO: Add date -1,
+						currentMonth, currentYear*/), null);
 
-				//g.genereer();
+				g.genereer();
 				JOptionPane.showMessageDialog(frame, "PDF is opgeslagen op "
 						+ p.getFile(), "PDF Opgeslagen.",
 						JOptionPane.INFORMATION_MESSAGE);
@@ -468,6 +464,7 @@ public class start {
 
 	int count = 0;
 
+	@SuppressWarnings("deprecation")
 	private void refreshCalendar(int month, int year) {
 		count++;
 
@@ -519,7 +516,15 @@ public class start {
 				}
 
 				if (i != 0) {
-					DagRequest d = new DagRequest(new Date()); // TODO: date
+					Date dg = new Date();
+					dg.setHours(0);
+					dg.setMinutes(0);
+					dg.setSeconds(0);
+					dg.setMonth(this.currentMonth);
+					dg.setYear(this.currentYear);
+					dg.setDate(i);
+					
+					DagRequest d = new DagRequest(dg); // TODO: date
 
 					Dag dag = (Dag) API.items.get(d);
 
@@ -529,15 +534,14 @@ public class start {
 					} else {
 						String vl = "<html>" + Integer.toString(i);
 						vl += "<br />";
+						
+						Set<Open> delen = dag.getOpens();
+						
+						for (Open deel : delen)
+						{
+							addDeel(deel.getType().getNaam(), deel.isOpen(), null);
+						}
 
-				/*		boolean opn[] = dag.getOpen();
-
-						vl += addDeel("Ochtend", opn[0],
-								dag.getDeelZaalDienst(0));
-						vl += addDeel("Middag", opn[1],
-								dag.getDeelZaalDienst(1));
-						vl += addDeel("Avond", opn[2], dag.getDeelZaalDienst(2));
-*/
 						if (open) {
 							if (!zaaldienst) {
 								kl = new Color(255, 0, 0);
@@ -655,26 +659,20 @@ public class start {
 	}
 
 	private void save() {
-		//Server srv = null;
+		// Server srv = null;
 
-		//srv = API.getServer();
+		// srv = API.getServer();
 
 		while (API.items.changed()) {
 			Item upd = API.items.getChanged();
 
-			/*try {
-				if (upd instanceof Dag) {
-					srv.saveDag((Dag) upd);
-				} else if (upd instanceof Zaaldienst) {
-					srv.saveZaalDienst((Zaaldienst) upd);
-				} else {
-					//upd.setChanged(false);
-				}
-			} catch (ServerException e) {
-				// Should not happen?
-				throw new RuntimeException(
-						"There is no result found at the server?");
-			}*/
+			/*
+			 * try { if (upd instanceof Dag) { srv.saveDag((Dag) upd); } else if
+			 * (upd instanceof Zaaldienst) { srv.saveZaalDienst((Zaaldienst)
+			 * upd); } else { //upd.setChanged(false); } } catch
+			 * (ServerException e) { // Should not happen? throw new
+			 * RuntimeException( "There is no result found at the server?"); }
+			 */
 
 			API.items.remove(upd);
 		}

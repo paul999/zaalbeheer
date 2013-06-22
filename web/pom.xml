@@ -6,6 +6,7 @@
 	</modelVersion>
 	<artifactId>web</artifactId>
 	<packaging>war</packaging>
+	<name>zaalbeheer-web</name>
 
 	<parent>
 		<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>

@@ -6,6 +6,7 @@
 	</modelVersion>
 	<artifactId>jaxws</artifactId>
 	<packaging>jar</packaging>
+	<name>zaalbeheer-jaxws</name>
 
 	<parent>
 		<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
@@ -16,7 +17,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
-			<artifactId>entities</artifactId>
+			<artifactId>dto</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

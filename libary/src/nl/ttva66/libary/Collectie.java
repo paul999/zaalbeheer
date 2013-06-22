@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import nl.ttva66.Item;
-import nl.ttva66.Request;
+import nl.ttva66.entities.Item;
+import nl.ttva66.entities.Request;
 
 
 public class Collectie {

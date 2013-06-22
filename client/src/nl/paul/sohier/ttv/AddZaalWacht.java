@@ -21,7 +21,7 @@ import javax.swing.JLabel;
 
 import javax.swing.JButton;
 
-import nl.ttva66.Zaaldienst;
+import nl.ttva66.entities.Zaaldienst;
 import nl.ttva66.libary.ServerException;
 
 

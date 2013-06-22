@@ -14,8 +14,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.GregorianCalendar;
 import java.util.Properties;
 
-import nl.ttva66.Dag;
-import nl.ttva66.DagRequest;
+import nl.ttva66.entities.Dag;
+import nl.ttva66.entities.DagRequest;
 
 import org.eclipse.egit.github.core.Issue;
 import org.eclipse.egit.github.core.client.GitHubClient;

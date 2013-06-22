@@ -1,17 +1,18 @@
 package nl.paul.sohier.ttv;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-import nl.ttva66.Dag;
-import nl.ttva66.DagRequest;
-import nl.ttva66.ZaalDienstRequest;
-import nl.ttva66.Zaaldienst;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import nl.ttva66.client.Service;
 import nl.ttva66.client.Service_Service;
-import nl.ttva66.libary.ServerException;
+import nl.ttva66.entities.Dag;
+import nl.ttva66.entities.DagRequest;
+import nl.ttva66.entities.ZaalDienstRequest;
+import nl.ttva66.entities.Zaaldienst;
 
 
 public class API extends nl.ttva66.libary.API{
@@ -23,14 +24,20 @@ public class API extends nl.ttva66.libary.API{
 	}
 	
 	public static Dag getDag(DagRequest request) {
-		/*Server srv = API.getServer();
-
+		System.out.println("Getting data for dag: " + request.getDatum());
+		Service srv = getServer();
+		
+		GregorianCalendar c = new GregorianCalendar();
+		c.setTime(request.getDatum());
+		XMLGregorianCalendar date2 = null;
 		try {
-			return srv.getSavedDag(request);
-		} catch (Exception e) {
-			return null;
-		}*/
-		return null;
+			 date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+		} catch (DatatypeConfigurationException e) {
+		
+		}
+		srv.getDagByDate(date2);
+		return null;//srv.getDagByDate(date2);
+
 	}
 
 	public static Zaaldienst getZaalDienst(ZaalDienstRequest request) {

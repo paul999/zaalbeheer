@@ -13,9 +13,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import nl.ttva66.Dag;
-import nl.ttva66.DagRequest;
-import nl.ttva66.Zaaldienst;
+import nl.ttva66.entities.Dag;
+import nl.ttva66.entities.DagRequest;
+import nl.ttva66.entities.Zaaldienst;
 import nl.ttva66.libary.ServerException;
 
 import com.jgoodies.forms.layout.FormLayout;

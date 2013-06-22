@@ -6,11 +6,11 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
-import nl.ttva66.Dag;
-import nl.ttva66.Dienst;
-import nl.ttva66.Open;
-import nl.ttva66.Type;
-import nl.ttva66.Zaaldienst;
+import nl.ttva66.dto.DagDto;
+import nl.ttva66.dto.DienstDto;
+import nl.ttva66.dto.OpenDto;
+import nl.ttva66.dto.TypeDto;
+import nl.ttva66.dto.ZaaldienstDto;
 
 
 /**
@@ -43,51 +43,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetDagByDate }
+     * Create an instance of {@link TypeDto }
      * 
      */
-    public GetDagByDate createGetDagByDate() {
-        return new GetDagByDate();
+    public TypeDto createTypeDto() {
+        return new TypeDto();
     }
 
     /**
-     * Create an instance of {@link Type }
+     * Create an instance of {@link ZaaldienstDto }
      * 
      */
-    public Type createType() {
-        return new Type();
+    public ZaaldienstDto createZaaldienstDto() {
+        return new ZaaldienstDto();
     }
 
     /**
-     * Create an instance of {@link GetDagByDateResponse }
+     * Create an instance of {@link DienstDto }
      * 
      */
-    public GetDagByDateResponse createGetDagByDateResponse() {
-        return new GetDagByDateResponse();
+    public DienstDto createDienstDto() {
+        return new DienstDto();
     }
 
     /**
-     * Create an instance of {@link Open }
+     * Create an instance of {@link LoginResponse }
      * 
      */
-    public Open createOpen() {
-        return new Open();
+    public LoginResponse createLoginResponse() {
+        return new LoginResponse();
     }
 
     /**
-     * Create an instance of {@link Dag }
+     * Create an instance of {@link OpenDto }
      * 
      */
-    public Dag createDag() {
-        return new Dag();
+    public OpenDto createOpenDto() {
+        return new OpenDto();
     }
 
     /**
-     * Create an instance of {@link Zaaldienst }
+     * Create an instance of {@link DagDto }
      * 
      */
-    public Zaaldienst createZaaldienst() {
-        return new Zaaldienst();
+    public DagDto createDagDto() {
+        return new DagDto();
     }
 
     /**
@@ -99,19 +99,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Dienst }
+     * Create an instance of {@link GetDagByDateResponse }
      * 
      */
-    public Dienst createDienst() {
-        return new Dienst();
+    public GetDagByDateResponse createGetDagByDateResponse() {
+        return new GetDagByDateResponse();
     }
 
     /**
-     * Create an instance of {@link LoginResponse }
+     * Create an instance of {@link GetDagByDate }
      * 
      */
-    public LoginResponse createLoginResponse() {
-        return new LoginResponse();
+    public GetDagByDate createGetDagByDate() {
+        return new GetDagByDate();
     }
 
     /**

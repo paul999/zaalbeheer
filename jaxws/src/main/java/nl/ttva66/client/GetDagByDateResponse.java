@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import nl.ttva66.Dag;
+import nl.ttva66.dto.DagDto;
 
 
 /**
@@ -19,7 +19,7 @@ import nl.ttva66.Dag;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.ttva66.nl/wsdl}dag" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.ttva66.nl/wsdl}dagDto" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,17 +35,17 @@ import nl.ttva66.Dag;
 public class GetDagByDateResponse {
 
     @XmlElement(name = "return")
-    protected Dag _return;
+    protected DagDto _return;
 
     /**
      * Gets the value of the return property.
      * 
      * @return
      *     possible object is
-     *     {@link Dag }
+     *     {@link DagDto }
      *     
      */
-    public Dag getReturn() {
+    public DagDto getReturn() {
         return _return;
     }
 
@@ -54,10 +54,10 @@ public class GetDagByDateResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link Dag }
+     *     {@link DagDto }
      *     
      */
-    public void setReturn(Dag value) {
+    public void setReturn(DagDto value) {
         this._return = value;
     }
 

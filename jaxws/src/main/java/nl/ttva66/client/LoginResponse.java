@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import nl.ttva66.Zaaldienst;
+import nl.ttva66.dto.ZaaldienstDto;
 
 
 /**
@@ -19,7 +19,7 @@ import nl.ttva66.Zaaldienst;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.ttva66.nl/wsdl}zaaldienst" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.ttva66.nl/wsdl}zaaldienstDto" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,17 +35,17 @@ import nl.ttva66.Zaaldienst;
 public class LoginResponse {
 
     @XmlElement(name = "return")
-    protected Zaaldienst _return;
+    protected ZaaldienstDto _return;
 
     /**
      * Gets the value of the return property.
      * 
      * @return
      *     possible object is
-     *     {@link Zaaldienst }
+     *     {@link ZaaldienstDto }
      *     
      */
-    public Zaaldienst getReturn() {
+    public ZaaldienstDto getReturn() {
         return _return;
     }
 
@@ -54,10 +54,10 @@ public class LoginResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link Zaaldienst }
+     *     {@link ZaaldienstDto }
      *     
      */
-    public void setReturn(Zaaldienst value) {
+    public void setReturn(ZaaldienstDto value) {
         this._return = value;
     }
 

@@ -5,6 +5,7 @@
 		4.0.0
 	</modelVersion>
 	<artifactId>entities</artifactId>
+	<name>zaalbeheer-entities</name>
 
 	<dependencies>
 		<dependency>
