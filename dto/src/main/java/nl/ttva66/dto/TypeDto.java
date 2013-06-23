@@ -10,6 +10,7 @@ public class TypeDto implements java.io.Serializable {
 	private String naam;
 	private int start;
 	private int eind;
+	private int sequence;
 
 	public TypeDto() {
 	}
@@ -51,4 +52,13 @@ public class TypeDto implements java.io.Serializable {
 	public void setEind(int eind) {
 		this.eind = eind;
 	}
+	
+	public int getSequence()
+	{
+		return this.sequence;
+	}
+	public void setSequence(int sequence)
+	{
+		this.sequence = sequence;
+	}	
 }

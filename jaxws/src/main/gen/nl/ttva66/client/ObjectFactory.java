@@ -6,14 +6,6 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
-import nl.ttva66.dto.DagDto;
-import nl.ttva66.dto.DienstDto;
-import nl.ttva66.dto.OpenDto;
-import nl.ttva66.dto.TypeDto;
-import nl.ttva66.dto.ZaaldienstDto;
-import nl.ttva66.interfaces.DagRequest;
-import nl.ttva66.interfaces.ZaalDienstRequest;
-
 
 /**
  * This object contains factory methods for each 

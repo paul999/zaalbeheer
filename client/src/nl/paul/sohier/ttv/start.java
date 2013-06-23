@@ -25,10 +25,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+
 import java.util.Set;
 import java.util.Stack;
 
@@ -39,6 +40,7 @@ import nl.paul.sohier.ttv.output.Generator;
 import nl.paul.sohier.ttv.output.PDF;
 
 import nl.ttva66.dto.DagDto;
+import nl.ttva66.dto.DienstDto;
 import nl.ttva66.dto.OpenDto;
 import nl.ttva66.dto.ZaaldienstDto;
 import nl.ttva66.interfaces.DagRequest;
@@ -64,6 +66,7 @@ public class start {
 	private int size = 0;
 
 	private int[][] data;
+	private ArrayList<DagRequest> dagdata = new ArrayList<DagRequest>();
 	private Color[][] kleur;
 
 	private Thread t;
@@ -278,16 +281,14 @@ public class start {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				int row = table.rowAtPoint(e.getPoint());
 				int col = table.columnAtPoint(e.getPoint());
-
+System.out.println("Hier: " + row + " " + col);
 				// Going to check if value is a day.
 
-				if (data[row][col] != 0) {
+				if (data[row][col] != -1) {
 					// Here should we open a new frame.
 
-					// EditDay frame = new EditDay(new
-					// DagRequest(data[row][col],
-					// currentMonth, currentYear), window);
-					// frame.setVisible(true);
+					EditDay frame = new EditDay(dagdata.get(data[row][col]), window);
+					frame.setVisible(true);
 
 				} else {
 					return;
@@ -305,7 +306,7 @@ public class start {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		// Set row/column count
-		table.setRowHeight(100);
+		table.setRowHeight(200);
 		mtblCalendar.setColumnCount(7);
 		mtblCalendar.setRowCount(6);
 
@@ -445,8 +446,8 @@ public class start {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				PDF p = new PDF(frame);
-				Generator g = new Generator(frame, p, new DagRequest(/* TODO: Add date -1,
-						currentMonth, currentYear*/), null);
+				Generator g = new Generator(frame, p, new DagRequest( -1,
+						currentMonth, currentYear), null);
 
 				g.genereer();
 				JOptionPane.showMessageDialog(frame, "PDF is opgeslagen op "
@@ -470,7 +471,6 @@ public class start {
 
 	int count = 0;
 
-	@SuppressWarnings("deprecation")
 	private void refreshCalendar(int month, int year) {
 		count++;
 
@@ -488,7 +488,7 @@ public class start {
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 7; j++) {
 				mtblCalendar.setValueAt(null, i, j);
-				data[i][j] = 0;
+				data[i][j] = -1;
 				kleur[i][j] = new Color(255, 255, 255);
 			}
 		}
@@ -496,6 +496,7 @@ public class start {
 		// Get first day of month and number of days
 		GregorianCalendar cal = new GregorianCalendar(year, month, 1);
 		nod = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+		int nod2 = nod + 7;
 		column = cal.get(GregorianCalendar.DAY_OF_WEEK);
 
 		if (column == 1) {
@@ -505,13 +506,29 @@ public class start {
 		}
 
 		int row = 0;
+		
+		int mt = this.currentMonth;
+		int yr = this.currentYear;
 
 		// Draw calendar
-		for (int i = 1; i <= nod; i++) {
+		for (int i = 1, ct = 1; i <= nod2; i++, ct++) {
 			try {
+				
+				if (i == nod)
+				{
+					if (mt == 11)
+					{
+						mt = -1;
+						yr++;
+					}
+					mt++;
+					ct = 1;
+				}
+				String dt = Integer.toString(ct) +  " " + months[mt] + " " + yr;
 
-				mtblCalendar.setValueAt(i, row, column);
-				data[row][column] = i;
+				mtblCalendar.setValueAt("<html>" + dt + "</html>", row, column);
+				data[row][column] = i - 1;
+				dagdata.add(new DagRequest(ct, mt, yr));
 
 				Color kl;
 
@@ -522,15 +539,9 @@ public class start {
 				}
 
 				if (i != 0) {
-					Date dg = new Date();
-					dg.setHours(0);
-					dg.setMinutes(0);
-					dg.setSeconds(0);
-					dg.setMonth(this.currentMonth);
-					dg.setYear(this.currentYear - 1900);
-					dg.setDate(i);
+					System.out.println("Doing request for " + ct);
 					
-					DagRequest d = new DagRequest(dg); // TODO: date
+					DagRequest d = new DagRequest(ct, mt, yr); 
 
 					DagDto dag = (DagDto) API.items.get(d);
 
@@ -538,19 +549,24 @@ public class start {
 						kl = new Color(255, 255, 0);
 						addQueue(d);
 					} else {
-						String vl = "<html>" + Integer.toString(i);
+						String vl = "<html>" + dt;						
+						
 						vl += "<br />";
 						
 						Set<OpenDto> delen = dag.getOpens();
+						System.out.println("DTO size open: " + delen.size());
 						
 						for (OpenDto deel : delen)
 						{
-							addDeel(deel.getType().getNaam(), deel.isOpen(), null);
+							System.out.println("OpenDto doing work... " + deel.getType().getNaam());
+							vl += addDeel(dag, deel);
 						}
 
 						if (open) {
 							if (!zaaldienst) {
 								kl = new Color(255, 0, 0);
+							} else if (!definitief) {
+								kl = new Color(0, 0, 255);
 							} else {
 								kl = new Color(0, 255, 0);
 							}
@@ -563,8 +579,8 @@ public class start {
 						mtblCalendar.setValueAt(vl, row, column);
 					}
 
-					if (i == realDay && currentMonth == realMonth
-							&& currentYear == realYear) { // Today
+					if (i == realDay && mt == realMonth
+							&& yr == realYear) { // Today
 						kl = new Color(220, 220, 255);
 					}
 
@@ -590,47 +606,78 @@ public class start {
 	}
 
 	private boolean open = false;
-	private boolean zaaldienst = true;
+	private boolean definitief = true;
+	private boolean zaaldienst = false;
 
-	private String addDeel(String deel, boolean opn, int[] dienst) {
-		String vl = deel + ": ";
+	private String addDeel(DagDto dag, OpenDto opn) {
+		
+		
+		
+		String vl = opn.getType().getNaam() + ": ";
 
-		vl += (opn) ? "Open" : "Gesloten";
+		vl += (opn.isOpen()) ? "Open" : "Gesloten";
 		vl += "<br />";
 
-		if (opn) {
+		if (opn.isOpen()) {
 			open = true;
+			
+			Set<DienstDto> dt = new HashSet<DienstDto>();
+			
+			for (DienstDto d : dag.getDienst())
+			{
+				if (d.getType().getId() == opn.getType().getId())
+				{
+					dt.add(d);
+				}
+			}
+			
 
-			if (dienst.length == 0) {
+			if (dt.size() == 0) {
 				// Geen zaaldienst toegewezen.
 
 				vl += "Geen zaaldienst toegewezen<br />";
 				zaaldienst = false;
 			} else {
-				String dt = "";
+				String result = "";
 
-				for (int i = 0; i < dienst.length; i++) {
-					if (dienst[i] == 0) {
-
+				int i = 0;
+				for (DienstDto dienst : dt) {
+					if (dienst == null) {
 						// Skip it.
 						continue;
 					}
-					ZaalDienstRequest r = new ZaalDienstRequest(dienst[i]);
+					
+					if (!dienst.isDefinitief())
+					{
+						definitief = false;
+					}
+					if (!dienst.isDefinitief())
+					{
+						zaaldienst = true;
+					}
+					
+					ZaalDienstRequest r = new ZaalDienstRequest(dienst.getZaaldienst());
 					ZaaldienstDto zt = (ZaaldienstDto) API.items.get(r);
 
 					if (i != 0) {
-						dt += ", ";
+						result += ", ";
 					}
+					i++;
 
 					if (zt == null) {
 						addQueue(r);
-						dt += "Ophalen";
+						result += "Ophalen";
 					} else {
-						dt += zt.getNaam();
+						result += zt.getNaam();
+						
+						if (dienst.isBackup())
+						{
+							result += "(backup)";
+						}
 					}
 				}
 
-				vl += "Zaaldienst: " + dt + "<br />";
+				vl += "Zaaldienst: " + result + "<br />";
 			}
 		}
 		return vl;

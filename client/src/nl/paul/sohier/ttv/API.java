@@ -3,9 +3,6 @@ package nl.paul.sohier.ttv;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import nl.ttva66.client.Service;
 import nl.ttva66.client.Service_Service;
@@ -25,41 +22,28 @@ public class API extends nl.ttva66.libary.API{
 	}
 	
 	public static DagDto getDag(DagRequest request) {
-		System.out.println("Getting data for dag: " + request.getDatum());
+		System.out.println("Getting data for dag: " + request);
 		Service srv = getServer();
 		
-		GregorianCalendar c = new GregorianCalendar();
-		c.setTime(request.getDatum());
-		XMLGregorianCalendar date2 = null;
-		try {
-			 date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-		} catch (DatatypeConfigurationException e) {
 		
-		}
-		DagDto dt = srv.getDagByDate(date2);
+		DagDto dt = srv.getDagByDate(request);
 		
-		System.out.println("Got back: " + dt.getDatum());
+		System.out.println("Got back: " + dt);
 		
 		return dt;
 	}
 
 	public static ZaaldienstDto getZaalDienst(ZaalDienstRequest request) {
-	/*	Server srv = API.getServer();
-
-		try {
-			return srv.getZaalDienst(request);
-		} catch (Exception e) {
-			return null;
-		}*/
-		return null;
+		Service srv = getServer();
+		return srv.getZaaldienstById(request);
 	}	
 	
 	public static ArrayList<ZaaldienstDto> zaallijsten(DagRequest request) {
 		ArrayList<ZaaldienstDto> list = new ArrayList<ZaaldienstDto>();
 
-		GregorianCalendar dt = new GregorianCalendar(/*request.getJaar(),
-				request.getMaand(), 1*/);
-		dt.setTime(request.getDatum());
+		//GregorianCalendar dt = new GregorianCalendar(/*request.getJaar(),
+		//		request.getMaand(), 1*/);
+		//dt.setTime(request.getDatum());
 
 		/*Server srv = API.getServer();
 

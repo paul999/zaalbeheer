@@ -5,8 +5,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-import nl.ttva66.interfaces.DagRequest;
-
 
 /**
  * <p>Java class for getDagByDate complex type.

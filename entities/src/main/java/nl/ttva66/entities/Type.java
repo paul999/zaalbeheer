@@ -30,6 +30,7 @@ public class Type implements java.io.Serializable {
 	private int eind;
 	private Set<Open> opens = new HashSet<Open>(0);
 	private Set<Dienst> diensts = new HashSet<Dienst>(0);
+	private int sequence;
 
 	public Type() {
 	}
@@ -103,6 +104,16 @@ public class Type implements java.io.Serializable {
 
 	public void setDiensts(Set<Dienst> diensts) {
 		this.diensts = diensts;
+	}
+	
+	@Column(name = "sequence")
+	public int getSequence()
+	{
+		return this.sequence;
+	}
+	public void setSequence(int sequence)
+	{
+		this.sequence = sequence;
 	}
 
 }

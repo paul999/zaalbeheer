@@ -3,6 +3,7 @@ package nl.ttva66;
 import java.util.HashSet;
 import java.util.Set;
 
+
 import nl.ttva66.dto.DagDto;
 import nl.ttva66.dto.DienstDto;
 import nl.ttva66.dto.OpenDto;
@@ -62,6 +63,7 @@ public class Convert {
 		dto.setId(type.getId());
 		dto.setNaam(type.getNaam());
 		dto.setStart(type.getStart());
+		dto.setSequence(type.getSequence());
 		
 		return dto;
 	}
@@ -79,13 +81,69 @@ public class Convert {
 	
 	static DagDto DagToDto(Dag zt) {
 		DagDto dto = new DagDto();
-		dto.setDatum(zt.getDatum());
+		dto.setDag(zt.getDag());
+		dto.setMaand(zt.getMaand());
+		dto.setJaar(zt.getJaar());
+		dto.setId(zt.getId());
+		dto.setOpmerkingen(zt.getOpmerkingen());
+		dto.setTeam(zt.getTeam());
+		
+		Set<OpenDto> odto = new HashSet<OpenDto>();
+		
+		for (Open op : zt.getOpens())
+		{
+			odto.add(OpenToDto(op));
+		}
+		dto.setOpens(odto);
+		
+		Set<DienstDto> odie = new HashSet<DienstDto>();
+		
+		for (Dienst dt : zt.getDiensts())
+		{
+			odie.add(DienstToDto(dt));
+		}
+		dto.setDienst(odie);
+		
+		System.out.println("DTO size: " + dto.getOpens().size());
+		
+		return dto;
+	}
+	
+	static Type DtoToType(TypeDto type) {
+		Type dto = new Type();
+		dto.setEind(type.getEind());
+		dto.setId(type.getId());
+		dto.setNaam(type.getNaam());
+		dto.setStart(type.getStart());
+		dto.setSequence(type.getSequence());
+		
+		return dto;
+	}	
+		
+	static Dag DtoToDag(DagDto zt) {
+		Dag dto = new Dag();
+		dto.setDag(zt.getDag());
+		dto.setMaand(zt.getMaand());
+		dto.setJaar(zt.getJaar());
 		dto.setId(zt.getId());
 		dto.setOpmerkingen(zt.getOpmerkingen());
 		dto.setTeam(zt.getTeam());
 		
 		
+		Set<Open> odto = new HashSet<Open>();
+		
+		for (OpenDto opdto : zt.getOpens())
+		{
+			Open op = new Open();
+			op.setDag(dto);
+			op.setType(DtoToType(opdto.getType()));
+			op.setOpen(opdto.isOpen());
+			op.setId(opdto.getId());
+			
+			odto.add(op);
+		}
+		dto.setOpens(odto);		
 		
 		return dto;
-	}
+	}	
 }

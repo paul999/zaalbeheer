@@ -3,22 +3,23 @@ package nl.ttva66.client;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import nl.ttva66.interfaces.DagRequest;
+import nl.ttva66.dto.TypeDto;
 
 
 /**
- * <p>Java class for getDagByDate complex type.
+ * <p>Java class for createTypeResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="getDagByDate">
+ * &lt;complexType name="createTypeResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.ttva66.nl/wsdl}dagRequest" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.ttva66.nl/wsdl}typeDto" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,35 +29,36 @@ import nl.ttva66.interfaces.DagRequest;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getDagByDate", propOrder = {
-    "arg0"
+@XmlType(name = "createTypeResponse", propOrder = {
+    "_return"
 })
-public class GetDagByDate {
+public class CreateTypeResponse {
 
-    protected DagRequest arg0;
+    @XmlElement(name = "return")
+    protected TypeDto _return;
 
     /**
-     * Gets the value of the arg0 property.
+     * Gets the value of the return property.
      * 
      * @return
      *     possible object is
-     *     {@link DagRequest }
+     *     {@link TypeDto }
      *     
      */
-    public DagRequest getArg0() {
-        return arg0;
+    public TypeDto getReturn() {
+        return _return;
     }
 
     /**
-     * Sets the value of the arg0 property.
+     * Sets the value of the return property.
      * 
      * @param value
      *     allowed object is
-     *     {@link DagRequest }
+     *     {@link TypeDto }
      *     
      */
-    public void setArg0(DagRequest value) {
-        this.arg0 = value;
+    public void setReturn(TypeDto value) {
+        this._return = value;
     }
 
 }

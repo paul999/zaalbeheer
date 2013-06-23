@@ -13,6 +13,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import nl.ttva66.client.Service;
 import nl.ttva66.dto.DagDto;
 import nl.ttva66.dto.ZaaldienstDto;
 import nl.ttva66.interfaces.DagRequest;
@@ -100,6 +101,23 @@ public class EditDay extends JFrame implements ActionListener,
 			return;
 		}
 */
+		dag = (DagDto) API.items.get(request);
+		
+		if (dag == null)
+		{
+			Service srv = API.getServer();
+			
+			dag = srv.getDagByDate(request);
+			
+			if (dag == null)
+			{
+				throw new RuntimeException("Missing dag");
+			}
+			
+			API.items.add(dag);
+			
+		}
+		
 		contentPane.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
@@ -199,7 +217,7 @@ public class EditDay extends JFrame implements ActionListener,
 		}*/
 		
 
-		ids = new int[s.length];
+		//ids = new int[s.length];
 
 /*		int[] zochtend = dag.getDeelZaalDienst(0);
 		int[] zmiddag = dag.getDeelZaalDienst(1);
@@ -211,13 +229,13 @@ public class EditDay extends JFrame implements ActionListener,
 */
 		int o = 0, m = 0, a = 0;
 
-		for (int i = 0; i < s.length; i++) {
+	/*	for (int i = 0; i < s.length; i++) {
 			if (s[i] != null) {
 				// dienstochtend.addItem(s[i].getNaam());
 
 				ids[i] = s[i].getId();
 
-		/*		if (inArray(zochtend, s[i].getId())) {
+				if (inArray(zochtend, s[i].getId())) {
 					lo[o] = i;
 					o++;
 				}
@@ -231,13 +249,13 @@ public class EditDay extends JFrame implements ActionListener,
 					la[a] = i;
 					a++;
 				}
-*/			}
-		}
-		model mo = new model(s);
+			}
+		}*/
+		/*model mo = new model(s);
 
 		dienstochtend.setModel(mo);
 		dienstavond.setModel(mo);
-		dienstmiddag.setModel(mo);
+		dienstmiddag.setModel(mo);*/
 
 		/*dienstochtend.setSelectedIndices(lo);
 		dienstmiddag.setSelectedIndices(lm);
@@ -446,7 +464,7 @@ public class EditDay extends JFrame implements ActionListener,
 		dienst[1] = new int[m.length];
 		dienst[2] = new int[a.length];
 
-		model om = (model) dienstochtend.getModel();
+/*		model om = (model) dienstochtend.getModel();
 		model mm = (model) dienstmiddag.getModel();
 		model am = (model) dienstavond.getModel();
 
@@ -475,7 +493,7 @@ public class EditDay extends JFrame implements ActionListener,
 				dienst[2][i] = findId((String) am.getElementAt(a[i]));
 				i++;
 			}
-		}
+		}*/
 
 	//	dag.setZaaldienst(dienst); // TODO Fix.
 		dag.setTeam(teamzaaldienst.getText());

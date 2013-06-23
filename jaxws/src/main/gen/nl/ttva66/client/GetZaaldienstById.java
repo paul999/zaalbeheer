@@ -5,20 +5,18 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-import nl.ttva66.interfaces.DagRequest;
-
 
 /**
- * <p>Java class for getDagByDate complex type.
+ * <p>Java class for getZaaldienstById complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="getDagByDate">
+ * &lt;complexType name="getZaaldienstById">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.ttva66.nl/wsdl}dagRequest" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.ttva66.nl/wsdl}zaalDienstRequest" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,22 +26,22 @@ import nl.ttva66.interfaces.DagRequest;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getDagByDate", propOrder = {
+@XmlType(name = "getZaaldienstById", propOrder = {
     "arg0"
 })
-public class GetDagByDate {
+public class GetZaaldienstById {
 
-    protected DagRequest arg0;
+    protected ZaalDienstRequest arg0;
 
     /**
      * Gets the value of the arg0 property.
      * 
      * @return
      *     possible object is
-     *     {@link DagRequest }
+     *     {@link ZaalDienstRequest }
      *     
      */
-    public DagRequest getArg0() {
+    public ZaalDienstRequest getArg0() {
         return arg0;
     }
 
@@ -52,10 +50,10 @@ public class GetDagByDate {
      * 
      * @param value
      *     allowed object is
-     *     {@link DagRequest }
+     *     {@link ZaalDienstRequest }
      *     
      */
-    public void setArg0(DagRequest value) {
+    public void setArg0(ZaalDienstRequest value) {
         this.arg0 = value;
     }
 

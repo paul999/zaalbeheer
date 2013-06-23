@@ -7,11 +7,7 @@
 	<name>zaalbeheer-dto</name>
 	<artifactId>dto</artifactId>
 	<dependencies>
-		<dependency>
-			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
-			<artifactId>entities</artifactId>
-			<scope>provided</scope>
-		</dependency>
+
 	</dependencies>
 
 	<parent>
