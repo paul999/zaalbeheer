@@ -129,17 +129,20 @@ public class ServiceBean implements Service {
 	}
 	public ZaaldienstDto getZaaldienstById(ZaalDienstRequest request)
 	{
-
+System.out.println("Getting request for: " + request.getId());
 		Query result = em
 				.createQuery("select X from Zaaldienst as X where id = :id");
 		result.setParameter("id", request.getId());
 
 		try {
 			Zaaldienst zt = (Zaaldienst) result.getSingleResult();
+			System.out.println("Zaaldienst is hier: " + zt);
+			System.out.println("ID: " + zt.getId());
 			return Convert.ZaaldientToDto(zt);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("Missing item???");
 		return null;		
 	}
 
@@ -161,4 +164,24 @@ public class ServiceBean implements Service {
 		return null;
 	}
 
+	@Override
+	public Integer[] listZaaldiensten()
+	{
+
+		Query result = em
+				.createQuery("select X from Zaaldienst as X");
+
+		@SuppressWarnings("unchecked")
+		List<Zaaldienst> zd = result.getResultList();
+		Integer[] list = new Integer[zd.size()];
+		
+		int i = 0;
+		for (Zaaldienst z : zd)
+		{
+			list[i] = z.getId();
+			i++;
+		}
+		
+		return list;			
+	}
 }

@@ -32,6 +32,7 @@ public class Convert {
 		dto.setWoensdag(zt.isWoensdag());
 		dto.setZaterdag(zt.isZaterdag());
 		dto.setZondag(zt.isZondag());
+		dto.setNaam(zt.getNaam());
 		
 		Set<DienstDto> ddto = new HashSet<DienstDto>();
 		
@@ -41,6 +42,8 @@ public class Convert {
 		}
 		
 		dto.setDiensts(ddto);
+		
+		System.out.println("DTO is hier: " + dto);
 		
 		return dto;
 	}

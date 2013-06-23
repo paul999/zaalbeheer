@@ -5,6 +5,7 @@ import java.util.Set;
 
 import nl.ttva66.interfaces.Item;
 import nl.ttva66.interfaces.ZaalDienstInterface;
+import nl.ttva66.interfaces.ZaalDienstRequest;
 
 
 public class ZaaldienstDto implements java.io.Serializable,
@@ -181,4 +182,24 @@ public class ZaaldienstDto implements java.io.Serializable,
 	public void setDiensts(Set<DienstDto> diensts) {
 		this.diensts = diensts;
 	}
+	
+	public boolean equals(Object obj) {
+
+		if (obj == this)
+			return true;
+
+		ZaalDienstInterface ob = null;
+		if (obj instanceof ZaaldienstDto) {
+			ob = (ZaaldienstDto) obj;
+		} else if (obj instanceof ZaalDienstRequest) {
+			ob = (ZaalDienstRequest) obj;
+		} else
+			return false;
+
+		if (ob.getId() == this.getId()) {
+			return true;
+		} else {
+			return false;
+		}
+	}	
 }

@@ -4,14 +4,14 @@ import nl.ttva66.dto.ZaaldienstDto;
 
 public class ZaalDienstRequest implements ZaalDienstInterface, Request{
 
-	private int id;
+	private Integer id;
 	
 	public ZaalDienstRequest()
 	{
 		
 	}
 	
-	public ZaalDienstRequest(int i)
+	public ZaalDienstRequest(Integer i)
 	{
 		id = i;
 	}
@@ -19,7 +19,7 @@ public class ZaalDienstRequest implements ZaalDienstInterface, Request{
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

@@ -281,7 +281,7 @@ public class start {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				int row = table.rowAtPoint(e.getPoint());
 				int col = table.columnAtPoint(e.getPoint());
-System.out.println("Hier: " + row + " " + col);
+
 				// Going to check if value is a day.
 
 				if (data[row][col] != -1) {
