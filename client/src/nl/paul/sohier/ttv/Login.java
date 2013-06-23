@@ -159,9 +159,9 @@ public class Login extends JFrame {
 			}
 
 			dispose();
-			start.window = new start();
-			start.ik = t;
-			start.window.frame.setVisible(true);
+			Start.window = new Start();
+			Start.ik = t;
+			Start.window.frame.setVisible(true);
 		}
 	}
 }

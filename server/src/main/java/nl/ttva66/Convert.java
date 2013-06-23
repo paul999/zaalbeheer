@@ -3,6 +3,9 @@ package nl.ttva66;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 
 import nl.ttva66.dto.DagDto;
 import nl.ttva66.dto.DienstDto;
@@ -123,7 +126,7 @@ public class Convert {
 		return dto;
 	}	
 		
-	static Dag DtoToDag(DagDto zt) {
+	static Dag DtoToDag(DagDto zt, EntityManager em) {
 		Dag dto = new Dag();
 		dto.setDag(zt.getDag());
 		dto.setMaand(zt.getMaand());
@@ -146,6 +149,26 @@ public class Convert {
 			odto.add(op);
 		}
 		dto.setOpens(odto);		
+		
+		Set<Dienst> odie = new HashSet<Dienst>();
+		
+		for (DienstDto dt : zt.getDienst())
+		{
+			Dienst d = new Dienst();
+			d.setBackup(dt.isBackup());
+			d.setDag(dto);
+			d.setDefinitief(dt.isDefinitief());
+			d.setId(dt.getId());
+			d.setType(DtoToType(dt.getType()));
+			
+			Query rs = em.createQuery("SELECT X FROM Zaaldienst as X WHERE id = :id");
+			rs.setParameter("id", dt.getZaaldienst());
+			Zaaldienst z = (Zaaldienst) rs.getSingleResult();
+			
+			d.setZaaldienst(z);
+			odie.add(d);
+		}
+		dto.setDiensts(odie);		
 		
 		return dto;
 	}	

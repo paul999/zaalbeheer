@@ -49,7 +49,7 @@ import nl.ttva66.interfaces.Request;
 import nl.ttva66.interfaces.ZaalDienstRequest;
 import nl.ttva66.libary.Collectie;
 
-public class start {
+public class Start {
 
 	public JFrame frame;
 	private JTable table;
@@ -70,7 +70,7 @@ public class start {
 	private Color[][] kleur;
 
 	private Thread t;
-	public static start window;
+	public static Start window;
 
 	/**
 	 * Launch the application.
@@ -95,7 +95,7 @@ public class start {
 	/**
 	 * Create the application.
 	 */
-	public start() {
+	public Start() {
 
 		initialize();
 
@@ -216,7 +216,6 @@ public class start {
 			if (size == 0) {
 				refreshCalendar(currentMonth, currentYear);
 			}
-
 		}
 	}
 

@@ -53,23 +53,6 @@
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
-			
-
-			<plugin>
-				<!-- Build an executable JAR -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>nl.paul.sohier.ttv.endpoint.Publish</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.4</version>
@@ -81,7 +64,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>nl.paul.sohier.ttv.start</mainClass>
+							<mainClass>nl.paul.sohier.ttv.Start</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
