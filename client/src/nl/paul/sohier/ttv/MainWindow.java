@@ -49,7 +49,7 @@ import nl.ttva66.interfaces.Request;
 import nl.ttva66.interfaces.ZaalDienstRequest;
 import nl.ttva66.libary.Collectie;
 
-public class Start {
+public class MainWindow {
 
 	public JFrame frame;
 	private JTable table;
@@ -70,7 +70,7 @@ public class Start {
 	private Color[][] kleur;
 
 	private Thread t;
-	public static Start window;
+	public static MainWindow window;
 
 	/**
 	 * Launch the application.
@@ -95,7 +95,7 @@ public class Start {
 	/**
 	 * Create the application.
 	 */
-	public Start() {
+	public MainWindow() {
 
 		initialize();
 

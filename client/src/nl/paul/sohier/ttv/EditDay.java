@@ -50,7 +50,7 @@ public class EditDay extends JFrame implements ActionListener, DocumentListener 
 	private JPanel contentPane;
 
 	private DagDto dag;
-	private Start parent;
+	private MainWindow parent;
 
 	private JLabel lblZaaldienst;
 	private JButton btnOpslaan;
@@ -71,7 +71,7 @@ public class EditDay extends JFrame implements ActionListener, DocumentListener 
 	/**
 	 * Create the frame.
 	 */
-	public EditDay(DagRequest request, Start parent) {
+	public EditDay(DagRequest request, MainWindow parent) {
 		this.parent = parent;
 
 		setTitle("Aanpassen dag: " + request);

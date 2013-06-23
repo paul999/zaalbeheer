@@ -64,7 +64,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>nl.paul.sohier.ttv.Start</mainClass>
+							<mainClass>nl.paul.sohier.ttv.MainWindow</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

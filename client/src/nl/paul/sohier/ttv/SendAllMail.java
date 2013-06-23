@@ -65,7 +65,7 @@ public class SendAllMail extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public SendAllMail(DagRequest request, Start parent) {
+	public SendAllMail(DagRequest request, MainWindow parent) {
 		frame = this;
 
 		// this.parent = parent;
