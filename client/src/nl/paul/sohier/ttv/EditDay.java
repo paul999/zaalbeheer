@@ -235,21 +235,49 @@ public class EditDay extends JFrame implements ActionListener, DocumentListener 
 					Set<DienstDto> dt = dag.getDienst();
 
 					Iterator<DienstDto> it = dt.iterator();
+					
+					
+					ArrayList<DienstDto> oldDienst = new ArrayList<DienstDto>(); 
+					
 					while (it.hasNext()) {
 						DienstDto d = it.next();
+ 
 						if (d.getType().getId() == open.getType().getId()) {
+							for (int sel : list.getSelectedIndices()) {
+								if (diensten.get(sel).getId().equals(d.getZaaldienst()))
+								{
+									oldDienst.add(d);
+								}
+							}
+							
 							it.remove();
 						}
 					}
 
 					for (int sel : list.getSelectedIndices()) {
 						ZaaldienstDto choosen = diensten.get(sel);
+						
+						DienstDto dienst = null;
+						
+						for (DienstDto d : oldDienst)
+						{
+							if (choosen.getId().equals(d.getZaaldienst()))
+							{
+								System.out.println("gevonden voor " + choosen.getNaam());
+								dienst = d;
+								break;
+							}
+						}
 
-						DienstDto dienst = new DienstDto();
-						dienst.setDag(dag.getId());
-						dienst.setDefinitief(false);
-						dienst.setType(open.getType());
-						dienst.setZaaldienst(choosen.getId());
+						if (dienst == null)
+						{
+							System.out.println("Niet gevonden... " + choosen.getNaam());
+							dienst = new DienstDto();
+							dienst.setDag(dag.getId());
+							dienst.setDefinitief(false);
+							dienst.setType(open.getType());
+							dienst.setZaaldienst(choosen.getId());
+						}
 						dt.add(dienst);
 					}
 					dag.setDienst(dt);
@@ -341,10 +369,13 @@ public class EditDay extends JFrame implements ActionListener, DocumentListener 
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void save() {
-		Service srv = API.getServer();
-		srv.saveDag(dag);
-		parent.refresh();
+		dag.setOpmerkingen(this.opmerkingen.getText());
+		dag.setTeam(this.teamzaaldienst.getText());
+		
+		new ChangeDienstOpties(parent, dag).show();
+		
 		dispose();
 	}
 

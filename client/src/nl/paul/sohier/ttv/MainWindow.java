@@ -558,6 +558,7 @@ public class MainWindow {
 						for (OpenDto deel : delen)
 						{
 							System.out.println("OpenDto doing work... " + deel.getType().getNaam());
+							System.out.println("Open: " + deel.isOpen());
 							vl += addDeel(dag, deel);
 						}
 
