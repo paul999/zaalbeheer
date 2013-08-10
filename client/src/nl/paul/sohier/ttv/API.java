@@ -108,7 +108,7 @@ public class API extends nl.ttva66.libary.API{
 		/*if (lijst.length == 0) {
 			return null;
 		}
-*/
+*/ 
 		String dt = "";
 	/*	Server srv = API.getServer();
 
