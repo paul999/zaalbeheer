@@ -146,6 +146,14 @@ public class Login extends JFrame {
 				return;
 			}
 			Service srv = API.getServer();
+			
+			if (srv == null)
+			{
+				error("Kon geen verbinding maken met de server. Maak je gebruik van de laatste versie?");
+				dispose();
+				return;
+			}
+			
 			ZaaldienstDto t = null;
 			t = srv.login(gbr, API.md5(pass));
 

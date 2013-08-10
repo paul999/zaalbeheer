@@ -22,7 +22,7 @@ import javax.xml.ws.WebServiceFeature;
 
 
 @WebServiceClient(name = "Service", 
-                  wsdlLocation = "http://localhost:8080/server-0.0.1-SNAPSHOT/Service/ServiceBean?wsdl",
+                  wsdlLocation = "http://localhost:8080/server-0.0.3-SNAPSHOT/Service/ServiceBean?wsdl",
                   targetNamespace = "http://www.ttva66.nl/wsdl") 
 public class Service_Service extends javax.xml.ws.Service {
 
@@ -32,9 +32,9 @@ public class Service_Service extends javax.xml.ws.Service {
     static {
         URL url = null;
         try {
-            url = new URL("http://localhost:8080/server-0.0.1-SNAPSHOT/Service/ServiceBean?wsdl");
+            url = new URL("http://localhost:8080/server-0.0.3-SNAPSHOT/Service/ServiceBean?wsdl");
         } catch (MalformedURLException e) {
-            System.err.println("Can not initialize the default wsdl from http://localhost:8080/server-0.0.1-SNAPSHOT/Service/ServiceBean?wsdl");
+            System.err.println("Can not initialize the default wsdl from http://localhost:8080/server-0.0.3-SNAPSHOT/Service/ServiceBean?wsdl");
             // e.printStackTrace();
         }
         WSDL_LOCATION = url;

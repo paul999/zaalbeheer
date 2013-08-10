@@ -13,6 +13,7 @@ entities/target/*
 ear/target/*
 server/target/*
 web/target/*
+target/*
 */.settings/*
 */.project
 */.classpath
