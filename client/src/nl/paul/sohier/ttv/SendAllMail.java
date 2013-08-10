@@ -20,10 +20,12 @@ import javax.swing.border.EmptyBorder;
 import nl.paul.sohier.ttv.output.Generator;
 import nl.paul.sohier.ttv.output.PDF;
 
+import nl.ttva66.client.Service;
+import nl.ttva66.dto.DagDto;
+import nl.ttva66.dto.DienstDto;
 import nl.ttva66.dto.ZaaldienstDto;
 import nl.ttva66.interfaces.DagRequest;
 import nl.ttva66.interfaces.ZaalDienstRequest;
-import nl.ttva66.libary.ServerException;
 
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -290,15 +292,10 @@ public class SendAllMail extends JFrame implements ActionListener {
 				 * worden. Voor alle gebruikers wordt een aparte BCC aangemaakt.
 				 */
 
-				GregorianCalendar dt = new GregorianCalendar(/*request.getJaar(),
-						request.getMaand(), 1*/);
+				GregorianCalendar dt = new GregorianCalendar(request.getJaar(),
+						request.getMaand(), 1);
 
-				/*Server srv;
-				try {
-					srv = API.getServer();
-				} catch (Exception e1) {
-					throw new RuntimeException(e1.getMessage());
-				}*/
+				Service srv = API.getServer();
 
 				ArrayList<Integer> users = new ArrayList<Integer>();
 
@@ -306,12 +303,12 @@ public class SendAllMail extends JFrame implements ActionListener {
 						.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); i++) {
 					System.out.println(i);
 
-				/*	DagRequest r = new DagRequest(i, request.getMaand(),
+					DagRequest r = new DagRequest(i, request.getMaand(),
 							request.getJaar());
-					Dag dag = (Dag) API.items.get(r);
+					DagDto dag = (DagDto) API.items.get(r);
 
 					if (dag == null) {
-						dag = srv.getSavedDag(r);
+						dag = API.getDag(r);
 
 						if (dag == null) {
 							throw new RuntimeException("Kon " + r
@@ -320,13 +317,13 @@ public class SendAllMail extends JFrame implements ActionListener {
 					}
 
 					for (int j = 0; j < 3; j++) {
-						int[] tmp = dag.getDeelZaalDienst(j);
-						for (int k = 0; k < tmp.length; k++) {
-							if (!users.contains(tmp[k])) {
-								users.add(tmp[k]);
+						Set<DienstDto> tmp = dag.getDienst();
+						for (DienstDto dienst : tmp) {
+							if (!users.contains(dienst.getZaaldienst())) {
+								users.add(dienst.getZaaldienst());
 							}
 						}
-					}*/
+					}
 				}
 
 				for (int i = 0; i < users.size(); i++) {
@@ -335,7 +332,7 @@ public class SendAllMail extends JFrame implements ActionListener {
 					ZaaldienstDto zt = (ZaaldienstDto) API.items.get(r);
 
 					if (zt == null) {
-					//	zt = srv.getZaalDienst(r);
+						zt = srv.getZaaldienstById(r);
 
 						if (zt == null) {
 							// Should not happen?
@@ -390,8 +387,8 @@ public class SendAllMail extends JFrame implements ActionListener {
 
 					DataSource source = new FileDataSource(filename);
 					messageBodyPart.setDataHandler(new DataHandler(source));
-				//	messageBodyPart.setFileName("schema_"
-				//			+ months[request.getMaand()] + ".pdf");
+					messageBodyPart.setFileName("schema_"
+							+ months[request.getMaand()] + ".pdf");
 					multipart.addBodyPart(messageBodyPart);
 				}
 
@@ -438,26 +435,13 @@ public class SendAllMail extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(frame,
 						"Er gebeurde iets wat niet hoorde: " + e2.getMessage(),
 						"Kon mail niet versturen", JOptionPane.ERROR_MESSAGE);
-		/*	} catch (ServerException e1) {
-				e1.printStackTrace();
-
-				frame.dispose();
-
-				JOptionPane.showMessageDialog(frame,
-						"Er gebeurde iets wat nite hoorde: " + e1.getMessage(),
-						"Kon data niet ophalen van de server", JOptionPane.ERROR_MESSAGE);
-			}*/
-
+			}
 		}
 	}
-
-
-
-}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

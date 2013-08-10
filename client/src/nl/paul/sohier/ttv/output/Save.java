@@ -120,6 +120,7 @@ abstract public class Save implements Output {
     	    afile.delete();
  
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new OutputException("Kon file niet opslaan");
 		}
 	}

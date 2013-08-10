@@ -212,6 +212,7 @@ public class EditDay extends JFrame implements ActionListener, DocumentListener 
 				public void actionPerformed(ActionEvent arg0) {
 					System.out.println("Open: " + open.getType().getNaam()
 							+ " sel " + r.isSelected());
+					System.out.println("Opens: " + dag.getOpens());
 					Set<OpenDto> dt = dag.getOpens();
 					dt.remove(open);
 					open.setOpen(r.isSelected());
@@ -357,7 +358,7 @@ public class EditDay extends JFrame implements ActionListener, DocumentListener 
 			System.out.println("Integer: " + zd);
 			ZaaldienstDto d = srv.getZaaldienstById(rq);
 
-			System.out.println("Result van server: " + d);
+			System.out.println("Result van server: " + d);	
 			System.out.println("ID: " + d.getId());
 
 			API.items.add(d);

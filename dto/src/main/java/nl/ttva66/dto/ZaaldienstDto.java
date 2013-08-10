@@ -7,9 +7,8 @@ import nl.ttva66.interfaces.Item;
 import nl.ttva66.interfaces.ZaalDienstInterface;
 import nl.ttva66.interfaces.ZaalDienstRequest;
 
-
-public class ZaaldienstDto implements java.io.Serializable,
-		 Item,ZaalDienstInterface {
+public class ZaaldienstDto implements java.io.Serializable, Item,
+		ZaalDienstInterface {
 
 	/**
 	 * 
@@ -165,14 +164,17 @@ public class ZaaldienstDto implements java.io.Serializable,
 
 	/**
 	 * NOTE: This method only accepts MD5 strings!
+	 * 
 	 * @param password
 	 */
 	public void setPassword(String password) {
-		if (password.length() != 32)
-		{
-			throw new RuntimeException("Wrong password length");
+		System.out.println("passwd: " + password + " len " +password.length());
+		if (password != null && !password.equals("null")) {
+			if (password.length() != 32 && password.length() != 0) {
+				throw new RuntimeException("Wrong password length");
+			}
 		}
-		
+
 		this.password = password;
 	}
 
@@ -191,7 +193,7 @@ public class ZaaldienstDto implements java.io.Serializable,
 	public void setDiensts(Set<DienstDto> diensts) {
 		this.diensts = diensts;
 	}
-	
+
 	public boolean equals(Object obj) {
 
 		if (obj == this)
@@ -210,5 +212,5 @@ public class ZaaldienstDto implements java.io.Serializable,
 		} else {
 			return false;
 		}
-	}	
+	}
 }

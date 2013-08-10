@@ -1,9 +1,7 @@
 package nl.ttva66;
 
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -37,12 +35,7 @@ public class Convert {
 		dto.setZondag(zt.isZondag());
 		dto.setNaam(zt.getNaam());
 
-		Set<DienstDto> ddto = new TreeSet<DienstDto>(new Comparator<DienstDto>() {
-			public int compare(DienstDto n1, DienstDto n2) {
-				return n1.getType().getSequence() - n2.getType().getSequence();
-			}
-		});
-		;
+		Set<DienstDto> ddto = new HashSet<DienstDto>();
 
 		for (Dienst d : zt.getDiensts()) {
 			ddto.add(DienstToDto(d));
@@ -118,12 +111,7 @@ public class Convert {
 		dto.setOpmerkingen(zt.getOpmerkingen());
 		dto.setTeam(zt.getTeam());
 
-		Set<OpenDto> odto = new TreeSet<OpenDto>(new Comparator<OpenDto>() {
-			public int compare(OpenDto n1, OpenDto n2) {
-				return n1.getType().getSequence() - n2.getType().getSequence();
-			}
-		});
-		;
+		Set<OpenDto> odto = new HashSet<OpenDto>();
 
 		for (Open op : zt.getOpens()) {
 			odto.add(OpenToDto(op));
@@ -132,7 +120,7 @@ public class Convert {
 
 		dto.setOpens(odto);
 
-		Set<DienstDto> odie = new TreeSet<DienstDto>();
+		Set<DienstDto> odie = new HashSet<DienstDto>();
 
 		for (Dienst dt : zt.getDiensts()) {
 			odie.add(DienstToDto(dt));

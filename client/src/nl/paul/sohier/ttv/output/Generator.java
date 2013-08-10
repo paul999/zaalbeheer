@@ -22,8 +22,8 @@ public class Generator {
 		this.progressMonitor = progressMonitor;
 	}
 
-	public void genereer() {
-		genereer(false);
+	public boolean genereer() {
+		return genereer(false);
 	}
 
 	/**

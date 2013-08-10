@@ -18,6 +18,7 @@ public interface Service {
  public ZaaldienstDto login(String user, String password);
  public ZaaldienstDto saveZaaldienst(ZaaldienstDto dienst);
  public TypeDto createType(TypeDto type);
+ public TypeDto[] listTypes();
  public DagDto saveDag(DagDto dto);
  public Integer[] listZaaldiensten();
 }

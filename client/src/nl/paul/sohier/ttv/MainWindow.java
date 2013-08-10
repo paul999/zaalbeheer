@@ -187,10 +187,9 @@ public class MainWindow {
 			if (add == null) {
 				System.out.println("Got null?");
 				return null;
-			}
-			else
-			{
-				System.out.println("Got valid data: " + add.getId() + " " + add.getClass());
+			} else {
+				System.out.println("Got valid data: " + add.getId() + " "
+						+ add.getClass());
 			}
 
 			API.items.add(add);
@@ -286,7 +285,8 @@ public class MainWindow {
 				if (data[row][col] != -1) {
 					// Here should we open a new frame.
 
-					EditDay frame = new EditDay(dagdata.get(data[row][col]), window);
+					EditDay frame = new EditDay(dagdata.get(data[row][col]),
+							window);
 					frame.setVisible(true);
 
 				} else {
@@ -444,14 +444,20 @@ public class MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				PDF p = new PDF(frame);
-				Generator g = new Generator(frame, p, new DagRequest( -1,
-						currentMonth, currentYear), null);
+				try {
+					PDF p = new PDF(frame);
+					Generator g = new Generator(frame, p, new DagRequest(-1,
+							currentMonth, currentYear), null);
 
-				g.genereer();
-				JOptionPane.showMessageDialog(frame, "PDF is opgeslagen op "
-						+ p.getFile(), "PDF Opgeslagen.",
-						JOptionPane.INFORMATION_MESSAGE);
+					if (g.genereer()) {
+						JOptionPane.showMessageDialog(frame,
+								"PDF is opgeslagen op " + p.getFile(),
+								"PDF Opgeslagen.",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
+				} catch (Exception e) {
+
+				}
 			}
 
 		});
@@ -505,25 +511,23 @@ public class MainWindow {
 		}
 
 		int row = 0;
-		
+
 		int mt = this.currentMonth;
 		int yr = this.currentYear;
 
 		// Draw calendar
 		for (int i = 1, ct = 1; i <= nod2; i++, ct++) {
 			try {
-				
-				if (i == nod)
-				{
-					if (mt == 11)
-					{
+
+				if (i == nod) {
+					if (mt == 11) {
 						mt = -1;
 						yr++;
 					}
 					mt++;
 					ct = 1;
 				}
-				String dt = Integer.toString(ct) +  " " + months[mt] + " " + yr;
+				String dt = Integer.toString(ct) + " " + months[mt] + " " + yr;
 
 				mtblCalendar.setValueAt("<html>" + dt + "</html>", row, column);
 				data[row][column] = i - 1;
@@ -539,8 +543,8 @@ public class MainWindow {
 
 				if (i != 0) {
 					System.out.println("Doing request for " + ct);
-					
-					DagRequest d = new DagRequest(ct, mt, yr); 
+
+					DagRequest d = new DagRequest(ct, mt, yr);
 
 					DagDto dag = (DagDto) API.items.get(d);
 
@@ -548,17 +552,14 @@ public class MainWindow {
 						kl = new Color(255, 255, 0);
 						addQueue(d);
 					} else {
-						String vl = "<html>" + dt;						
-						
+						String vl = "<html>" + dt;
+
 						vl += "<br />";
-						
+
 						Set<OpenDto> delen = API.sortOpen(dag.getOpens());
 						System.out.println("DTO size open: " + delen.size());
-						
-						for (OpenDto deel : delen)
-						{
-							System.out.println("OpenDto doing work... " + deel.getType().getNaam());
-							System.out.println("Open: " + deel.isOpen());
+
+						for (OpenDto deel : delen) {
 							vl += addDeel(dag, deel);
 						}
 
@@ -579,8 +580,7 @@ public class MainWindow {
 						mtblCalendar.setValueAt(vl, row, column);
 					}
 
-					if (i == realDay && mt == realMonth
-							&& yr == realYear) { // Today
+					if (i == realDay && mt == realMonth && yr == realYear) { // Today
 						kl = new Color(220, 220, 255);
 					}
 
@@ -610,9 +610,7 @@ public class MainWindow {
 	private boolean zaaldienst = false;
 
 	private String addDeel(DagDto dag, OpenDto opn) {
-		
-		
-		
+
 		String vl = opn.getType().getNaam() + ": ";
 
 		vl += (opn.isOpen()) ? "Open" : "Gesloten";
@@ -620,17 +618,14 @@ public class MainWindow {
 
 		if (opn.isOpen()) {
 			open = true;
-			
+
 			Set<DienstDto> dt = new HashSet<DienstDto>();
-			
-			for (DienstDto d : dag.getDienst())
-			{
-				if (d.getType().getId() == opn.getType().getId())
-				{
+
+			for (DienstDto d : dag.getDienst()) {
+				if (d.getType().getId() == opn.getType().getId()) {
 					dt.add(d);
 				}
 			}
-			
 
 			if (dt.size() == 0) {
 				// Geen zaaldienst toegewezen.
@@ -646,17 +641,16 @@ public class MainWindow {
 						// Skip it.
 						continue;
 					}
-					
-					if (!dienst.isDefinitief())
-					{
+
+					if (!dienst.isDefinitief()) {
 						definitief = false;
 					}
-					if (!dienst.isDefinitief())
-					{
+					if (!dienst.isDefinitief()) {
 						zaaldienst = true;
 					}
-					
-					ZaalDienstRequest r = new ZaalDienstRequest(dienst.getZaaldienst());
+
+					ZaalDienstRequest r = new ZaalDienstRequest(
+							dienst.getZaaldienst());
 					ZaaldienstDto zt = (ZaaldienstDto) API.items.get(r);
 
 					if (i != 0) {
@@ -669,9 +663,8 @@ public class MainWindow {
 						result += "Ophalen";
 					} else {
 						result += zt.getNaam();
-						
-						if (dienst.isBackup())
-						{
+
+						if (dienst.isBackup()) {
 							result += "(backup)";
 						}
 					}

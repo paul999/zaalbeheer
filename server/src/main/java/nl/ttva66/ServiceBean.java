@@ -263,4 +263,27 @@ public class ServiceBean implements Service {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@Override
+	public TypeDto[] listTypes() {
+		try {
+			Query result = em.createQuery("select X from Type as X");
+
+			@SuppressWarnings("unchecked")
+			List<Type> zd = result.getResultList();
+			TypeDto[] list = new TypeDto[zd.size()];
+
+			int i = 0;
+			for (Type z : zd) {
+				list[i] = Convert.TypeToDto(z);
+				i++;
+			}
+
+			return list;
+		} catch (Exception e) {
+			API.createIssue("Service SQL exception in listTypes",
+					"A service SQL exception has encountered", e);
+			throw new RuntimeException(e);
+		}
+	}
 }

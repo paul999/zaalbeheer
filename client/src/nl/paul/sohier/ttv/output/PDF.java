@@ -5,9 +5,21 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.ProgressMonitor;
+
+import nl.paul.sohier.ttv.API;
+import nl.ttva66.client.Service;
+import nl.ttva66.dto.DagDto;
+import nl.ttva66.dto.DienstDto;
+import nl.ttva66.dto.OpenDto;
+import nl.ttva66.dto.TypeDto;
+import nl.ttva66.dto.ZaaldienstDto;
+import nl.ttva66.interfaces.DagRequest;
+import nl.ttva66.interfaces.ZaalDienstRequest;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -17,13 +29,11 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import nl.paul.sohier.ttv.API;
-import nl.ttva66.interfaces.DagRequest;
-
 public class PDF extends Save {
 
 	private ProgressMonitor progressMonitor;
 	private String tempDir;
+	private Service srv;
 
 	public PDF(JFrame jf) {
 		frame = jf;
@@ -35,11 +45,11 @@ public class PDF extends Save {
 
 	@Override
 	public void generate(DagRequest request) throws OutputException {
-	/*	if (request == null || request.getDag() != -1) {
+		if (request == null || request.getDag() != -1) {
 			throw new OutputException("Ongeldige declaratie.");
 		}
-*/
-		Document document = new Document(PageSize.A4, 50, 50, 50, 50);
+
+		Document document = new Document(PageSize.A4, 10, 10, 10, 10);
 
 		try {
 			File tmp = File.createTempFile("ttv", ".pdf");
@@ -63,10 +73,18 @@ public class PDF extends Save {
 
 			document.open();
 
-			PdfPTable t = new PdfPTable(5);
+			srv = API.getServer();
+			Set<TypeDto> types = API.sortType(srv.listTypes());
+
+			int cols = 2 + types.size();
+
+			System.out.println("Col size: " + cols);
+
+			PdfPTable t = new PdfPTable(cols);
 			t.setHeaderRows(2);
 
-			GregorianCalendar dt = new GregorianCalendar();// TODO: datum
+			GregorianCalendar dt = new GregorianCalendar(request.getJaar(),
+					request.getMaand(), 1);
 
 			String[] months = { "januari", "februari", "maart", "april", "mei",
 					"juni", "juli", "augustus", "september", "oktober",
@@ -76,24 +94,32 @@ public class PDF extends Save {
 					+ months[dt.get(GregorianCalendar.MONTH)] + " "
 					+ dt.get(GregorianCalendar.YEAR)));
 			c1.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-			c1.setColspan(5);
+			c1.setColspan(cols);
 			t.addCell(c1);
 
 			c1 = new PdfPCell(new Phrase(
 					"Kan je niet? Zorg dan zelf voor een vervanging!"));
-			c1.setColspan(5);
+			c1.setColspan(cols);
 			c1.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
 
 			t.addCell(c1);
 
 			t.addCell("Datum");
-			t.addCell("Ochtend");
-			t.addCell("Middag");
-			t.addCell("Avond");
+
+			for (TypeDto dto : types) {
+				t.addCell(dto.getNaam());
+			}
+
 			t.addCell("Team");
 
 			t.completeRow();
-//			Server srv = API.getServer();
+
+			t.addCell("Tijden: ");
+			for (TypeDto dto : types) {
+				t.addCell(dto.getStart() + " - " + dto.getEind());
+			}
+
+			t.completeRow();
 
 			progressMonitor.setMaximum(dt
 					.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
@@ -102,7 +128,8 @@ public class PDF extends Save {
 					.getActualMaximum(GregorianCalendar.DAY_OF_MONTH); i++) {
 				System.out.println(i);
 
-				GregorianCalendar dat = new GregorianCalendar(); //TODO: Datum
+				GregorianCalendar dat = new GregorianCalendar(
+						request.getJaar(), request.getMaand(), i);
 
 				String txt = "";
 				switch (dat.get(GregorianCalendar.DAY_OF_WEEK)) {
@@ -131,12 +158,12 @@ public class PDF extends Save {
 				txt += " " + i + " ";
 				txt += months[dat.get(GregorianCalendar.MONTH)].substring(0, 3);
 
-/*				DagRequest r = new DagRequest(i, request.getMaand(),
+				DagRequest r = new DagRequest(i, request.getMaand(),
 						request.getJaar());
-				Dag dag = (Dag) API.items.get(r);
+				DagDto dag = (DagDto) API.items.get(r);
 
 				if (dag == null) {
-					dag = srv.getSavedDag(r);
+					dag = API.getDag(r);
 
 					if (dag == null) {
 						throw new OutputException("Kon " + r
@@ -144,16 +171,61 @@ public class PDF extends Save {
 					}
 				}
 
-				boolean open[] = dag.getOpen();
-*/
-				String[] zt = null;
+				t.addCell(txt);
 
 				try {
-					String[] zt2 = {
-			/*				API.zaallijst(dag.getDeelZaalDienst(0)),
-							API.zaallijst(dag.getDeelZaalDienst(1)),
-							API.zaallijst(dag.getDeelZaalDienst(2)) */};
-					zt = zt2;
+					Set<OpenDto> delen = API.sortOpen(dag.getOpens());
+					System.out.println("DTO size open: " + delen.size());
+
+					for (OpenDto deel : delen) {
+						int cal = 0;
+						if (deel.isOpen()) {
+							Set<DienstDto> dienst = new HashSet<DienstDto>();
+
+							for (DienstDto d : dag.getDienst()) {
+								if (d.getType().getId() == deel.getType()
+										.getId()) {
+									dienst.add(d);
+								}
+							}
+							String result = "";
+
+							if (dienst.size() > 0) {
+
+								for (DienstDto row : dienst) {
+									if (row == null) {
+										// Skip it.
+										continue;
+									}
+
+									ZaalDienstRequest r2 = new ZaalDienstRequest(
+											row.getZaaldienst());
+									ZaaldienstDto zt = (ZaaldienstDto) API.items
+											.get(r2);
+
+									if (cal != 0) {
+										result += ", ";
+									}
+									cal++;
+
+									if (zt == null) {
+										zt = srv.getZaaldienstById(r2);
+									}
+
+									result += zt.getNaam();
+
+									if (row.isBackup()) {
+										result += "(backup)";
+									}
+								}
+							} else {
+								result = "?";
+							}
+							t.addCell(result);
+						} else {
+							t.addCell("Gesloten");
+						}
+					}
 				} catch (RuntimeException e) {
 					throw new OutputException(
 							"Zaaldienst kon niet gegenereerd worden.");
@@ -162,63 +234,12 @@ public class PDF extends Save {
 							"Zaaldienst kon niet gegenereerd worden.");
 				}
 
-			/*	if (dat.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY
-						&& !open[0] && !open[1] && !open[2]) {
-					t.addCell("");
-					t.addCell("");
-					t.addCell("");
-					t.addCell("");
-					t.completeRow();
-					continue;
-				}
-*/
-				t.addCell(txt);
-		/*		if (open[0]) {
-					if (zt[0] != null) {
-						t.addCell(zt[0]);
-					} else {
-						t.addCell("?");
-					}
-				} else {*/
-					t.addCell("");
-				//}
+				String team = dag.getTeam();
 
-			/*	if (open[1]) {
-					if (zt[1] != null) {
-						t.addCell(zt[1]);
-					} else {
-						t.addCell("?");
-					}
-				} else {
-					if (dat.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY) {
-						t.addCell("Gesloten");
+				if (team == null || team.equals("null"))
+					team = "";
 
-					} else {
-						t.addCell("");
-					}
-				}
-
-				if (open[2]) {
-					if (zt[2] != null) {
-						t.addCell(zt[2]);
-					} else {
-						t.addCell("?");
-					}
-				} else {
-					if (dat.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SATURDAY
-							&& dat.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.SUNDAY) {
-						t.addCell("Gesloten");
-
-					} else {
-						t.addCell("");
-					}
-				}*/
-				//String team = dag.getTeam();
-				
-				//if (team == null || team.equals("null"))
-				//	team = "";
-				
-			//	t.addCell(team);
+				t.addCell(team);
 
 				t.completeRow();
 				progressMonitor.setProgress(i);
