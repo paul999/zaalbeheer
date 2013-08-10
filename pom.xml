@@ -9,6 +9,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<scm>
+		<developerConnection>scm:git:git@github.com:paul999/zaalbeheer.git</developerConnection>
+	</scm>
+
 	<dependencyManagement>
 		<dependencies>
 
@@ -31,7 +35,7 @@
 
 			<dependency>
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
-				<artifactId>server</artifactId>				
+				<artifactId>server</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 				<type>ejb</type>
 			</dependency>
@@ -46,8 +50,8 @@
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 				<artifactId>dto</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
-			</dependency>		
-			
+			</dependency>
+
 
 			<dependency>
 				<groupId>log4j</groupId>
@@ -108,7 +112,7 @@
 		<module>server</module>
 		<module>web</module>
 		<module>jaxws</module>
-		
+
 		<module>ear</module>
 	</modules>
 
@@ -129,6 +133,11 @@
 						</manifest>
 					</archive>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.4.1</version>
 			</plugin>
 		</plugins>
 	</build>
