@@ -4,12 +4,12 @@
 	<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 	<artifactId>ZaalBeheer</artifactId>
 	<name>zaalbeheer</name>
-	<version>0.0.2</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<scm>
 		<developerConnection>scm:git:git@github.com:paul999/zaalbeheer.git</developerConnection>
-		<tag>ZaalBeheer-0.0.2</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<distributionManagement>
@@ -27,37 +27,37 @@
 			<dependency>
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 				<artifactId>libary</artifactId>
-				<version>0.0.2</version>
+				<version>0.0.3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 				<artifactId>jaxws</artifactId>
-				<version>0.0.2</version>
+				<version>0.0.3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 				<artifactId>entities</artifactId>
-				<version>0.0.2</version>
+				<version>0.0.3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 				<artifactId>server</artifactId>
-				<version>0.0.2</version>
+				<version>0.0.3-SNAPSHOT</version>
 				<type>ejb</type>
 			</dependency>
 
 			<dependency>
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 				<artifactId>web</artifactId>
-				<version>0.0.2</version>
+				<version>0.0.3-SNAPSHOT</version>
 				<type>war</type>
 			</dependency>
 			<dependency>
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 				<artifactId>dto</artifactId>
-				<version>0.0.2</version>
+				<version>0.0.3-SNAPSHOT</version>
 			</dependency>
 
 
