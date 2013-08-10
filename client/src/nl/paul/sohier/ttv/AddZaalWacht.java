@@ -21,9 +21,8 @@ import javax.swing.JLabel;
 
 import javax.swing.JButton;
 
+import nl.ttva66.client.Service;
 import nl.ttva66.dto.ZaaldienstDto;
-import nl.ttva66.libary.ServerException;
-
 
 import javax.swing.JCheckBox;
 import javax.swing.JPasswordField;
@@ -185,15 +184,14 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 		chckbxZaterdag = new JCheckBox("Zaterdag");
 		panel.add(chckbxZaterdag, "6, 4");
 
-/*		boolean tmp[] = dienst.getDagen();
-		chckbxMaandag.setSelected(tmp[0]);
-		chckbxDinsdag.setSelected(tmp[1]);
-		chckbxWoensdag.setSelected(tmp[2]);
-		chckbxDonderdag.setSelected(tmp[3]);
-		chckbxVrijdag.setSelected(tmp[4]);
-		chckbxZaterdag.setSelected(tmp[5]);
-		chckbxZondag.setSelected(tmp[6]);
-*/
+		/*
+		 * boolean tmp[] = dienst.getDagen(); chckbxMaandag.setSelected(tmp[0]);
+		 * chckbxDinsdag.setSelected(tmp[1]);
+		 * chckbxWoensdag.setSelected(tmp[2]);
+		 * chckbxDonderdag.setSelected(tmp[3]);
+		 * chckbxVrijdag.setSelected(tmp[4]);
+		 * chckbxZaterdag.setSelected(tmp[5]); chckbxZondag.setSelected(tmp[6]);
+		 */
 		chckbxMaandag.addActionListener(this);
 		chckbxDinsdag.addActionListener(this);
 		chckbxWoensdag.addActionListener(this);
@@ -236,24 +234,18 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 	}
 
 	public void save() {
-		
 
 		btnOpslaan.setEnabled(false);
 		btnOpslaan.setText("Bezig met opslaan...");
 		btnAnnuleren.setVisible(false);
 
 		ZaaldienstDto saved = null;
-		/*try {
-			saved = srv.saveZaalDienst(dienst);
-		} catch (ServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 
-/*		if (saved != null && saved.isSaved()) {
-			dispose();
-		} else {
-	*/		JOptionPane
+		Service srv = API.getServer();
+		saved = srv.saveZaaldienst(dienst);
+
+		if (saved.getId() == null) {
+			JOptionPane
 					.showMessageDialog(
 							this,
 							"Er is iets misgegaan bij het opslaan, probeer het later nogmaals",
@@ -263,8 +255,10 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 			btnOpslaan.setEnabled(true);
 			btnOpslaan.setText("Opslaan");
 			btnAnnuleren.setVisible(true);
+			return;
+		}
 
-		//}
+		dispose();
 
 	}
 
@@ -307,11 +301,11 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 		tmp[5] = chckbxZaterdag.isSelected();
 		tmp[6] = chckbxZondag.isSelected();
 
-//		dienst.setDagen(tmp);
+		// dienst.setDagen(tmp);
 		dienst.setNaam(jnaam.getText());
 		dienst.setEmail(jEmail.getText());
 		dienst.setAantal(Integer.parseInt(aantal.getText()));
-	//	dienst.setPlainPassword(wachtwoord.getText());
+		dienst.setPassword(API.md5(wachtwoord.getText()));
 		dienst.setCanlogin(canlogin.isSelected());
 
 	}

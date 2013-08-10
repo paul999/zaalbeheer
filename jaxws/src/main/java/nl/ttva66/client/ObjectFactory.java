@@ -32,18 +32,20 @@ import nl.ttva66.interfaces.ZaalDienstRequest;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _LoginResponse_QNAME = new QName("http://www.ttva66.nl/wsdl", "loginResponse");
-    private final static QName _CreateTypeResponse_QNAME = new QName("http://www.ttva66.nl/wsdl", "createTypeResponse");
-    private final static QName _GetDagByDate_QNAME = new QName("http://www.ttva66.nl/wsdl", "getDagByDate");
     private final static QName _ListZaaldiensten_QNAME = new QName("http://www.ttva66.nl/wsdl", "listZaaldiensten");
     private final static QName _SaveDag_QNAME = new QName("http://www.ttva66.nl/wsdl", "saveDag");
-    private final static QName _GetZaaldienstById_QNAME = new QName("http://www.ttva66.nl/wsdl", "getZaaldienstById");
     private final static QName _CreateType_QNAME = new QName("http://www.ttva66.nl/wsdl", "createType");
     private final static QName _GetDagByDateResponse_QNAME = new QName("http://www.ttva66.nl/wsdl", "getDagByDateResponse");
     private final static QName _ListZaaldienstenResponse_QNAME = new QName("http://www.ttva66.nl/wsdl", "listZaaldienstenResponse");
+    private final static QName _SaveZaaldienst_QNAME = new QName("http://www.ttva66.nl/wsdl", "saveZaaldienst");
     private final static QName _Login_QNAME = new QName("http://www.ttva66.nl/wsdl", "login");
-    private final static QName _GetZaaldienstByIdResponse_QNAME = new QName("http://www.ttva66.nl/wsdl", "getZaaldienstByIdResponse");
     private final static QName _SaveDagResponse_QNAME = new QName("http://www.ttva66.nl/wsdl", "saveDagResponse");
+    private final static QName _GetZaaldienstByIdResponse_QNAME = new QName("http://www.ttva66.nl/wsdl", "getZaaldienstByIdResponse");
+    private final static QName _LoginResponse_QNAME = new QName("http://www.ttva66.nl/wsdl", "loginResponse");
+    private final static QName _CreateTypeResponse_QNAME = new QName("http://www.ttva66.nl/wsdl", "createTypeResponse");
+    private final static QName _GetDagByDate_QNAME = new QName("http://www.ttva66.nl/wsdl", "getDagByDate");
+    private final static QName _GetZaaldienstById_QNAME = new QName("http://www.ttva66.nl/wsdl", "getZaaldienstById");
+    private final static QName _SaveZaaldienstResponse_QNAME = new QName("http://www.ttva66.nl/wsdl", "saveZaaldienstResponse");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: nl.ttva66.client
@@ -53,11 +55,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DienstDto }
+     * Create an instance of {@link GetDagByDateResponse }
      * 
      */
-    public DienstDto createDienstDto() {
-        return new DienstDto();
+    public GetDagByDateResponse createGetDagByDateResponse() {
+        return new GetDagByDateResponse();
+    }
+
+    /**
+     * Create an instance of {@link TypeDto }
+     * 
+     */
+    public TypeDto createTypeDto() {
+        return new TypeDto();
+    }
+
+    /**
+     * Create an instance of {@link SaveDagResponse }
+     * 
+     */
+    public SaveDagResponse createSaveDagResponse() {
+        return new SaveDagResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreateType }
+     * 
+     */
+    public CreateType createCreateType() {
+        return new CreateType();
     }
 
     /**
@@ -77,83 +103,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TypeDto }
+     * Create an instance of {@link DienstDto }
      * 
      */
-    public TypeDto createTypeDto() {
-        return new TypeDto();
-    }
-
-    /**
-     * Create an instance of {@link LoginResponse }
-     * 
-     */
-    public LoginResponse createLoginResponse() {
-        return new LoginResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetZaaldienstByIdResponse }
-     * 
-     */
-    public GetZaaldienstByIdResponse createGetZaaldienstByIdResponse() {
-        return new GetZaaldienstByIdResponse();
-    }
-
-    /**
-     * Create an instance of {@link ZaalDienstRequest }
-     * 
-     */
-    public ZaalDienstRequest createZaalDienstRequest() {
-        return new ZaalDienstRequest();
-    }
-
-    /**
-     * Create an instance of {@link Login }
-     * 
-     */
-    public Login createLogin() {
-        return new Login();
-    }
-
-    /**
-     * Create an instance of {@link GetDagByDate }
-     * 
-     */
-    public GetDagByDate createGetDagByDate() {
-        return new GetDagByDate();
-    }
-
-    /**
-     * Create an instance of {@link CreateTypeResponse }
-     * 
-     */
-    public CreateTypeResponse createCreateTypeResponse() {
-        return new CreateTypeResponse();
-    }
-
-    /**
-     * Create an instance of {@link SaveDagResponse }
-     * 
-     */
-    public SaveDagResponse createSaveDagResponse() {
-        return new SaveDagResponse();
-    }
-
-    /**
-     * Create an instance of {@link OpenDto }
-     * 
-     */
-    public OpenDto createOpenDto() {
-        return new OpenDto();
-    }
-
-    /**
-     * Create an instance of {@link ListZaaldiensten }
-     * 
-     */
-    public ListZaaldiensten createListZaaldiensten() {
-        return new ListZaaldiensten();
+    public DienstDto createDienstDto() {
+        return new DienstDto();
     }
 
     /**
@@ -165,22 +119,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ZaaldienstDto }
-     * 
-     */
-    public ZaaldienstDto createZaaldienstDto() {
-        return new ZaaldienstDto();
-    }
-
-    /**
-     * Create an instance of {@link ListZaaldienstenResponse }
-     * 
-     */
-    public ListZaaldienstenResponse createListZaaldienstenResponse() {
-        return new ListZaaldienstenResponse();
-    }
-
-    /**
      * Create an instance of {@link DagRequest }
      * 
      */
@@ -189,46 +127,99 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateType }
+     * Create an instance of {@link SaveZaaldienstResponse }
      * 
      */
-    public CreateType createCreateType() {
-        return new CreateType();
+    public SaveZaaldienstResponse createSaveZaaldienstResponse() {
+        return new SaveZaaldienstResponse();
     }
 
     /**
-     * Create an instance of {@link GetDagByDateResponse }
+     * Create an instance of {@link ZaaldienstDto }
      * 
      */
-    public GetDagByDateResponse createGetDagByDateResponse() {
-        return new GetDagByDateResponse();
+    public ZaaldienstDto createZaaldienstDto() {
+        return new ZaaldienstDto();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link LoginResponse }{@code >}}
+     * Create an instance of {@link ListZaaldiensten }
      * 
      */
-    @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "loginResponse")
-    public JAXBElement<LoginResponse> createLoginResponse(LoginResponse value) {
-        return new JAXBElement<LoginResponse>(_LoginResponse_QNAME, LoginResponse.class, null, value);
+    public ListZaaldiensten createListZaaldiensten() {
+        return new ListZaaldiensten();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CreateTypeResponse }{@code >}}
+     * Create an instance of {@link ZaalDienstRequest }
      * 
      */
-    @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "createTypeResponse")
-    public JAXBElement<CreateTypeResponse> createCreateTypeResponse(CreateTypeResponse value) {
-        return new JAXBElement<CreateTypeResponse>(_CreateTypeResponse_QNAME, CreateTypeResponse.class, null, value);
+    public ZaalDienstRequest createZaalDienstRequest() {
+        return new ZaalDienstRequest();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetDagByDate }{@code >}}
+     * Create an instance of {@link OpenDto }
      * 
      */
-    @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "getDagByDate")
-    public JAXBElement<GetDagByDate> createGetDagByDate(GetDagByDate value) {
-        return new JAXBElement<GetDagByDate>(_GetDagByDate_QNAME, GetDagByDate.class, null, value);
+    public OpenDto createOpenDto() {
+        return new OpenDto();
+    }
+
+    /**
+     * Create an instance of {@link GetZaaldienstByIdResponse }
+     * 
+     */
+    public GetZaaldienstByIdResponse createGetZaaldienstByIdResponse() {
+        return new GetZaaldienstByIdResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetDagByDate }
+     * 
+     */
+    public GetDagByDate createGetDagByDate() {
+        return new GetDagByDate();
+    }
+
+    /**
+     * Create an instance of {@link LoginResponse }
+     * 
+     */
+    public LoginResponse createLoginResponse() {
+        return new LoginResponse();
+    }
+
+    /**
+     * Create an instance of {@link Login }
+     * 
+     */
+    public Login createLogin() {
+        return new Login();
+    }
+
+    /**
+     * Create an instance of {@link SaveZaaldienst }
+     * 
+     */
+    public SaveZaaldienst createSaveZaaldienst() {
+        return new SaveZaaldienst();
+    }
+
+    /**
+     * Create an instance of {@link CreateTypeResponse }
+     * 
+     */
+    public CreateTypeResponse createCreateTypeResponse() {
+        return new CreateTypeResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListZaaldienstenResponse }
+     * 
+     */
+    public ListZaaldienstenResponse createListZaaldienstenResponse() {
+        return new ListZaaldienstenResponse();
     }
 
     /**
@@ -247,15 +238,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "saveDag")
     public JAXBElement<SaveDag> createSaveDag(SaveDag value) {
         return new JAXBElement<SaveDag>(_SaveDag_QNAME, SaveDag.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetZaaldienstById }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "getZaaldienstById")
-    public JAXBElement<GetZaaldienstById> createGetZaaldienstById(GetZaaldienstById value) {
-        return new JAXBElement<GetZaaldienstById>(_GetZaaldienstById_QNAME, GetZaaldienstById.class, null, value);
     }
 
     /**
@@ -286,12 +268,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SaveZaaldienst }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "saveZaaldienst")
+    public JAXBElement<SaveZaaldienst> createSaveZaaldienst(SaveZaaldienst value) {
+        return new JAXBElement<SaveZaaldienst>(_SaveZaaldienst_QNAME, SaveZaaldienst.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Login }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "login")
     public JAXBElement<Login> createLogin(Login value) {
         return new JAXBElement<Login>(_Login_QNAME, Login.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SaveDagResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "saveDagResponse")
+    public JAXBElement<SaveDagResponse> createSaveDagResponse(SaveDagResponse value) {
+        return new JAXBElement<SaveDagResponse>(_SaveDagResponse_QNAME, SaveDagResponse.class, null, value);
     }
 
     /**
@@ -304,12 +304,48 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SaveDagResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link LoginResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "saveDagResponse")
-    public JAXBElement<SaveDagResponse> createSaveDagResponse(SaveDagResponse value) {
-        return new JAXBElement<SaveDagResponse>(_SaveDagResponse_QNAME, SaveDagResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "loginResponse")
+    public JAXBElement<LoginResponse> createLoginResponse(LoginResponse value) {
+        return new JAXBElement<LoginResponse>(_LoginResponse_QNAME, LoginResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CreateTypeResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "createTypeResponse")
+    public JAXBElement<CreateTypeResponse> createCreateTypeResponse(CreateTypeResponse value) {
+        return new JAXBElement<CreateTypeResponse>(_CreateTypeResponse_QNAME, CreateTypeResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetDagByDate }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "getDagByDate")
+    public JAXBElement<GetDagByDate> createGetDagByDate(GetDagByDate value) {
+        return new JAXBElement<GetDagByDate>(_GetDagByDate_QNAME, GetDagByDate.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetZaaldienstById }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "getZaaldienstById")
+    public JAXBElement<GetZaaldienstById> createGetZaaldienstById(GetZaaldienstById value) {
+        return new JAXBElement<GetZaaldienstById>(_GetZaaldienstById_QNAME, GetZaaldienstById.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SaveZaaldienstResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.ttva66.nl/wsdl", name = "saveZaaldienstResponse")
+    public JAXBElement<SaveZaaldienstResponse> createSaveZaaldienstResponse(SaveZaaldienstResponse value) {
+        return new JAXBElement<SaveZaaldienstResponse>(_SaveZaaldienstResponse_QNAME, SaveZaaldienstResponse.class, null, value);
     }
 
 }

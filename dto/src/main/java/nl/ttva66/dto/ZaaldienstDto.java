@@ -163,7 +163,16 @@ public class ZaaldienstDto implements java.io.Serializable,
 		return this.password;
 	}
 
+	/**
+	 * NOTE: This method only accepts MD5 strings!
+	 * @param password
+	 */
 	public void setPassword(String password) {
+		if (password.length() != 32)
+		{
+			throw new RuntimeException("Wrong password length");
+		}
+		
 		this.password = password;
 	}
 

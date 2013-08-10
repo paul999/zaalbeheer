@@ -164,7 +164,7 @@ public class ServiceBean implements Service {
 			Zaaldienst zt = (Zaaldienst) result.getSingleResult();
 			System.out.println("Zaaldienst is hier: " + zt);
 			System.out.println("ID: " + zt.getId());
-			return Convert.ZaaldientToDto(zt);
+			return Convert.ZaaldienstToDto(zt);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -184,7 +184,7 @@ public class ServiceBean implements Service {
 
 		try {
 			Zaaldienst zt = (Zaaldienst) result.getSingleResult();
-			return Convert.ZaaldientToDto(zt);
+			return Convert.ZaaldienstToDto(zt);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -207,5 +207,17 @@ public class ServiceBean implements Service {
 		}
 
 		return list;
+	}
+
+	@Override
+	public ZaaldienstDto saveZaaldienst(ZaaldienstDto dienst) {
+		Zaaldienst zd = Convert.DtoToZaaldienst(dienst); 
+		
+		if (zd.getId() != null)
+			em.merge(zd);
+		else
+			em.persist(zd);
+		
+		return Convert.ZaaldienstToDto(zd);
 	}
 }

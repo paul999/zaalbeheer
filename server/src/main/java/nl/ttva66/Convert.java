@@ -21,7 +21,7 @@ import nl.ttva66.entities.Zaaldienst;
 
 public class Convert {
 
-	static ZaaldienstDto ZaaldientToDto(Zaaldienst zt) {
+	static ZaaldienstDto ZaaldienstToDto(Zaaldienst zt) {
 		ZaaldienstDto dto = new ZaaldienstDto();
 		dto.setAantal(zt.getAantal());
 		dto.setCanlogin(zt.isCanlogin());
@@ -49,6 +49,27 @@ public class Convert {
 		}
 
 		dto.setDiensts(ddto);
+
+		System.out.println("DTO is hier: " + dto);
+
+		return dto;
+	}
+	
+	static Zaaldienst DtoToZaaldienst(ZaaldienstDto zt) {
+		Zaaldienst dto = new Zaaldienst();
+		dto.setAantal(zt.getAantal());
+		dto.setCanlogin(zt.isCanlogin());
+		dto.setDinsdag(zt.isDinsdag());
+		dto.setDonderdag(zt.isDonderdag());
+		dto.setEmail(zt.getEmail());
+		dto.setId(zt.getId());
+		dto.setMaandag(zt.isMaandag());
+		dto.setPassword(zt.getPassword());
+		dto.setVrijdag(zt.isVrijdag());
+		dto.setWoensdag(zt.isWoensdag());
+		dto.setZaterdag(zt.isZaterdag());
+		dto.setZondag(zt.isZondag());
+		dto.setNaam(zt.getNaam());
 
 		System.out.println("DTO is hier: " + dto);
 
