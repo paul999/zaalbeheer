@@ -6,6 +6,7 @@
 start.jar
 server.jar
 client/target/*
+dto/target/*
 jaxws/target/*
 libary/target/*
 entities/target/*
