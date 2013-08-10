@@ -1,16 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 	<artifactId>ZaalBeheer</artifactId>
 	<name>zaalbeheer</name>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<packaging>pom</packaging>
 
 	<scm>
 		<developerConnection>scm:git:git@github.com:paul999/zaalbeheer.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>ZaalBeheer-0.0.2</tag>
 	</scm>
 
 	<distributionManagement>
@@ -28,37 +27,37 @@
 			<dependency>
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 				<artifactId>libary</artifactId>
-				<version>0.0.2-SNAPSHOT</version>
+				<version>0.0.2</version>
 			</dependency>
 			<dependency>
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 				<artifactId>jaxws</artifactId>
-				<version>0.0.2-SNAPSHOT</version>
+				<version>0.0.2</version>
 			</dependency>
 
 			<dependency>
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 				<artifactId>entities</artifactId>
-				<version>0.0.2-SNAPSHOT</version>
+				<version>0.0.2</version>
 			</dependency>
 
 			<dependency>
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 				<artifactId>server</artifactId>
-				<version>0.0.2-SNAPSHOT</version>
+				<version>0.0.2</version>
 				<type>ejb</type>
 			</dependency>
 
 			<dependency>
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 				<artifactId>web</artifactId>
-				<version>0.0.2-SNAPSHOT</version>
+				<version>0.0.2</version>
 				<type>war</type>
 			</dependency>
 			<dependency>
 				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
 				<artifactId>dto</artifactId>
-				<version>0.0.2-SNAPSHOT</version>
+				<version>0.0.2</version>
 			</dependency>
 
 
