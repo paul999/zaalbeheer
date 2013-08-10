@@ -20,7 +20,6 @@ import javax.swing.JPasswordField;
 
 import nl.ttva66.client.Service;
 import nl.ttva66.dto.ZaaldienstDto;
-import nl.ttva66.libary.ServerException;
 
 import java.awt.Color;
 
@@ -33,15 +32,12 @@ public class Login extends JFrame {
 	private JTextField user;
 	private JPasswordField password;
 	private JLabel lblError;
-	private JFrame frame;
 
 	/**
 	 * Create the frame.
 	 */
 	public Login() {
 		setAlwaysOnTop(true);
-
-		frame = this;
 
 		setTitle("Login");
 

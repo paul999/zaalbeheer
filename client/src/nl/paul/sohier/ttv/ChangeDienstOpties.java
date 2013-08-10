@@ -3,35 +3,28 @@ package nl.paul.sohier.ttv;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
-import javax.swing.JTextField;
+
 import javax.swing.JLabel;
 
 import javax.swing.JButton;
 
-import nl.paul.sohier.ttv.EditDay.btnCancel;
 import nl.ttva66.client.Service;
 import nl.ttva66.dto.DagDto;
 import nl.ttva66.dto.DienstDto;
 import nl.ttva66.dto.ZaaldienstDto;
 import nl.ttva66.interfaces.ZaalDienstRequest;
-import nl.ttva66.libary.ServerException;
 
 import javax.swing.JCheckBox;
-import javax.swing.JPasswordField;
 
 public class ChangeDienstOpties extends JFrame {
 

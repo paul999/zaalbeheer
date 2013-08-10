@@ -67,7 +67,7 @@ public class Open implements java.io.Serializable {
 		this.type = type;
 	}
 
-	@Column(name="open")
+	@Column(name = "open")
 	public boolean isOpen() {
 		return open;
 	}
@@ -75,5 +75,4 @@ public class Open implements java.io.Serializable {
 	public void setOpen(boolean open) {
 		this.open = open;
 	}
-
 }

@@ -552,7 +552,7 @@ public class MainWindow {
 						
 						vl += "<br />";
 						
-						Set<OpenDto> delen = dag.getOpens();
+						Set<OpenDto> delen = API.sortOpen(dag.getOpens());
 						System.out.println("DTO size open: " + delen.size());
 						
 						for (OpenDto deel : delen)

@@ -50,5 +50,12 @@ public class OpenDto implements java.io.Serializable {
 	public void setOpen(boolean open) {
 		this.open = open;
 	}
+	
+	
+	@Override
+	public String toString()
+	{
+		return this.getType().toString();
+	}
 
 }

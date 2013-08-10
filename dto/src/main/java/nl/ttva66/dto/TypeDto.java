@@ -61,4 +61,9 @@ public class TypeDto implements java.io.Serializable {
 	{
 		this.sequence = sequence;
 	}	
+	@Override
+	public String toString()
+	{
+		return this.getNaam();
+	}
 }

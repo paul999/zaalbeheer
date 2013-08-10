@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -56,8 +55,6 @@ public class EditDay extends JFrame implements ActionListener, DocumentListener 
 	private JButton btnOpslaan;
 	private JButton button;
 
-	private boolean load = false;
-
 	private JLabel lblTeams;
 	private JLabel lblTeamZaaldienst;
 	private JTextField teamzaaldienst;
@@ -65,12 +62,12 @@ public class EditDay extends JFrame implements ActionListener, DocumentListener 
 	private JTextArea opmerkingen;
 	private JLabel lblNewLabel;
 	private JScrollPane scrollPane;
-	private JLabel lblZaaldienstB;
 	private ArrayList<ZaaldienstDto> diensten;
 
 	/**
 	 * Create the frame.
 	 */
+	@SuppressWarnings("unchecked")
 	public EditDay(DagRequest request, MainWindow parent) {
 		this.parent = parent;
 
@@ -171,7 +168,7 @@ public class EditDay extends JFrame implements ActionListener, DocumentListener 
 
 		model mo = new model(diensten);
 
-		for (final OpenDto open : dag.getOpens()) {
+		for (final OpenDto open : API.sortOpen(dag.getOpens())) {
 			JLabel lbl = new JLabel(open.getType().getNaam() + " ("
 					+ open.getType().getStart() + " - "
 					+ open.getType().getEind() + ")");
@@ -349,8 +346,6 @@ public class EditDay extends JFrame implements ActionListener, DocumentListener 
 		scrollPane.setSize(getSize());
 		setContentPane(scrollPane);
 
-		load = true;
-
 	}
 
 	private void ensureZd(int zd) {
@@ -412,6 +407,7 @@ public class EditDay extends JFrame implements ActionListener, DocumentListener 
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	class model extends AbstractListModel {
 		/**
 		 * 

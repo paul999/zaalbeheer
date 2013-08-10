@@ -140,4 +140,5 @@ public class DagDto implements java.io.Serializable, DagInterface, Item {
 	public void setDienst(Set<DienstDto> dienst) {
 		this.dienst = dienst;
 	}
+
 }

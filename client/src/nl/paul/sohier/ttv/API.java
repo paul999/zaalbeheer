@@ -1,12 +1,15 @@
 package nl.paul.sohier.ttv;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 import nl.ttva66.client.Service;
 import nl.ttva66.client.Service_Service;
 import nl.ttva66.dto.DagDto;
+import nl.ttva66.dto.OpenDto;
 import nl.ttva66.dto.ZaaldienstDto;
 
 import nl.ttva66.interfaces.DagRequest;
@@ -38,7 +41,7 @@ public class API extends nl.ttva66.libary.API{
 		return srv.getZaaldienstById(request);
 	}	
 	
-	public static ArrayList<ZaaldienstDto> zaallijsten(DagRequest request) {
+	private static ArrayList<ZaaldienstDto> zaallijsten(DagRequest request) {
 		ArrayList<ZaaldienstDto> list = new ArrayList<ZaaldienstDto>();
 
 		//GregorianCalendar dt = new GregorianCalendar(/*request.getJaar(),
@@ -101,7 +104,7 @@ public class API extends nl.ttva66.libary.API{
 		return list;
 	}
 
-	public static String zaallijst(int[] lijst) {
+	private static String zaallijst(int[] lijst) {
 		/*if (lijst.length == 0) {
 			return null;
 		}
@@ -137,5 +140,15 @@ public class API extends nl.ttva66.libary.API{
 		}*/
 
 		return dt;
+	}
+
+	public static Set<OpenDto> sortOpen(Set<OpenDto> opens) {
+		Set<OpenDto> odto = new TreeSet<OpenDto>(new Comparator<OpenDto>() {
+			public int compare(OpenDto n1, OpenDto n2) {
+				return n1.getType().getSequence() - n2.getType().getSequence();
+			}
+		});
+		odto.addAll(opens);
+		return odto;
 	}	
 }
