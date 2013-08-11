@@ -321,7 +321,7 @@ public class MainWindow {
 
 		JMenuItem mntmWijzig = new JMenuItem("Wijzig persoon");
 		mnBestand.add(mntmWijzig);
-		
+
 		mntmWijzig.addActionListener(new ActionListener() {
 
 			@Override
@@ -541,6 +541,10 @@ public class MainWindow {
 						Set<OpenDto> delen = API.sortOpen(dag.getOpens());
 						System.out.println("DTO size open: " + delen.size());
 
+						open = false;
+						definitief = true;
+						zaaldienst = false;
+
 						for (OpenDto deel : delen) {
 							vl += addDeel(dag, deel);
 						}
@@ -627,7 +631,8 @@ public class MainWindow {
 					if (!dienst.isDefinitief()) {
 						definitief = false;
 					}
-					if (!dienst.isDefinitief()) {
+
+					if (!dienst.isBackup()) {
 						zaaldienst = true;
 					}
 
@@ -646,8 +651,21 @@ public class MainWindow {
 					} else {
 						result += zt.getNaam();
 
-						if (dienst.isBackup()) {
-							result += "(backup)";
+						if (dienst.isBackup() || !dienst.isDefinitief()) {
+							result += "(";
+							
+							if (dienst.isBackup()) {
+								result += "backup";
+							}
+
+							if (!dienst.isDefinitief()) {
+								if (dienst.isBackup())
+								{
+									result += ", ";
+								}
+								result += "niet bevestigd";
+							}
+							result += ")";
 						}
 					}
 				}
