@@ -52,6 +52,8 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 	private JLabel lblWachtwoord;
 	private JPasswordField wachtwoord;
 	private boolean load = false;
+	private boolean mod = false;
+	private JButton btnVerwijderen;
 
 	/**
 	 * Create the frame.
@@ -63,6 +65,7 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 		} else {
 			dienst = zt;
 			setTitle("Zaalwacht aanpassen");
+			mod = true;
 		}
 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -204,7 +207,29 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 		contentPane.add(btnOpslaan, "2, 14");
 
 		btnAnnuleren = new JButton("Annuleren");
-		contentPane.add(btnAnnuleren, "4, 14, left, default");
+
+		btnVerwijderen = new JButton("Verwijderen");
+
+		JPanel buttons = new JPanel();
+		contentPane.add(buttons, "2, 14, left, top");
+		buttons.setLayout(new FormLayout(
+				new ColumnSpec[] { FormFactory.RELATED_GAP_COLSPEC,
+						FormFactory.DEFAULT_COLSPEC,
+						FormFactory.RELATED_GAP_COLSPEC,
+						FormFactory.DEFAULT_COLSPEC,
+						FormFactory.RELATED_GAP_COLSPEC,
+						FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] {
+						FormFactory.RELATED_GAP_ROWSPEC,
+						FormFactory.DEFAULT_ROWSPEC, }));
+
+		buttons.add(btnOpslaan, "2, 2");
+		buttons.add(btnAnnuleren, "4, 2");
+
+		if (mod) {
+			buttons.add(btnVerwijderen, "6, 2");
+
+			btnVerwijderen.addActionListener(new btnVerwijderen());
+		}
 
 		btnOpslaan.addActionListener(new btnSave());
 		btnAnnuleren.addActionListener(new btnCancel());
@@ -230,6 +255,16 @@ public class AddZaalWacht extends JFrame implements DocumentListener,
 			// TODO: Check if we want to validate the changed fields before
 			// Actually canceling it...
 			dispose();
+		}
+	}
+
+	class btnVerwijderen implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			JOptionPane
+					.showMessageDialog(
+							null,
+							"Het is momenteel niet mogelijk om zaaldiensten te verwijderen",
+							"Niet mogelijk", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

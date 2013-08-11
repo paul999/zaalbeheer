@@ -321,6 +321,15 @@ public class MainWindow {
 
 		JMenuItem mntmWijzig = new JMenuItem("Wijzig persoon");
 		mnBestand.add(mntmWijzig);
+		
+		mntmWijzig.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				EditZaalwacht w = new EditZaalwacht();
+				w.setVisible(true);
+			}
+		});
 
 		JMenuItem mntmMijzelf = new JMenuItem("Mijn account");
 		mnBestand.add(mntmMijzelf);
@@ -406,10 +415,10 @@ public class MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				/*
-				 * new SendAllMail(new DagRequest(-1, currentMonth,
-				 * currentYear), window);
-				 */
+
+				new SendAllMail(new DagRequest(-1, currentMonth, currentYear),
+						window);
+
 			}
 		});
 

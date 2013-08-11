@@ -213,4 +213,10 @@ public class ZaaldienstDto implements java.io.Serializable, Item,
 			return false;
 		}
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.naam;
+	}
 }
