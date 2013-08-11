@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+	<groupId>nl.ttva66.zaalbeheer</groupId>
 	<artifactId>ZaalBeheer</artifactId>
 	<name>zaalbeheer</name>
 	<version>0.0.3-SNAPSHOT</version>
@@ -25,37 +25,37 @@
 		<dependencies>
 
 			<dependency>
-				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+				<groupId>nl.ttva66.zaalbeheer</groupId>
 				<artifactId>libary</artifactId>
 				<version>0.0.3-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+				<groupId>nl.ttva66.zaalbeheer</groupId>
 				<artifactId>jaxws</artifactId>
 				<version>0.0.3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+				<groupId>nl.ttva66.zaalbeheer</groupId>
 				<artifactId>entities</artifactId>
 				<version>0.0.3-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+				<groupId>nl.ttva66.zaalbeheer</groupId>
 				<artifactId>server</artifactId>
 				<version>0.0.3-SNAPSHOT</version>
 				<type>ejb</type>
 			</dependency>
 
 			<dependency>
-				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+				<groupId>nl.ttva66.zaalbeheer</groupId>
 				<artifactId>web</artifactId>
 				<version>0.0.3-SNAPSHOT</version>
 				<type>war</type>
 			</dependency>
 			<dependency>
-				<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+				<groupId>nl.ttva66.zaalbeheer</groupId>
 				<artifactId>dto</artifactId>
 				<version>0.0.3-SNAPSHOT</version>
 			</dependency>

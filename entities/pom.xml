@@ -22,7 +22,7 @@
 	</dependencies>
 
 	<parent>
-		<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+		<groupId>nl.ttva66.zaalbeheer</groupId>
 		<artifactId>ZaalBeheer</artifactId>
 		<version>0.0.3-SNAPSHOT</version>
 	</parent>

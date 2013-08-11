@@ -8,24 +8,24 @@
 	<name>zaalbeheer-server</name>
 
 	<parent>
-		<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+		<groupId>nl.ttva66.zaalbeheer</groupId>
 		<artifactId>ZaalBeheer</artifactId>
 		<version>0.0.3-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
-			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>entities</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>libary</artifactId>
 			<scope>provided</scope>
 		</dependency>		
 		<dependency>
-			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>dto</artifactId>
 			<scope>provided</scope>
 		</dependency>		

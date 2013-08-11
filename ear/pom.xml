@@ -21,30 +21,30 @@
 		</dependency>
 
 		<dependency>
-			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>entities</artifactId>
 		</dependency>
 		
 		<dependency>
-			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>dto</artifactId>
 		</dependency>
 				
 
 		<dependency>
-			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>server</artifactId>
 			<type>ejb</type>
 		</dependency>
 
 		<dependency>
-			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>web</artifactId>
 			<type>war</type>
 		</dependency>
 
 		<dependency>
-			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>libary</artifactId>
 		</dependency>
 
@@ -55,7 +55,7 @@
 	</dependencies>
 
 	<parent>
-		<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+		<groupId>nl.ttva66.zaalbeheer</groupId>
 		<artifactId>ZaalBeheer</artifactId>
 		<version>0.0.3-SNAPSHOT</version>
 	</parent>

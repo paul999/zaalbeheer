@@ -1,6 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>nl.paul.sohier.ttv.client</groupId>
 	<artifactId>client</artifactId>
 	<name>zaalbeheer-client</name>
 
@@ -8,18 +7,18 @@
 
 
 		<dependency>
-			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>libary</artifactId>
 		</dependency>
 		
 		<dependency>
-			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>dto</artifactId>
 		</dependency>
 	
 		
 		<dependency>
-			<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>jaxws</artifactId>
 		</dependency>		
 		
@@ -44,7 +43,7 @@
 
 	</dependencies>
 	<parent>
-		<groupId>nl.paul.sohier.ttv.zaalbeheer</groupId>
+		<groupId>nl.ttva66.zaalbeheer</groupId>
 		<artifactId>ZaalBeheer</artifactId>
 		<version>0.0.3-SNAPSHOT</version>
 	</parent>
@@ -63,7 +62,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>nl.paul.sohier.ttv.MainWindow</mainClass>
+							<mainClass>nl.ttva66.client.Login</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
