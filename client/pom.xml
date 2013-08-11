@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>client</artifactId>
 	<name>zaalbeheer-client</name>
@@ -10,18 +11,18 @@
 			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>libary</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>dto</artifactId>
 		</dependency>
-	
-		
+
+
 		<dependency>
 			<groupId>nl.ttva66.zaalbeheer</groupId>
 			<artifactId>jaxws</artifactId>
-		</dependency>		
-		
+		</dependency>
+
 		<dependency>
 			<groupId>com.jgoodies</groupId>
 			<artifactId>forms</artifactId>
@@ -73,6 +74,67 @@
 						<goals>
 							<goal>single</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<shadedArtifactAttached>true</shadedArtifactAttached> <!-- Make the shaded artifact not the main one -->
+					<shadedClassifierName>shaded</shadedClassifierName> <!-- set the suffix to the shaded jar -->
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.bluestemsoftware.open.maven.plugin</groupId>
+				<artifactId>launch4j-plugin</artifactId>
+				<version>1.5.0.0</version>
+				<executions>
+
+					<!-- GUI exe -->
+					<execution>
+						<id>l4j-gui</id>
+						<phase>package</phase>
+						<goals>
+							<goal>launch4j</goal>
+						</goals>
+						<configuration>
+							<headerType>gui</headerType>
+							<outfile>target/zaaldienst-gui.exe</outfile>
+							<jar>target/${artifactId}-${version}-shaded.jar</jar> <!-- 'shaded' is the value set on shadedClassifierName above -->
+							<errTitle>App Err</errTitle>
+							<classPath>
+								<mainClass>nl.ttva66.client.Login</mainClass>
+							</classPath>
+							<!-- <icon>src/main/resources/icons/exeIcon.ico</icon> -->
+							<jre>
+								<minVersion>1.7.0</minVersion>
+								<initialHeapSize>128</initialHeapSize>
+								<maxHeapSize>1024</maxHeapSize>
+							</jre>
+							<versionInfo>
+								<fileVersion>0.0.3.0</fileVersion>
+								<txtFileVersion>0.0.3.0</txtFileVersion>
+								<fileDescription>Desc</fileDescription>
+								<copyright>Paul sohier</copyright>
+								<productVersion>0.0.3.0</productVersion>
+								<txtProductVersion>0.0.3.0</txtProductVersion>
+								<productName>zaaldienst</productName>
+								<internalName>zaaldienst</internalName>
+								<originalFilename>zaaldienst-gui-${version}.exe</originalFilename>
+							</versionInfo>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
