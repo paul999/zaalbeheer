@@ -27,7 +27,7 @@ import nl.ttva66.interfaces.ZaalDienstRequest;
 import nl.ttva66.libary.API;
 
 @Stateless
-@WebService(serviceName = "Service", targetNamespace = "http://www.ttva66.nl/wsdl", endpointInterface = "nl.ttva66.Service")
+@WebService(serviceName = "Service", targetNamespace = "http://www.ttva66.nl/wsdl", endpointInterface = "nl.ttva66.server.Service")
 @SOAPBinding(style = Style.DOCUMENT)
 public class ServiceBean implements Service {
 
